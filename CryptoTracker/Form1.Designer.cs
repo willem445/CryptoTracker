@@ -158,6 +158,8 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBuyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addSellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -1375,7 +1377,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(765, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1358, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -1413,20 +1415,41 @@
             // addBuyToolStripMenuItem
             // 
             this.addBuyToolStripMenuItem.Name = "addBuyToolStripMenuItem";
-            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.addBuyToolStripMenuItem.Text = "Add Coin";
             // 
             // addSellToolStripMenuItem
             // 
             this.addSellToolStripMenuItem.Name = "addSellToolStripMenuItem";
-            this.addSellToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addSellToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.addSellToolStripMenuItem.Text = "Edit Coin";
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 426);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(789, 379);
+            this.flowLayoutPanel1.TabIndex = 4;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(877, 645);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(765, 425);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(1358, 817);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -1573,6 +1596,8 @@
         private System.Windows.Forms.TextBox linkInvestedTB;
         private System.Windows.Forms.TextBox linkQuantityTB;
         private System.Windows.Forms.Label linkLabel;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -16,6 +16,8 @@ namespace CryptoTracker
         private TextBox[,] textboxes;
         System.Timers.Timer updatePrices;
 
+        int flowControlCoinCount = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -64,6 +66,8 @@ namespace CryptoTracker
             updatePrices.Interval = 30000; //30 seconds
             updatePrices.Elapsed += new ElapsedEventHandler(UpdatePrices);
             updatePrices.Start();
+
+            AddNewLine();
         }
 
         public void UpdatePrices(object sender, ElapsedEventArgs e)
@@ -167,6 +171,78 @@ namespace CryptoTracker
 
             priceManager.UpdatePriceData();
             UpdateUI();
+        }
+
+        private void AddNewLine()
+        {
+            FlowLayoutPanel newFlowPanel = new FlowLayoutPanel();
+            newFlowPanel.WrapContents = true;
+            newFlowPanel.FlowDirection = FlowDirection.BottomUp;
+            newFlowPanel.Height = 185;
+            newFlowPanel.Width = 90;
+
+            Label quantity = new Label();
+            quantity.Margin = new Padding(2, 2, 2, 2);
+            quantity.Text = "Quantity:";
+            Label invested = new Label();
+            invested.Margin = new Padding(2, 2, 2, 2);
+            invested.Text = "Total Invested:";
+            Label value = new Label();
+            value.Margin = new Padding(2, 2, 2, 2);
+            value.Text = "Value:";
+            Label profit = new Label();
+            profit.Margin = new Padding(2, 2, 2, 2);
+            profit.Text = "Profit:";
+            Label profitPercent = new Label();
+            profitPercent.Margin = new Padding(2, 2, 2, 2);
+            profitPercent.Text = "Profit %:";
+
+            newFlowPanel.Controls.Add(profitPercent);
+            newFlowPanel.Controls.Add(profit);
+            newFlowPanel.Controls.Add(value);
+            newFlowPanel.Controls.Add(invested);
+            newFlowPanel.Controls.Add(quantity);
+
+            flowLayoutPanel1.Controls.Add(newFlowPanel);
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (flowControlCoinCount == 7)
+            {
+                AddNewLine();
+                flowControlCoinCount = 0;
+            }
+
+            FlowLayoutPanel newFlowPanel = new FlowLayoutPanel();
+            newFlowPanel.WrapContents = true;
+            newFlowPanel.FlowDirection = FlowDirection.TopDown;
+            newFlowPanel.Height = 185;
+            newFlowPanel.Width = 90;
+
+            Label coinName = new Label();
+            coinName.Text = "Bitcoin";
+
+            Label coinPrice = new Label();
+            coinPrice.Text = "$1,222";
+
+            TextBox coinQuantity = new TextBox();
+            TextBox coinInvested = new TextBox();
+            TextBox coinValue = new TextBox();
+            TextBox coinProfit = new TextBox();
+            TextBox coinProfitPercent = new TextBox();
+
+            newFlowPanel.Controls.Add(coinName);
+            newFlowPanel.Controls.Add(coinPrice);
+            newFlowPanel.Controls.Add(coinQuantity);
+            newFlowPanel.Controls.Add(coinInvested);
+            newFlowPanel.Controls.Add(coinValue);
+            newFlowPanel.Controls.Add(coinProfit);
+            newFlowPanel.Controls.Add(coinProfitPercent);
+
+            flowLayoutPanel1.Controls.Add(newFlowPanel);
+
+            flowControlCoinCount++;
         }
     }
 }
