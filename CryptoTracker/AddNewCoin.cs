@@ -12,25 +12,32 @@ namespace CryptoTracker
 {
     public partial class AddNewCoin : Form
     {
-        public string CoinName { get; set; }
-        public string Quantity { get; set; }
-        public string NetCost { get; set; }
-        public string APILink { get; set; }
+        public CoinModel Coin
+        {
+            get
+            {
+                return coin;
+            }
+        }
+
+        private CoinModel coin;
 
         public AddNewCoin()
         {
             InitializeComponent();
             addButton.DialogResult = DialogResult.OK;
             cancelButton.DialogResult = DialogResult.Cancel;
+
+            coin = new CoinModel();
         }
 
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            CoinName = coinName_TB.Text;
-            Quantity = quantity_TB.Text;
-            NetCost = netCost_TB.Text;
-            APILink = apiLink_TB.Text;
+            coin.CoinName = coinName_TB.Text;
+            coin.Quantity = quantity_TB.Text;
+            coin.NetCost = netCost_TB.Text;
+            coin.APILink = apiLink_TB.Text;
 
             this.Close();
         }

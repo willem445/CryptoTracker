@@ -57,6 +57,7 @@
     <Compile Include="AddNewCoin.Designer.cs">
       <DependentUpon>AddNewCoin.cs</DependentUpon>
     </Compile>
+    <Compile Include="CoinModel.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
