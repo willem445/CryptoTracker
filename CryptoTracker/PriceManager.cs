@@ -27,7 +27,7 @@ namespace CryptoTracker
         public float totalValue = 0.0F;
         public float totalInvestment = 0.0F;
 
-
+        public List<string[]> toolTipValues = new List<string[]>();
 
 
         public void UpdatePriceData()
@@ -42,11 +42,13 @@ namespace CryptoTracker
         private void APIUpdate()
         {
             coinPrice.Clear();
+            toolTipValues.Clear();
 
             //Read data from API
             for (int i = 0; i < coinApiUrlList.Count; i++)
             {
                 string input = coinApiUrlList[i];
+                string[] values = new string[5];
 
                 try
                 {
@@ -56,6 +58,13 @@ namespace CryptoTracker
                     dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
 
                     coinPrice.Add((float)(Convert.ToDouble(results[0].price_usd)));
+
+                    values[0] = results[0].rank;
+                    values[1] = results[0].market_cap_usd;
+                    values[2] = results[0].percent_change_1h;
+                    values[3] = results[0].percent_change_24h;
+                    values[4] = results[0].percent_change_7d;
+                    toolTipValues.Add(values);
                 }
                 catch
                 {

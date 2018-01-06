@@ -11,6 +11,8 @@ namespace CryptoTracker
 {
     public partial class Form1 : Form
     {
+        ToolTip toolTip = new ToolTip();
+
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
 
@@ -30,6 +32,13 @@ namespace CryptoTracker
             updatePrices.Interval = 30000; //30 seconds
             updatePrices.Elapsed += new ElapsedEventHandler(UpdatePrices);
             updatePrices.Start();
+
+            // Set up the delays for the ToolTip.
+            toolTip.AutoPopDelay = 15000;
+            toolTip.InitialDelay = 1000;
+            toolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip.ShowAlways = true;
 
             AddNewLine();
         }
@@ -108,7 +117,12 @@ namespace CryptoTracker
                         
                 }
 
-                i++;
+                this.Invoke((MethodInvoker)delegate {
+                    toolTip.SetToolTip(priceLabelList[i], "Rank: " + priceManager.toolTipValues[i][0] + "\n" + "Market Cap: $" + priceManager.toolTipValues[i][1] + "\n" + "% Change 1h: " + priceManager.toolTipValues[i][2] + "%\n" + "% Change 24h: " + priceManager.toolTipValues[i][3] + "%\n" + "% Change 7d: " + priceManager.toolTipValues[i][4] + "%");
+                });
+
+                
+                i++;             
             }
 
             this.Invoke((MethodInvoker)delegate {
@@ -116,6 +130,8 @@ namespace CryptoTracker
                 totalInvestedLabel.Text = "$" + priceManager.totalInvestment.ToString("0.00");
                 totalValueLabel.Text = "$" + priceManager.totalValue.ToString("0.00");
             });
+
+            
         }
 
         //Open saved file
@@ -214,8 +230,11 @@ namespace CryptoTracker
             newFlowPanel.Height = 185;
             newFlowPanel.Width = 90;
 
+            
+
             Label coinName = new Label();
             coinName.Text = addCoin.CoinName;
+            
 
             Label coinPrice = new Label();
             coinPrice.Name = addCoin.CoinName + "Label";
