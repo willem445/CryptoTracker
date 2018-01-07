@@ -119,7 +119,9 @@ namespace CryptoTracker
                 }
 
                 this.Invoke((MethodInvoker)delegate {
-                    toolTip.SetToolTip(priceLabelList[i], "Rank: " + priceManager.toolTipValues[i][0] + "\n" + "Market Cap: $" + priceManager.toolTipValues[i][1] + "\n" + "% Change 1h: " + priceManager.toolTipValues[i][2] + "%\n" + "% Change 24h: " + priceManager.toolTipValues[i][3] + "%\n" + "% Change 7d: " + priceManager.toolTipValues[i][4] + "%");
+
+                    string comma = String.Format("{0:#,###0.#}", Convert.ToDouble(priceManager.toolTipValues[i][1]));
+                    toolTip.SetToolTip(priceLabelList[i], "Rank: " + priceManager.toolTipValues[i][0] + "\n" + "Market Cap: $" + comma + "\n" + "% Change 1h: " + priceManager.toolTipValues[i][2] + "%\n" + "% Change 24h: " + priceManager.toolTipValues[i][3] + "%\n" + "% Change 7d: " + priceManager.toolTipValues[i][4] + "%");
                 });
 
                 
@@ -230,8 +232,6 @@ namespace CryptoTracker
             newFlowPanel.FlowDirection = FlowDirection.TopDown;
             newFlowPanel.Height = 185;
             newFlowPanel.Width = 90;
-
-            
 
             Label coinName = new Label();
             coinName.Text = addCoin.CoinName;
