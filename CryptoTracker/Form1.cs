@@ -16,6 +16,7 @@ namespace CryptoTracker
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
 
+        List<string> coinNamesList = new List<string>();
         List<Label> priceLabelList = new List<Label>();
         List<TextBox[]> textBoxArrayList = new List<TextBox[]>();
 
@@ -270,6 +271,8 @@ namespace CryptoTracker
             //Update Lists
             priceLabelList.Add(coinPrice);
 
+            coinNamesList.Add(addCoin.CoinName);
+
             TextBox[] newArray = new TextBox[5];
             newArray[0] = coinQuantity;
             newArray[1] = coinInvested;
@@ -287,6 +290,25 @@ namespace CryptoTracker
             priceManager.valueArrayList.Add(coinValues);
 
             flowControlCoinCount++;
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(@"C:\Users\Willem\Desktop\CoinPrices.txt"))
+            {
+                for (int i = 0; i < priceLabelList.Count; i++)
+                {
+                    //Print name, quantity, net cost, and api link to text file
+                    string line = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.Split('$')[1] + ", " + priceManager.coinApiUrlList[i];
+
+                    file.WriteLine(line);
+                }
+            }
+
+
         }
     }
 }
