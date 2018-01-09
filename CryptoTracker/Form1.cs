@@ -296,6 +296,8 @@ namespace CryptoTracker
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
+            //TODOHP - Read values first, handle errors, then write to file, avoid erasing the whole file
+
             using (System.IO.StreamWriter file =
                 new System.IO.StreamWriter(@"C:\Users\Willem\Desktop\CoinPrices.txt"))
             {
