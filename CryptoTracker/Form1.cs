@@ -12,15 +12,19 @@ namespace CryptoTracker
     public partial class Form1 : Form
     {
         ToolTip toolTip = new ToolTip();
-
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
 
-        List<string> coinNamesList = new List<string>();
-        List<Label> priceLabelList = new List<Label>();
-        List<TextBox[]> textBoxArrayList = new List<TextBox[]>();
+        //TODOHP - add struct containing data for each coin
 
-        int flowControlCoinCount = 0;
+        List<string> coinNamesList = new List<string>(); //Stores the names of each coin added
+
+        //UI Lists
+        List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
+        List<TextBox[]> textBoxArrayList = new List<TextBox[]>(); //Array of textboxes for each coin, stored in a list
+
+        int flowControlCoinCount = 0; //Tracks coins added to row in flow control
+        bool updatingUiFlag = false; //Tracks if UI is currently being updated
 
         public Form1()
         {
@@ -47,18 +51,26 @@ namespace CryptoTracker
         public void UpdatePrices(object sender, ElapsedEventArgs e)
         {
             priceManager.UpdatePriceData();
-            UpdateUI();
+            if (!updatingUiFlag)
+            {
+                UpdateUI();
+            }  
         }
 
         //Refresh data
         private void button1_Click(object sender, EventArgs e)
         {
             priceManager.UpdatePriceData();
-            UpdateUI();
+            if (!updatingUiFlag)
+            {
+                UpdateUI();
+            }
         }
 
         private void UpdateUI()
         {
+            updatingUiFlag = true;
+
             int i = 0;
             foreach (var item in priceLabelList)
             {
@@ -134,7 +146,7 @@ namespace CryptoTracker
                 totalValueLabel.Text = "$" + priceManager.totalValue.ToString("0.00");
             });
 
-            
+            updatingUiFlag = false;
         }
 
         //Open saved file
@@ -292,25 +304,45 @@ namespace CryptoTracker
             flowControlCoinCount++;
         }
 
+        /// <summary>
+        /// Write coin data to text file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //TODO - Option for user to select save location
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-            //TODOHP - Read values first, handle errors, then write to file, avoid erasing the whole file
+            string[] textFileArray = new string[priceLabelList.Count];
+            bool readError = false;
 
-            using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(@"C:\Users\Willem\Desktop\CoinPrices.txt"))
+            //Loop through each coin and put data in string array, if there is an error, do not write
+            for (int i = 0; i < priceLabelList.Count; i++)
             {
-                for (int i = 0; i < priceLabelList.Count; i++)
+                try
                 {
-                    //Print name, quantity, net cost, and api link to text file
-                    string line = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.Split('$')[1] + ", " + priceManager.coinApiUrlList[i];
-
-                    file.WriteLine(line);
+                    textFileArray[i] = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.Split('$')[1] + ", " + priceManager.coinApiUrlList[i];
+                }
+                catch
+                {
+                    MessageBox.Show("Error reading data");
+                    readError = true;
                 }
             }
 
-
+            if (!readError)
+            {
+                using (System.IO.StreamWriter file =
+                    new System.IO.StreamWriter(@"C:\Users\Willem\Desktop\CoinPrices.txt"))
+                {
+                    for (int i = 0; i < priceLabelList.Count; i++)
+                    {
+                        //Print name, quantity, net cost, and api link to text file
+                        file.WriteLine(textFileArray[i]);
+                    }
+                }
+            }
         }
     }
 }
