@@ -180,8 +180,8 @@ namespace CryptoTracker
 
                 string[] data = line.Split(',');
                 newCoin.CoinName = data[0];
-                newCoin.Quantity = data[1];
-                newCoin.NetCost = data[2];
+                newCoin.Quantity = (float)(Convert.ToDouble(data[1]));
+                newCoin.NetCost = (float)(Convert.ToDouble(data[2]));
                 newCoin.APILink = data[3];
 
                 AddNewCoinToFlowControl(newCoin);
@@ -245,11 +245,11 @@ namespace CryptoTracker
 
             TextBox coinQuantity = new TextBox();
             coinQuantity.Name = addCoin.CoinName + "Quantity_TB";
-            coinQuantity.Text = addCoin.Quantity;
+            coinQuantity.Text = addCoin.Quantity.ToString();
 
             TextBox coinInvested = new TextBox();
             coinInvested.Name = addCoin.CoinName + "Invested_TB";
-            coinInvested.Text = addCoin.NetCost;
+            coinInvested.Text = addCoin.NetCost.ToString();
 
             TextBox coinValue = new TextBox();
             coinValue.Name = addCoin.CoinName + "Value_TB";

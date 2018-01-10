@@ -19,19 +19,6 @@ namespace CryptoTracker
             ProfitPercent
         }
 
-        public struct Coin
-        {
-            public string name;
-            public float percent_change_1h;
-            public float percent_change_24hr;
-            public float percent_change_7d;
-            public float quantity;
-            public float totalInvested;
-            public float value;
-            public float profit;
-            public float profitPercent;
-        }
-
         public List<string> coinApiUrlList = new List<string>();
         public List<float[]> valueArrayList = new List<float[]>();
         public List<float> coinPrice = new List<float>();
