@@ -15,8 +15,6 @@ namespace CryptoTracker
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
 
-        //TODOHP - add struct containing data for each coin
-
         List<string> coinNamesList = new List<string>(); //Stores the names of each coin added
 
         //UI Lists

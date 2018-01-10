@@ -8,19 +8,6 @@ namespace CryptoTracker
 {
     public class CoinModel
     {
-        public struct Coin
-        {
-            public string name;
-            public float percent_change_1h;
-            public float percent_change_24hr;
-            public float percent_change_7d;
-            public float quantity;
-            public float totalInvested;
-            public float value;
-            public float profit;
-            public float profitPercent;
-        }
-
         public string CoinName { get; set; }
 
         public float Percent_Change_1h { get; set; }
