@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,12 +22,14 @@ namespace CryptoTracker
         }
 
         private CoinModel coin;
-
+        
         public AddNewCoin()
         {
             InitializeComponent();
-            addButton.DialogResult = DialogResult.OK;
             cancelButton.DialogResult = DialogResult.Cancel;
+            //addButton.DialogResult = DialogResult.OK;
+
+            apiLink_TB.Text = "https://api.coinmarketcap.com/v1/ticker/";
 
             coin = new CoinModel();
         }
@@ -34,12 +37,76 @@ namespace CryptoTracker
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            coin.CoinName = coinName_TB.Text;
-            coin.Quantity = quantity_TB.Text;
-            coin.NetCost = netCost_TB.Text;
-            coin.APILink = apiLink_TB.Text;
+            bool error = false;
 
-            this.Close();
+            //Check for valid coin name
+            if ((coinName_TB.Text == null) || (coinName_TB.Text == ""))
+            {
+                MessageBox.Show("Enter coin name!");
+                error = true;
+            }
+
+            //Check for valid quantity
+            if ((quantity_TB.Text == null) || (quantity_TB.Text == ""))
+            {
+                MessageBox.Show("Enter coin quantity!");
+                error = true;
+            }
+            else if (!Extensions.IsNumeric(quantity_TB.Text))
+            {
+                MessageBox.Show("Enter valid quantity!");
+                error = true;
+            }
+
+            //Check for valid coin cost
+            if ((netCost_TB.Text == null) || (netCost_TB.Text == ""))
+            {
+                MessageBox.Show("Enter netcost!");
+                error = true;
+            }
+            else
+            {
+                if (netCost_TB.Text.Contains('$'))
+                {
+                    netCost_TB.Text = netCost_TB.Text.Split('$')[1];
+                }
+                else if (!Extensions.IsNumeric(netCost_TB.Text))
+                {
+                    MessageBox.Show("Enter valid net cost!");
+                    error = true;
+                }
+            }
+
+            //Check for valid api link
+            if ((apiLink_TB.Text == null) || (apiLink_TB.Text == ""))
+            {
+                MessageBox.Show("Enter api link!");
+                error = true;
+            }
+            else
+            {
+                try
+                {
+                    var cli = new System.Net.WebClient();
+                    string prices = cli.DownloadString(apiLink_TB.Text);
+                }
+                catch
+                {
+                    MessageBox.Show("Enter valid api url!");
+                    error = true;
+                }
+            }
+
+            //If no errors, continue
+            if(!error)
+            {
+                coin.CoinName = coinName_TB.Text;
+                coin.Quantity = quantity_TB.Text;
+                coin.NetCost = netCost_TB.Text;
+                coin.APILink = apiLink_TB.Text;
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
         private void cancelButton_Click(object sender, EventArgs e)

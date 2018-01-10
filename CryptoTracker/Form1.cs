@@ -23,8 +23,9 @@ namespace CryptoTracker
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
         List<TextBox[]> textBoxArrayList = new List<TextBox[]>(); //Array of textboxes for each coin, stored in a list
 
+        //Program variables
         int flowControlCoinCount = 0; //Tracks coins added to row in flow control
-        bool updatingUiFlag = false; //Tracks if UI is currently being updated
+        bool updatingUiFlag = false; //Tracks if UI is currently being updated, prevents thread interference
 
         public Form1()
         {
@@ -75,19 +76,6 @@ namespace CryptoTracker
             foreach (var item in priceLabelList)
             {
                 this.Invoke((MethodInvoker)delegate {
-                    //if (priceManager.coinPrice[i] < Convert.ToDouble(item.Text.Replace('$', ' ')))
-                    //{
-                    //    item.ForeColor = Color.Red;
-                    //}
-                    //else if (priceManager.coinPrice[i] > Convert.ToDouble(item.Text.Replace('$', ' ')))
-                    //{
-                    //    item.ForeColor = Color.Green;
-                    //}
-                    //else
-                    //{
-                    //    item.ForeColor = Color.Black;
-                    //}
-
                     item.Text = "$" + priceManager.coinPrice[i].ToString("0.00"); // runs on UI thread
                 });
 
@@ -170,13 +158,15 @@ namespace CryptoTracker
 
         private void addBuyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewCoin addCoin = new AddNewCoin();
+            //TODO - Check if data is null before adding
 
-            if (addCoin.ShowDialog() == DialogResult.OK)
+            AddNewCoin addCoin = new AddNewCoin(); //Instantiate form
+
+            if (addCoin.ShowDialog() == DialogResult.OK) //Show form
             {
-                CoinModel coinModel = addCoin.Coin;
+                CoinModel coinModel = addCoin.Coin; //Create new coin model and add data from form
 
-                AddNewCoinToFlowControl(coinModel);
+                AddNewCoinToFlowControl(coinModel); //Add coin to form
             }
         }
 
