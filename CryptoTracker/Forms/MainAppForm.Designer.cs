@@ -1,6 +1,6 @@
 ﻿namespace CryptoTracker
 {
-    partial class Form1
+    partial class MainAppForm
     {
         /// <summary>
         /// Required designer variable.

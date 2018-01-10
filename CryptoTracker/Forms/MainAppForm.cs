@@ -9,20 +9,23 @@ using System.Drawing;
 
 namespace CryptoTracker
 {
-    public partial class Form1 : Form
+    public partial class MainAppForm : Form
     {
         ToolTip toolTip = new ToolTip();
-
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
 
-        List<string> coinNamesList = new List<string>();
-        List<Label> priceLabelList = new List<Label>();
-        List<TextBox[]> textBoxArrayList = new List<TextBox[]>();
+        List<string> coinNamesList = new List<string>(); //Stores the names of each coin added
 
-        int flowControlCoinCount = 0;
+        //UI Lists
+        List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
+        List<TextBox[]> textBoxArrayList = new List<TextBox[]>(); //Array of textboxes for each coin, stored in a list
 
-        public Form1()
+        //Program variables
+        int flowControlCoinCount = 0; //Tracks coins added to row in flow control
+        bool updatingUiFlag = false; //Tracks if UI is currently being updated, prevents thread interference
+
+        public MainAppForm()
         {
             InitializeComponent();
             this.Text = "Crypto Tracker";
@@ -47,35 +50,30 @@ namespace CryptoTracker
         public void UpdatePrices(object sender, ElapsedEventArgs e)
         {
             priceManager.UpdatePriceData();
-            UpdateUI();
+            if (!updatingUiFlag)
+            {
+                UpdateUI();
+            }  
         }
 
         //Refresh data
         private void button1_Click(object sender, EventArgs e)
         {
             priceManager.UpdatePriceData();
-            UpdateUI();
+            if (!updatingUiFlag)
+            {
+                UpdateUI();
+            }
         }
 
         private void UpdateUI()
         {
+            updatingUiFlag = true;
+
             int i = 0;
             foreach (var item in priceLabelList)
             {
                 this.Invoke((MethodInvoker)delegate {
-                    //if (priceManager.coinPrice[i] < Convert.ToDouble(item.Text.Replace('$', ' ')))
-                    //{
-                    //    item.ForeColor = Color.Red;
-                    //}
-                    //else if (priceManager.coinPrice[i] > Convert.ToDouble(item.Text.Replace('$', ' ')))
-                    //{
-                    //    item.ForeColor = Color.Green;
-                    //}
-                    //else
-                    //{
-                    //    item.ForeColor = Color.Black;
-                    //}
-
                     item.Text = "$" + priceManager.coinPrice[i].ToString("0.00"); // runs on UI thread
                 });
 
@@ -134,7 +132,7 @@ namespace CryptoTracker
                 totalValueLabel.Text = "$" + priceManager.totalValue.ToString("0.00");
             });
 
-            
+            updatingUiFlag = false;
         }
 
         //Open saved file
@@ -158,13 +156,15 @@ namespace CryptoTracker
 
         private void addBuyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddNewCoin addCoin = new AddNewCoin();
+            //TODO - Check if data is null before adding
 
-            if (addCoin.ShowDialog() == DialogResult.OK)
+            AddCoinForm addCoin = new AddCoinForm(); //Instantiate form
+
+            if (addCoin.ShowDialog() == DialogResult.OK) //Show form
             {
-                CoinModel coinModel = addCoin.Coin;
+                CoinModel coinModel = addCoin.Coin; //Create new coin model and add data from form
 
-                AddNewCoinToFlowControl(coinModel);
+                AddNewCoinToFlowControl(coinModel); //Add coin to form
             }
         }
 
@@ -178,8 +178,8 @@ namespace CryptoTracker
 
                 string[] data = line.Split(',');
                 newCoin.CoinName = data[0];
-                newCoin.Quantity = data[1];
-                newCoin.NetCost = data[2];
+                newCoin.Quantity = (float)(Convert.ToDouble(data[1]));
+                newCoin.NetCost = (float)(Convert.ToDouble(data[2]));
                 newCoin.APILink = data[3];
 
                 AddNewCoinToFlowControl(newCoin);
@@ -243,11 +243,11 @@ namespace CryptoTracker
 
             TextBox coinQuantity = new TextBox();
             coinQuantity.Name = addCoin.CoinName + "Quantity_TB";
-            coinQuantity.Text = addCoin.Quantity;
+            coinQuantity.Text = addCoin.Quantity.ToString();
 
             TextBox coinInvested = new TextBox();
             coinInvested.Name = addCoin.CoinName + "Invested_TB";
-            coinInvested.Text = addCoin.NetCost;
+            coinInvested.Text = addCoin.NetCost.ToString();
 
             TextBox coinValue = new TextBox();
             coinValue.Name = addCoin.CoinName + "Value_TB";
@@ -282,33 +282,51 @@ namespace CryptoTracker
 
             textBoxArrayList.Add(newArray);
 
-            priceManager.coinApiUrlList.Add(addCoin.APILink);
-
-            float[] coinValues = new float[5];
-            coinValues[(int)PriceManager.rowNames.Quantity] = (float)Convert.ToDouble(addCoin.Quantity);
-            coinValues[(int)PriceManager.rowNames.TotalInvested] = (float)Convert.ToDouble(addCoin.NetCost);
-            priceManager.valueArrayList.Add(coinValues);
+            priceManager.AddNewCoin(addCoin);        
 
             flowControlCoinCount++;
         }
 
+        /// <summary>
+        /// Write coin data to text file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //TODO - Option for user to select save location
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-            using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(@"C:\Users\Willem\Desktop\CoinPrices.txt"))
-            {
-                for (int i = 0; i < priceLabelList.Count; i++)
-                {
-                    //Print name, quantity, net cost, and api link to text file
-                    string line = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.Split('$')[1] + ", " + priceManager.coinApiUrlList[i];
+            string[] textFileArray = new string[priceLabelList.Count];
+            bool readError = false;
 
-                    file.WriteLine(line);
+            //Loop through each coin and put data in string array, if there is an error, do not write
+            for (int i = 0; i < priceLabelList.Count; i++)
+            {
+                try
+                {
+
+                    textFileArray[i] = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.TrimStart('$') + ", " + priceManager.coinApiUrlList[i];
+                }
+                catch
+                {
+                    MessageBox.Show("Error reading data");
+                    readError = true;
                 }
             }
 
-
+            if (!readError)
+            {
+                using (System.IO.StreamWriter file =
+                    new System.IO.StreamWriter(@"C:\Users\Willem\Desktop\CoinPrices.txt"))
+                {
+                    for (int i = 0; i < priceLabelList.Count; i++)
+                    {
+                        //Print name, quantity, net cost, and api link to text file
+                        file.WriteLine(textFileArray[i]);
+                    }
+                }
+            }
         }
     }
 }

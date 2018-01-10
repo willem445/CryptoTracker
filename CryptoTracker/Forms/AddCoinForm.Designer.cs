@@ -1,6 +1,6 @@
 ﻿namespace CryptoTracker
 {
-    partial class AddNewCoin
+    partial class AddCoinForm
     {
         /// <summary>
         /// Required designer variable.

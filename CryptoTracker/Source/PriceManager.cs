@@ -19,9 +19,9 @@ namespace CryptoTracker
             ProfitPercent
         }
 
-        public List<string> coinApiUrlList = new List<string>();
+        public List<string> coinApiUrlList = new List<string>(); //List of api URLs
         public List<float[]> valueArrayList = new List<float[]>();
-        public List<float> coinPrice = new List<float>();
+        public List<float> coinPrice = new List<float>(); //Contains current price for each coin updated by APIUpdate()
 
         public float totalProfit = 0.0F;
         public float totalValue = 0.0F;
@@ -105,7 +105,15 @@ namespace CryptoTracker
         }
 
 
+        public void AddNewCoin(CoinModel addCoin)
+        {
+            coinApiUrlList.Add(addCoin.APILink);
 
+            float[] coinValues = new float[5];
+            coinValues[(int)PriceManager.rowNames.Quantity] = (float)Convert.ToDouble(addCoin.Quantity);
+            coinValues[(int)PriceManager.rowNames.TotalInvested] = (float)Convert.ToDouble(addCoin.NetCost);
+            valueArrayList.Add(coinValues);
+        }
 
     }
 }
