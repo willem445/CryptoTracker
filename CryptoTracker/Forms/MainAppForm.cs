@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace CryptoTracker
 {
-    public partial class Form1 : Form
+    public partial class MainAppForm : Form
     {
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
@@ -27,7 +27,7 @@ namespace CryptoTracker
         int flowControlCoinCount = 0; //Tracks coins added to row in flow control
         bool updatingUiFlag = false; //Tracks if UI is currently being updated, prevents thread interference
 
-        public Form1()
+        public MainAppForm()
         {
             InitializeComponent();
             this.Text = "Crypto Tracker";
@@ -160,7 +160,7 @@ namespace CryptoTracker
         {
             //TODO - Check if data is null before adding
 
-            AddNewCoin addCoin = new AddNewCoin(); //Instantiate form
+            AddCoinForm addCoin = new AddCoinForm(); //Instantiate form
 
             if (addCoin.ShowDialog() == DialogResult.OK) //Show form
             {

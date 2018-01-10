@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace CryptoTracker
 {
-    public partial class AddNewCoin : Form
+    public partial class AddCoinForm : Form
     {
         public CoinModel Coin
         {
@@ -23,7 +23,7 @@ namespace CryptoTracker
 
         private CoinModel coin;
         
-        public AddNewCoin()
+        public AddCoinForm()
         {
             InitializeComponent();
             cancelButton.DialogResult = DialogResult.Cancel;
