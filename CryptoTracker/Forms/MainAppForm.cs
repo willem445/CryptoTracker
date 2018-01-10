@@ -284,12 +284,7 @@ namespace CryptoTracker
 
             textBoxArrayList.Add(newArray);
 
-            priceManager.coinApiUrlList.Add(addCoin.APILink);
-
-            float[] coinValues = new float[5];
-            coinValues[(int)PriceManager.rowNames.Quantity] = (float)Convert.ToDouble(addCoin.Quantity);
-            coinValues[(int)PriceManager.rowNames.TotalInvested] = (float)Convert.ToDouble(addCoin.NetCost);
-            priceManager.valueArrayList.Add(coinValues);
+            priceManager.AddNewCoin(addCoin);        
 
             flowControlCoinCount++;
         }
@@ -312,7 +307,8 @@ namespace CryptoTracker
             {
                 try
                 {
-                    textFileArray[i] = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.Split('$')[1] + ", " + priceManager.coinApiUrlList[i];
+
+                    textFileArray[i] = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.TrimStart('$') + ", " + priceManager.coinApiUrlList[i];
                 }
                 catch
                 {
