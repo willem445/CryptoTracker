@@ -22,8 +22,9 @@ namespace CryptoTracker
         List<TextBox[]> textBoxArrayList = new List<TextBox[]>(); //Array of textboxes for each coin, stored in a list
 
         //Program variables
-        int flowControlCoinCount = 0; //Tracks coins added to row in flow control
+        int flowControlRowCount = 0; //Tracks coins added to row in flow control
         bool updatingUiFlag = false; //Tracks if UI is currently being updated, prevents thread interference
+        int coinCount = 0; //Count of coins added to project
 
         public MainAppForm()
         {
@@ -70,67 +71,61 @@ namespace CryptoTracker
         {
             updatingUiFlag = true;
 
-            int i = 0;
-            foreach (var item in priceLabelList)
+            for (int i = 0; i < coinCount; i++)
             {
-                this.Invoke((MethodInvoker)delegate {
-                    item.Text = "$" + priceManager.coinPrice[i].ToString("0.00"); // runs on UI thread
-                });
-
-                for (int j = 0; j < 5; j++)
+                if (priceManager.coinPriceList[i].HasValue)
                 {
-                    if (j == 0)
-                    {
-                        this.Invoke((MethodInvoker)delegate {
-                            textBoxArrayList[i][j].Text = priceManager.valueArrayList[i][j].ToString("0.000000"); // runs on UI thread
-                        });
-                    }
-                        
-                    else if (j >= 1 && j <= 3)
-                    {
-                        this.Invoke((MethodInvoker)delegate {
-                            textBoxArrayList[i][j].Text = "$" + priceManager.valueArrayList[i][j].ToString("0.00"); // runs on UI thread
-                        });
-                    }
-                        
-                    else if (j == 4)
-                    {
-                        this.Invoke((MethodInvoker)delegate {
-                            textBoxArrayList[i][j].Text = priceManager.valueArrayList[i][j].ToString("0.00") + "%"; // runs on UI thread
-                        });
-                    }
+                    this.Invoke((MethodInvoker)delegate {
+                        priceLabelList[i].Text = "$" + priceManager.coinPriceList[i].Value.ToString("0.00"); // runs on UI thread
 
-                    if (j == 3)
-                    {
-                        this.Invoke((MethodInvoker)delegate {
-                            if (priceManager.valueArrayList[i][j] <= 0)
+                        //Update textboxes
+                        for (int j = 0; j < 5; j++)
+                        {
+                            if (j == 0)
                             {
-                                textBoxArrayList[i][j].ForeColor = Color.Red; // runs on UI thread
+                                textBoxArrayList[i][j].Text = priceManager.valueArrayList[i][j].Value.ToString("0.000000"); // runs on UI thread
                             }
-                            else
+                            else if (j >= 1 && j <= 3)
                             {
-                                textBoxArrayList[i][j].ForeColor = Color.Green; // runs on UI thread
+                                textBoxArrayList[i][j].Text = "$" + priceManager.valueArrayList[i][j].Value.ToString("0.00"); // runs on UI thread
                             }
-                        });
-                    }
-                        
+                            else if (j == 4)
+                            {
+                                textBoxArrayList[i][j].Text = priceManager.valueArrayList[i][j].Value.ToString("0.00") + "%"; // runs on UI thread
+                            }
+
+                            if (j == 3)
+                            {
+                                if (priceManager.valueArrayList[i][j] <= 0)
+                                {
+                                    textBoxArrayList[i][j].ForeColor = Color.Red; // runs on UI thread
+                                }
+                                else
+                                {
+                                    textBoxArrayList[i][j].ForeColor = Color.Green; // runs on UI thread
+                                }
+                            }
+                        }
+
+                        //Update tooltip
+                        string comma = String.Format("{0:#,###0.#}", Convert.ToDouble(priceManager.toolTipValues[i][1]));
+                        toolTip.SetToolTip(priceLabelList[i], "Rank: " + priceManager.toolTipValues[i][0] + "\n" + "Market Cap: $" + comma + "\n" + "% Change 1h: " + priceManager.toolTipValues[i][2] + "%\n" + "% Change 24h: " + priceManager.toolTipValues[i][3] + "%\n" + "% Change 7d: " + priceManager.toolTipValues[i][4] + "%");
+
+                        totalProfitLabel.Text = "$" + priceManager.totalProfit.ToString("0.00"); // runs on UI thread
+                        totalInvestedLabel.Text = "$" + priceManager.totalInvestment.ToString("0.00");
+                        totalValueLabel.Text = "$" + priceManager.totalValue.ToString("0.00");
+                    });
                 }
-
-                this.Invoke((MethodInvoker)delegate {
-
-                    string comma = String.Format("{0:#,###0.#}", Convert.ToDouble(priceManager.toolTipValues[i][1]));
-                    toolTip.SetToolTip(priceLabelList[i], "Rank: " + priceManager.toolTipValues[i][0] + "\n" + "Market Cap: $" + comma + "\n" + "% Change 1h: " + priceManager.toolTipValues[i][2] + "%\n" + "% Change 24h: " + priceManager.toolTipValues[i][3] + "%\n" + "% Change 7d: " + priceManager.toolTipValues[i][4] + "%");
-                });
-
-                
-                i++;             
+                else
+                {
+                    this.Invoke((MethodInvoker)delegate {
+                        foreach (var item in textBoxArrayList[i])
+                        {
+                            item.Text = "Error";
+                        }
+                    });
+                }
             }
-
-            this.Invoke((MethodInvoker)delegate {
-                totalProfitLabel.Text = "$" + priceManager.totalProfit.ToString("0.00"); // runs on UI thread
-                totalInvestedLabel.Text = "$" + priceManager.totalInvestment.ToString("0.00");
-                totalValueLabel.Text = "$" + priceManager.totalValue.ToString("0.00");
-            });
 
             updatingUiFlag = false;
         }
@@ -186,6 +181,9 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// Creates labels for a new row in flow panel
+        /// </summary>
         private void AddNewLine()
         {
             FlowLayoutPanel newFlowPanel = new FlowLayoutPanel();
@@ -219,24 +217,29 @@ namespace CryptoTracker
             flowLayoutPanel1.Controls.Add(newFlowPanel);
         }
 
+        /// <summary>
+        /// Adds new coin to crypto tracker
+        /// </summary>
+        /// <param name="addCoin"></param>
         public void AddNewCoinToFlowControl(CoinModel addCoin)
         {
-            if (flowControlCoinCount == 7)
+            if (flowControlRowCount == 7)
             {
                 AddNewLine();
-                flowControlCoinCount = 0;
+                flowControlRowCount = 0;
             }
 
+            //Create flow panel to add coin specific controls
             FlowLayoutPanel newFlowPanel = new FlowLayoutPanel();
             newFlowPanel.WrapContents = true;
             newFlowPanel.FlowDirection = FlowDirection.TopDown;
             newFlowPanel.Height = 185;
             newFlowPanel.Width = 90;
 
+            //Create controls
             Label coinName = new Label();
             coinName.Text = addCoin.CoinName;
             
-
             Label coinPrice = new Label();
             coinPrice.Name = addCoin.CoinName + "Label";
             coinPrice.Text = "$100,000";
@@ -258,6 +261,7 @@ namespace CryptoTracker
             TextBox coinProfitPercent = new TextBox();
             coinProfitPercent.Name = addCoin.CoinName + "ProfitPercent_TB";
 
+            //Add controls to coin specifc flow panel
             newFlowPanel.Controls.Add(coinName);
             newFlowPanel.Controls.Add(coinPrice);
             newFlowPanel.Controls.Add(coinQuantity);
@@ -266,25 +270,28 @@ namespace CryptoTracker
             newFlowPanel.Controls.Add(coinProfit);
             newFlowPanel.Controls.Add(coinProfitPercent);
 
+            //Add new flow panel to base flow panel
             flowLayoutPanel1.Controls.Add(newFlowPanel);
 
             //Update Lists
             priceLabelList.Add(coinPrice);
-
             coinNamesList.Add(addCoin.CoinName);
 
+            //Create new textbox array and add to textbox array list
             TextBox[] newArray = new TextBox[5];
             newArray[0] = coinQuantity;
             newArray[1] = coinInvested;
             newArray[2] = coinValue;
             newArray[3] = coinProfit;
             newArray[4] = coinProfitPercent;
-
             textBoxArrayList.Add(newArray);
 
+            //Add new value array to price manager
             priceManager.AddNewCoin(addCoin);        
 
-            flowControlCoinCount++;
+            //Update counts
+            flowControlRowCount++; //Update row count
+            coinCount++; //Update coin count
         }
 
         /// <summary>
@@ -295,17 +302,17 @@ namespace CryptoTracker
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //TODO - Option for user to select save location
+            //TODO - Fix so if no coins are added, cannot save
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-            string[] textFileArray = new string[priceLabelList.Count];
+            string[] textFileArray = new string[coinCount];
             bool readError = false;
 
             //Loop through each coin and put data in string array, if there is an error, do not write
-            for (int i = 0; i < priceLabelList.Count; i++)
+            for (int i = 0; i < coinCount; i++)
             {
                 try
                 {
-
                     textFileArray[i] = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.TrimStart('$') + ", " + priceManager.coinApiUrlList[i];
                 }
                 catch
@@ -320,13 +327,18 @@ namespace CryptoTracker
                 using (System.IO.StreamWriter file =
                     new System.IO.StreamWriter(@"C:\Users\Willem\Desktop\CoinPrices.txt"))
                 {
-                    for (int i = 0; i < priceLabelList.Count; i++)
+                    for (int i = 0; i < coinCount; i++)
                     {
                         //Print name, quantity, net cost, and api link to text file
                         file.WriteLine(textFileArray[i]);
                     }
                 }
             }
+        }
+
+        private void addSellToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

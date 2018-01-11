@@ -20,8 +20,8 @@ namespace CryptoTracker
         }
 
         public List<string> coinApiUrlList = new List<string>(); //List of api URLs
-        public List<float[]> valueArrayList = new List<float[]>();
-        public List<float> coinPrice = new List<float>(); //Contains current price for each coin updated by APIUpdate()
+        public List<float?[]> valueArrayList = new List<float?[]>(); //Mirrors textbox array list but holds float values
+        public List<float?> coinPriceList = new List<float?>(); //Contains current price for each coin updated by APIUpdate()
 
         public float totalProfit = 0.0F;
         public float totalValue = 0.0F;
@@ -29,23 +29,24 @@ namespace CryptoTracker
 
         public List<string[]> toolTipValues = new List<string[]>();
 
+        int coinCount;
 
         public void UpdatePriceData()
         {
             APIUpdate();
-            CalculateValue();
-            CalculateProfit();
-            CalculateTotalProfit();
+            UpdateValues();
         }
 
 
         private void APIUpdate()
         {
-            coinPrice.Clear();
+            coinPriceList.Clear();
             toolTipValues.Clear();
 
+            List<float?> tempCoinPrice = new List<float?>();
+
             //Read data from API
-            for (int i = 0; i < coinApiUrlList.Count; i++)
+            for (int i = 0; i < coinCount; i++)
             {
                 string input = coinApiUrlList[i];
                 string[] values = new string[5];
@@ -57,7 +58,7 @@ namespace CryptoTracker
 
                     dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
 
-                    coinPrice.Add((float)(Convert.ToDouble(results[0].price_usd)));
+                    tempCoinPrice.Add((float)(Convert.ToDouble(results[0].price_usd)));
 
                     values[0] = results[0].rank;
                     values[1] = results[0].market_cap_usd;
@@ -66,53 +67,55 @@ namespace CryptoTracker
                     values[4] = results[0].percent_change_7d;
                     toolTipValues.Add(values);
                 }
-                catch
+                catch (System.Net.WebException e)
                 {
-                    MessageBox.Show("Count not connect to API");
+                    tempCoinPrice.Add(null);
                 }
-
             }
-        }
 
-        private void CalculateValue()
-        {
-            totalValue = 0.0F;
-            totalInvestment = 0.0F;
-            for (int i = 0; i < coinApiUrlList.Count; i++)
+            if (tempCoinPrice.Count == coinCount)
             {
-                valueArrayList[i][(int)rowNames.Value] = valueArrayList[i][(int)rowNames.Quantity] * coinPrice[i];
-                totalInvestment += valueArrayList[i][(int)rowNames.TotalInvested];
-                totalValue += valueArrayList[i][(int)rowNames.Value];
+                coinPriceList = tempCoinPrice;
             }
         }
 
-        private void CalculateProfit()
+        private void UpdateValues()
         {
-            for (int i = 0; i < coinApiUrlList.Count; i++)
+            for (int i = 0; i < coinCount; i++)
             {
-                valueArrayList[i][(int)rowNames.Profit] = valueArrayList[i][(int)rowNames.Value] - valueArrayList[i][(int)rowNames.TotalInvested];
-                valueArrayList[i][(int)rowNames.ProfitPercent] = (valueArrayList[i][(int)rowNames.Profit] / valueArrayList[i][(int)rowNames.Value]) * 100;
+                totalProfit = 0.0F;
+                totalValue = 0.0F;
+                totalInvestment = 0.0F;
+
+                if (coinPriceList[i].HasValue)
+                {
+                    valueArrayList[i][(int)rowNames.Value] = valueArrayList[i][(int)rowNames.Quantity] * coinPriceList[i];
+                    valueArrayList[i][(int)rowNames.Profit] = valueArrayList[i][(int)rowNames.Value] - valueArrayList[i][(int)rowNames.TotalInvested];
+                    valueArrayList[i][(int)rowNames.ProfitPercent] = (valueArrayList[i][(int)rowNames.Profit] / valueArrayList[i][(int)rowNames.Value]) * 100;
+
+                    totalInvestment += valueArrayList[i][(int)rowNames.TotalInvested].Value;
+                    totalValue += valueArrayList[i][(int)rowNames.Value].Value;
+                    totalProfit += valueArrayList[i][(int)rowNames.Profit].Value;
+                }
+                else
+                {
+                    valueArrayList[i][(int)rowNames.Value] = null;
+                    valueArrayList[i][(int)rowNames.Profit] = null;
+                    valueArrayList[i][(int)rowNames.ProfitPercent] = null;
+                }
             }
         }
-
-        private void CalculateTotalProfit()
-        {
-            totalProfit = 0.0F;
-            for (int i = 0; i < coinApiUrlList.Count; i++)
-            {
-                totalProfit += valueArrayList[i][(int)rowNames.Profit];
-            }
-        }
-
 
         public void AddNewCoin(CoinModel addCoin)
         {
             coinApiUrlList.Add(addCoin.APILink);
 
-            float[] coinValues = new float[5];
+            float?[] coinValues = new float?[5]; //Create array to be added to valueArrayList
             coinValues[(int)PriceManager.rowNames.Quantity] = (float)Convert.ToDouble(addCoin.Quantity);
             coinValues[(int)PriceManager.rowNames.TotalInvested] = (float)Convert.ToDouble(addCoin.NetCost);
             valueArrayList.Add(coinValues);
+
+            coinCount++;
         }
 
     }
