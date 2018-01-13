@@ -194,17 +194,18 @@
             // addBuyToolStripMenuItem
             // 
             this.addBuyToolStripMenuItem.Name = "addBuyToolStripMenuItem";
-            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.addBuyToolStripMenuItem.Text = "Add Coin";
             this.addBuyToolStripMenuItem.Click += new System.EventHandler(this.addBuyToolStripMenuItem_Click);
             // 
             // addSellToolStripMenuItem
             // 
             this.addSellToolStripMenuItem.Name = "addSellToolStripMenuItem";
-            this.addSellToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.addSellToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.addSellToolStripMenuItem.Text = "Edit Coin";
+            this.addSellToolStripMenuItem.Click += new System.EventHandler(this.addSellToolStripMenuItem_Click);
             // 
-            // Form1
+            // MainAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -214,7 +215,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Form1";
+            this.Name = "MainAppForm";
             this.Text = "Form1";
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
