@@ -70,6 +70,12 @@ namespace CryptoTracker
                 catch (System.Net.WebException e)
                 {
                     tempCoinPrice.Add(null);
+                    values[0] = "0";
+                    values[1] = "0";
+                    values[2] = "0";
+                    values[3] = "0";
+                    values[4] = "0";
+                    toolTipValues.Add(values);
                 }
             }
 
@@ -81,12 +87,12 @@ namespace CryptoTracker
 
         private void UpdateValues()
         {
+            totalProfit = 0.0F;
+            totalValue = 0.0F;
+            totalInvestment = 0.0F;
+
             for (int i = 0; i < coinCount; i++)
             {
-                totalProfit = 0.0F;
-                totalValue = 0.0F;
-                totalInvestment = 0.0F;
-
                 if (coinPriceList[i].HasValue)
                 {
                     valueArrayList[i][(int)rowNames.Value] = valueArrayList[i][(int)rowNames.Quantity] * coinPriceList[i];
