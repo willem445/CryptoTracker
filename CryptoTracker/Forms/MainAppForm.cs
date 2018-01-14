@@ -154,8 +154,6 @@ namespace CryptoTracker
 
         private void addBuyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO - Check if data is null before adding
-
             AddCoinForm addCoin = new AddCoinForm(); //Instantiate form
 
             if (addCoin.ShowDialog() == DialogResult.OK) //Show form
@@ -304,6 +302,11 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Save();
+        }
+
+        private void Save()
+        {
             //TODO - Option for user to select save location
             //TODO - Fix so if no coins are added, cannot save
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -339,9 +342,37 @@ namespace CryptoTracker
             }
         }
 
-        private void addSellToolStripMenuItem_Click(object sender, EventArgs e)
+        private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            EditCoinForm editCoin = new EditCoinForm(coinNamesList);
 
+            if (editCoin.ShowDialog() == DialogResult.OK) //Show form
+            {
+                CoinModel coinModel = editCoin.Coin; //Create new coin model and add data from form
+
+                //Find index of coin to edit
+                int index;
+                for (index = 0; index < coinCount; index++)
+                {
+                    if (coinNamesList[index] ==  coinModel.CoinName)
+                    {
+                        break;
+                    }
+                }
+
+                //Update lists with new values
+                priceManager.valueArrayList[index][0] = coinModel.Quantity;
+                priceManager.valueArrayList[index][1] = coinModel.TotalInvested;
+
+                textBoxArrayList[index][0].Text = coinModel.Quantity.ToString();
+                textBoxArrayList[index][1].Text ="$" + coinModel.TotalInvested.ToString();
+
+                //Save data if enabled
+                if (editCoin.SaveEnabled == true)
+                {
+                    Save();
+                }
+            }
         }
     }
 }

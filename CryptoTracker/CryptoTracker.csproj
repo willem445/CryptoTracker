@@ -51,6 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\EditCoinForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditCoinForm.Designer.cs">
+      <DependentUpon>EditCoinForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AddCoinForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +74,9 @@
     <Compile Include="Source\PriceManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\EditCoinForm.resx">
+      <DependentUpon>EditCoinForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddCoinForm.resx">
       <DependentUpon>AddCoinForm.cs</DependentUpon>
     </EmbeddedResource>
