@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace CryptoTracker
 {
-    public partial class MainAppForm : Form
+    public partial class MainAppForm : MetroFramework.Forms.MetroForm
     {
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
@@ -55,16 +55,6 @@ namespace CryptoTracker
             {
                 UpdateUI();
             }  
-        }
-
-        //Refresh data
-        private void button1_Click(object sender, EventArgs e)
-        {
-            priceManager.UpdatePriceData();
-            if (!updatingUiFlag)
-            {
-                UpdateUI();
-            }
         }
 
         private void UpdateUI()
@@ -372,6 +362,15 @@ namespace CryptoTracker
                 {
                     Save();
                 }
+            }
+        }
+
+        private void button1_Click(object sender, MouseEventArgs e)
+        {
+            priceManager.UpdatePriceData();
+            if (!updatingUiFlag)
+            {
+                UpdateUI();
             }
         }
     }
