@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,8 +10,10 @@ using System.Windows.Forms;
 
 namespace CryptoTracker
 {
-    public partial class AddCoinForm : Form
+    public partial class EditCoinForm : Form
     {
+        public bool SaveEnabled { get; set; }
+
         public CoinModel Coin
         {
             get
@@ -22,31 +23,35 @@ namespace CryptoTracker
         }
 
         private CoinModel coin;
-        
-        public AddCoinForm()
+
+        public EditCoinForm(List<string> coinList)
         {
             InitializeComponent();
-            cancelButton.DialogResult = DialogResult.Cancel;
-            //addButton.DialogResult = DialogResult.OK;
-
-            apiLink_TB.Text = "https://api.coinmarketcap.com/v1/ticker/";
 
             coin = new CoinModel();
+
+            foreach (var item in coinList)
+            {
+                selectCoin_CB.Items.Add(item);
+            }
         }
 
-
-        private void addButton_Click(object sender, EventArgs e)
+        private void okay_Button_Click(object sender, EventArgs e)
         {
             bool error = false;
 
-            //Check for valid coin name
-            if ((coinName_TB.Text == null) || (coinName_TB.Text == ""))
+            if (saveAfterEditCheckBox.Checked)
             {
-                MessageBox.Show("Enter coin name!");
+                SaveEnabled = true;
+            }
+
+            if (selectCoin_CB.Text == "")
+            {
+                MessageBox.Show("Select coin!");
                 error = true;
             }
 
-            //Check for valid quantity
+            //Quantity
             if ((quantity_TB.Text == null) || (quantity_TB.Text == ""))
             {
                 MessageBox.Show("Enter coin quantity!");
@@ -58,10 +63,10 @@ namespace CryptoTracker
                 error = true;
             }
 
-            //Check for valid coin cost
+            //Net cost
             if ((netCost_TB.Text == null) || (netCost_TB.Text == ""))
             {
-                MessageBox.Show("Enter netcost!");
+                MessageBox.Show("Enter valid netcost!");
                 error = true;
             }
             else
@@ -78,39 +83,18 @@ namespace CryptoTracker
                 }
             }
 
-            //Check for valid api link
-            if ((apiLink_TB.Text == null) || (apiLink_TB.Text == ""))
+            if (!error)
             {
-                MessageBox.Show("Enter api link!");
-                error = true;
-            }
-            else
-            {
-                try
-                {
-                    var cli = new System.Net.WebClient();
-                    string prices = cli.DownloadString(apiLink_TB.Text);
-                }
-                catch
-                {
-                    MessageBox.Show("Enter valid api url!");
-                    error = true;
-                }
-            }
-
-            //If no errors, continue
-            if(!error)
-            {
-                coin.CoinName = coinName_TB.Text;
                 coin.Quantity = (float)Convert.ToDouble(quantity_TB.Text);
-                coin.NetCost = (float)Convert.ToDouble(netCost_TB.Text);
-                coin.APILink = apiLink_TB.Text;
+                coin.TotalInvested = (float)Convert.ToDouble(netCost_TB.Text);
+                coin.CoinName = selectCoin_CB.Text;
+
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
         }
 
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void cancel_Button_Click(object sender, EventArgs e)
         {
             this.Close();
         }

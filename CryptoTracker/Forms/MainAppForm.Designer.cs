@@ -43,7 +43,7 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBuyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addSellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -171,14 +171,14 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -186,7 +186,7 @@
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addBuyToolStripMenuItem,
-            this.addSellToolStripMenuItem});
+            this.editToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -198,12 +198,12 @@
             this.addBuyToolStripMenuItem.Text = "Add Coin";
             this.addBuyToolStripMenuItem.Click += new System.EventHandler(this.addBuyToolStripMenuItem_Click);
             // 
-            // addSellToolStripMenuItem
+            // editToolStripMenuItem
             // 
-            this.addSellToolStripMenuItem.Name = "addSellToolStripMenuItem";
-            this.addSellToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.addSellToolStripMenuItem.Text = "Edit Coin";
-            this.addSellToolStripMenuItem.Click += new System.EventHandler(this.addSellToolStripMenuItem_Click);
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editToolStripMenuItem.Text = "Edit Coin";
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
             // MainAppForm
             // 
@@ -237,7 +237,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addBuyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addSellToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.Label totalValueLabel;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label totalInvestedLabel;
