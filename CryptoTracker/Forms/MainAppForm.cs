@@ -7,6 +7,11 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 
+//Historical Data API
+//https://www.cryptocompare.com/api/#-api-data-pricehistorical-
+//https://min-api.cryptocompare.com/
+//https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=USD&ts=1514923560
+
 namespace CryptoTracker
 {
     public partial class MainAppForm : Form
