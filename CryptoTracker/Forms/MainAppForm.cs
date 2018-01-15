@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace CryptoTracker
 {
-    public partial class MainAppForm : Form
+    public partial class MainAppForm : MetroFramework.Forms.MetroForm
     {
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
@@ -19,7 +19,7 @@ namespace CryptoTracker
 
         //UI Lists
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
-        List<TextBox[]> textBoxArrayList = new List<TextBox[]>(); //Array of textboxes for each coin, stored in a list
+        List<MetroFramework.Controls.MetroTextBox[]> textBoxArrayList = new List<MetroFramework.Controls.MetroTextBox[]>(); //Array of textboxes for each coin, stored in a list
 
         //Program variables
         int flowControlRowCount = 0; //Tracks coins added to row in flow control
@@ -55,16 +55,6 @@ namespace CryptoTracker
             {
                 UpdateUI();
             }  
-        }
-
-        //Refresh data
-        private void button1_Click(object sender, EventArgs e)
-        {
-            priceManager.UpdatePriceData();
-            if (!updatingUiFlag)
-            {
-                UpdateUI();
-            }
         }
 
         private void UpdateUI()
@@ -193,21 +183,26 @@ namespace CryptoTracker
             newFlowPanel.Height = 185;
             newFlowPanel.Width = 90;
 
-            Label quantity = new Label();
+            MetroFramework.Controls.MetroLabel quantity = new MetroFramework.Controls.MetroLabel();
             quantity.Margin = new Padding(2, 2, 2, 2);
             quantity.Text = "Quantity:";
-            Label invested = new Label();
+            quantity.FontSize = MetroFramework.MetroLabelSize.Small;
+            MetroFramework.Controls.MetroLabel invested = new MetroFramework.Controls.MetroLabel();
             invested.Margin = new Padding(2, 2, 2, 2);
             invested.Text = "Total Invested:";
-            Label value = new Label();
+            invested.FontSize = MetroFramework.MetroLabelSize.Small;
+            MetroFramework.Controls.MetroLabel value = new MetroFramework.Controls.MetroLabel();
             value.Margin = new Padding(2, 2, 2, 2);
             value.Text = "Value:";
-            Label profit = new Label();
+            value.FontSize = MetroFramework.MetroLabelSize.Small;
+            MetroFramework.Controls.MetroLabel profit = new MetroFramework.Controls.MetroLabel();
             profit.Margin = new Padding(2, 2, 2, 2);
             profit.Text = "Profit:";
-            Label profitPercent = new Label();
+            profit.FontSize = MetroFramework.MetroLabelSize.Small;
+            MetroFramework.Controls.MetroLabel profitPercent = new MetroFramework.Controls.MetroLabel();
             profitPercent.Margin = new Padding(2, 2, 2, 2);
             profitPercent.Text = "Profit %:";
+            profitPercent.FontSize = MetroFramework.MetroLabelSize.Small;
 
             newFlowPanel.Controls.Add(profitPercent);
             newFlowPanel.Controls.Add(profit);
@@ -238,28 +233,28 @@ namespace CryptoTracker
             newFlowPanel.Width = 90;
 
             //Create controls
-            Label coinName = new Label();
+            MetroFramework.Controls.MetroLabel coinName = new MetroFramework.Controls.MetroLabel();
             coinName.Text = addCoin.CoinName;
-            
-            Label coinPrice = new Label();
+
+            MetroFramework.Controls.MetroLabel coinPrice = new MetroFramework.Controls.MetroLabel();
             coinPrice.Name = addCoin.CoinName + "Label";
             coinPrice.Text = "$100,000";
 
-            TextBox coinQuantity = new TextBox();
+            MetroFramework.Controls.MetroTextBox coinQuantity = new MetroFramework.Controls.MetroTextBox();
             coinQuantity.Name = addCoin.CoinName + "Quantity_TB";
             coinQuantity.Text = addCoin.Quantity.ToString();
 
-            TextBox coinInvested = new TextBox();
+            MetroFramework.Controls.MetroTextBox coinInvested = new MetroFramework.Controls.MetroTextBox();
             coinInvested.Name = addCoin.CoinName + "Invested_TB";
             coinInvested.Text = addCoin.NetCost.ToString();
 
-            TextBox coinValue = new TextBox();
+            MetroFramework.Controls.MetroTextBox coinValue = new MetroFramework.Controls.MetroTextBox();
             coinValue.Name = addCoin.CoinName + "Value_TB";
 
-            TextBox coinProfit = new TextBox();
+            MetroFramework.Controls.MetroTextBox coinProfit = new MetroFramework.Controls.MetroTextBox();
             coinProfit.Name = addCoin.CoinName + "Profit_TB";
 
-            TextBox coinProfitPercent = new TextBox();
+            MetroFramework.Controls.MetroTextBox coinProfitPercent = new MetroFramework.Controls.MetroTextBox();
             coinProfitPercent.Name = addCoin.CoinName + "ProfitPercent_TB";
 
             //Add controls to coin specifc flow panel
@@ -279,13 +274,29 @@ namespace CryptoTracker
             coinNamesList.Add(addCoin.CoinName);
 
             //Create new textbox array and add to textbox array list
-            TextBox[] newArray = new TextBox[5];
+            MetroFramework.Controls.MetroTextBox[] newArray = new MetroFramework.Controls.MetroTextBox[5];
             newArray[0] = coinQuantity;
             newArray[1] = coinInvested;
             newArray[2] = coinValue;
             newArray[3] = coinProfit;
             newArray[4] = coinProfitPercent;
             textBoxArrayList.Add(newArray);
+
+            //Update textbox properties
+            foreach (var item in newArray)
+            {
+                item.Size = new Size(85, 20);
+                item.Padding = new Padding(0, 4, 0, 4);
+                item.CustomBackground = false;
+                item.CustomForeColor = true;
+            }
+
+            //Add tile to info panel
+            MetroFramework.Controls.MetroTile tile = new MetroFramework.Controls.MetroTile();
+            tile.Size = new Size(100, 100);
+            tile.Visible = true;
+            tile.Enabled = true;
+            infoFlowPanel.Controls.Add(tile);
 
             //Add new value array to price manager
             priceManager.AddNewCoin(addCoin);        
@@ -372,6 +383,15 @@ namespace CryptoTracker
                 {
                     Save();
                 }
+            }
+        }
+
+        private void button1_Click(object sender, MouseEventArgs e)
+        {
+            priceManager.UpdatePriceData();
+            if (!updatingUiFlag)
+            {
+                UpdateUI();
             }
         }
     }

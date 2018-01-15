@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace CryptoTracker
 {
-    public partial class EditCoinForm : Form
+    public partial class EditCoinForm : MetroFramework.Forms.MetroForm
     {
         public bool SaveEnabled { get; set; }
 
@@ -27,6 +27,7 @@ namespace CryptoTracker
         public EditCoinForm(List<string> coinList)
         {
             InitializeComponent();
+            this.Text = "Edit Coin";
 
             coin = new CoinModel();
 
@@ -97,6 +98,11 @@ namespace CryptoTracker
         private void cancel_Button_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void EditCoinForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
