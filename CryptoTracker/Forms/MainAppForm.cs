@@ -291,6 +291,13 @@ namespace CryptoTracker
                 item.CustomForeColor = true;
             }
 
+            //Add tile to info panel
+            MetroFramework.Controls.MetroTile tile = new MetroFramework.Controls.MetroTile();
+            tile.Size = new Size(100, 100);
+            tile.Visible = true;
+            tile.Enabled = true;
+            infoFlowPanel.Controls.Add(tile);
+
             //Add new value array to price manager
             priceManager.AddNewCoin(addCoin);        
 

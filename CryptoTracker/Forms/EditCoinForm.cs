@@ -99,5 +99,10 @@ namespace CryptoTracker
         {
             this.Close();
         }
+
+        private void EditCoinForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
