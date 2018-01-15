@@ -40,6 +40,9 @@ namespace CryptoTracker
 
             priceManager = new PriceManager();
 
+            //Create handle created event
+            HandleCreated += MainAppForm_HandleCreated;
+
             //Configure the autoupdate timer
             updatePrices = new System.Timers.Timer();
             updatePrices.Interval = 30000; //30 seconds
@@ -53,10 +56,23 @@ namespace CryptoTracker
             toolTip.ShowAlways = true;
 
             //Initialize the new line labels
-            AddNewLine();     
+            AddNewLine();
+
+            //Parse data in documents folder
+            ParseSavedData();     
         }
 
         //Methods*******************************************************************************
+        /// <summary>
+        /// Update the UI when the form handle is created
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainAppForm_HandleCreated(object sender, EventArgs e)
+        {
+            UpdateUI();
+        }
+
         /// <summary>
         /// Called by timer every 30 seconds to update prices
         /// </summary>
@@ -378,49 +394,34 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// Open text file where saved coin data is stored
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                //Parse data from text file and update UI
-                ParseSavedData(openFileDialog1.FileName);
-            }
-
-            //Update price data and UI with values for newly added coins
-            priceManager.UpdatePriceData();
-            UpdateUI();
-        }
-
-        /// <summary>
         /// Parses data from text file and adds coin to form
         /// </summary>
         /// <param name="path"></param>
-        public void ParseSavedData(string path)
+        public void ParseSavedData()
         {
-            string[] lines = System.IO.File.ReadAllLines(path);
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
 
-            foreach (string line in lines)
+            string[] lines;
+
+            if (Directory.Exists(path))
             {
-                CoinModel newCoin = new CoinModel();
+                lines = System.IO.File.ReadAllLines(Path.Combine(path, "CoinData.txt"));
 
-                string[] data = line.Split(',');
-                newCoin.CoinName = data[0];
-                newCoin.Quantity = (float)(Convert.ToDouble(data[1]));
-                newCoin.NetCost = (float)(Convert.ToDouble(data[2]));
-                newCoin.APILink = data[3];
+                foreach (string line in lines)
+                {
+                    CoinModel newCoin = new CoinModel();
 
-                AddNewCoinToFlowControl(newCoin);
+                    string[] data = line.Split(',');
+                    newCoin.CoinName = data[0];
+                    newCoin.Quantity = (float)(Convert.ToDouble(data[1]));
+                    newCoin.NetCost = (float)(Convert.ToDouble(data[2]));
+                    newCoin.APILink = data[3];
+
+                    AddNewCoinToFlowControl(newCoin);
+                }
+
+                priceManager.UpdatePriceData();
             }
         }
 
@@ -439,9 +440,8 @@ namespace CryptoTracker
         /// </summary>
         private void Save()
         {
-            //TODO - Option for user to select save location
-            //TODO - Fix so if no coins are added, cannot save
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
 
             string[] textFileArray = new string[coinCount];
             bool readError = false;
@@ -462,8 +462,13 @@ namespace CryptoTracker
 
             if (!readError)
             {
+                if (!Directory.Exists(Path.Combine(path, "CoinData.txt")))
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+
                 using (System.IO.StreamWriter file =
-                    new System.IO.StreamWriter(@"C:\Users\Willem\Desktop\CoinPrices.txt"))
+                    new System.IO.StreamWriter(Path.Combine(path, "CoinData.txt")))
                 {
                     for (int i = 0; i < coinCount; i++)
                     {
