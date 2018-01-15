@@ -42,7 +42,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 21);
+            this.label1.Location = new System.Drawing.Point(23, 66);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 0;
@@ -51,7 +51,7 @@
             // selectCoin_CB
             // 
             this.selectCoin_CB.FormattingEnabled = true;
-            this.selectCoin_CB.Location = new System.Drawing.Point(79, 18);
+            this.selectCoin_CB.Location = new System.Drawing.Point(90, 63);
             this.selectCoin_CB.Name = "selectCoin_CB";
             this.selectCoin_CB.Size = new System.Drawing.Size(121, 21);
             this.selectCoin_CB.TabIndex = 1;
@@ -59,7 +59,7 @@
             // saveAfterEditCheckBox
             // 
             this.saveAfterEditCheckBox.AutoSize = true;
-            this.saveAfterEditCheckBox.Location = new System.Drawing.Point(206, 20);
+            this.saveAfterEditCheckBox.Location = new System.Drawing.Point(116, 156);
             this.saveAfterEditCheckBox.Name = "saveAfterEditCheckBox";
             this.saveAfterEditCheckBox.Size = new System.Drawing.Size(95, 17);
             this.saveAfterEditCheckBox.TabIndex = 2;
@@ -69,7 +69,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 54);
+            this.label2.Location = new System.Drawing.Point(23, 99);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 13);
             this.label2.TabIndex = 3;
@@ -78,7 +78,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 88);
+            this.label3.Location = new System.Drawing.Point(23, 133);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(51, 13);
             this.label3.TabIndex = 4;
@@ -86,21 +86,21 @@
             // 
             // quantity_TB
             // 
-            this.quantity_TB.Location = new System.Drawing.Point(79, 51);
+            this.quantity_TB.Location = new System.Drawing.Point(90, 96);
             this.quantity_TB.Name = "quantity_TB";
             this.quantity_TB.Size = new System.Drawing.Size(121, 20);
             this.quantity_TB.TabIndex = 5;
             // 
             // netCost_TB
             // 
-            this.netCost_TB.Location = new System.Drawing.Point(79, 85);
+            this.netCost_TB.Location = new System.Drawing.Point(90, 130);
             this.netCost_TB.Name = "netCost_TB";
             this.netCost_TB.Size = new System.Drawing.Size(121, 20);
             this.netCost_TB.TabIndex = 6;
             // 
             // okay_Button
             // 
-            this.okay_Button.Location = new System.Drawing.Point(226, 129);
+            this.okay_Button.Location = new System.Drawing.Point(136, 199);
             this.okay_Button.Name = "okay_Button";
             this.okay_Button.Size = new System.Drawing.Size(75, 23);
             this.okay_Button.TabIndex = 7;
@@ -110,7 +110,7 @@
             // 
             // cancel_Button
             // 
-            this.cancel_Button.Location = new System.Drawing.Point(145, 129);
+            this.cancel_Button.Location = new System.Drawing.Point(55, 199);
             this.cancel_Button.Name = "cancel_Button";
             this.cancel_Button.Size = new System.Drawing.Size(75, 23);
             this.cancel_Button.TabIndex = 8;
@@ -122,7 +122,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 164);
+            this.BorderStyle = MetroFramework.Drawing.MetroBorderStyle.FixedSingle;
+            this.ClientSize = new System.Drawing.Size(233, 245);
             this.Controls.Add(this.cancel_Button);
             this.Controls.Add(this.okay_Button);
             this.Controls.Add(this.netCost_TB);
@@ -133,6 +134,8 @@
             this.Controls.Add(this.selectCoin_CB);
             this.Controls.Add(this.label1);
             this.Name = "EditCoinForm";
+            this.Resizable = false;
+            this.Style = MetroFramework.MetroColorStyle.Red;
             this.Text = "EditCoinForm";
             this.ResumeLayout(false);
             this.PerformLayout();

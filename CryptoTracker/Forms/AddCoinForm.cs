@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace CryptoTracker
 {
-    public partial class AddCoinForm : Form
+    public partial class AddCoinForm : MetroFramework.Forms.MetroForm
     {
         public CoinModel Coin
         {
@@ -26,6 +26,7 @@ namespace CryptoTracker
         public AddCoinForm()
         {
             InitializeComponent();
+            this.Text = "Add New Coin";
             cancelButton.DialogResult = DialogResult.Cancel;
             //addButton.DialogResult = DialogResult.OK;
 
