@@ -335,10 +335,14 @@ namespace CryptoTracker
                 }
                 else
                 {
-                    tile.UseTileImage = false;
+                    tile.UseTileImage = true;
                     Random rnd = new Random();
                     Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
                     tile.BackColor = ControlPaint.Light(randomColor);
+
+                    tile.TileImage = Image.FromFile(@"../../Resources\device.png");
+                    tile.UseTileImage = true;
+                    tile.TileImageAlign = ContentAlignment.MiddleCenter;
                 }         
                 tile.Size = new Size(120, 120);
                 tile.Visible = true;
@@ -369,7 +373,6 @@ namespace CryptoTracker
         {
             //Need to build link to https://coinmarketcap.com/currencies/coin/ and navigate to website
             string name = ((MetroFramework.Controls.MetroTile)sender).Name.ToString().Split('/')[5];
-            MessageBox.Show("de");
 
             if (name.Contains(((MetroFramework.Controls.MetroTile)sender).Text.ToLower()))
             {

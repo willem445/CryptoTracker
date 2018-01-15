@@ -171,6 +171,7 @@
     <Content Include="Resources\dcn%402x.png" />
     <Content Include="Resources\dcr%402x.png" />
     <Content Include="Resources\dent%402x.png" />
+    <Content Include="Resources\device.png" />
     <Content Include="Resources\dgb%402x.png" />
     <Content Include="Resources\dgd%402x.png" />
     <Content Include="Resources\doge%402x.png" />
