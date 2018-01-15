@@ -6,6 +6,14 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Diagnostics;
+
+using MetroFramework;
+using MetroFramework.Forms;
+
+//Crypto Images
+//https://github.com/cjdowner/cryptocurrency-icons
 
 namespace CryptoTracker
 {
@@ -16,6 +24,7 @@ namespace CryptoTracker
         System.Timers.Timer updatePrices;
 
         List<string> coinNamesList = new List<string>(); //Stores the names of each coin added
+        public List<string> coinTradeName = new List<string>();
 
         //UI Lists
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
@@ -45,7 +54,7 @@ namespace CryptoTracker
             // Force the ToolTip text to be displayed whether or not the form is active.
             toolTip.ShowAlways = true;
 
-            AddNewLine();
+            AddNewLine();     
         }
 
         public void UpdatePrices(object sender, ElapsedEventArgs e)
@@ -291,12 +300,66 @@ namespace CryptoTracker
                 item.CustomForeColor = true;
             }
 
-            //Add tile to info panel
-            MetroFramework.Controls.MetroTile tile = new MetroFramework.Controls.MetroTile();
-            tile.Size = new Size(100, 100);
-            tile.Visible = true;
-            tile.Enabled = true;
-            infoFlowPanel.Controls.Add(tile);
+
+            
+            //Get trade name
+            try
+            {
+                MetroFramework.Controls.MetroTile tile = new MetroFramework.Controls.MetroTile();
+
+                var cli = new System.Net.WebClient();
+                string prices = cli.DownloadString(addCoin.APILink);
+
+                dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
+
+                //coinTradeName.Add();
+
+                //Sample pixel color
+                int x4 = 16;
+                int y = 16;
+
+                string result = results[0].symbol;
+                result = result.ToLower();
+                string path = @"../../Resources\" + result + "@2x.png";
+
+                if (File.Exists(path))
+                {
+                    Bitmap b = new Bitmap(path);
+                    Color x = b.GetPixel(x4, y);
+
+                    //Add image to tile 
+                    tile.TileImage = Image.FromFile(path);
+                    tile.UseTileImage = true;
+                    tile.TileImageAlign = ContentAlignment.MiddleCenter;
+                    tile.BackColor = ControlPaint.Light(x);
+                }
+                else
+                {
+                    tile.UseTileImage = true;
+                    Random rnd = new Random();
+                    Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                    tile.BackColor = ControlPaint.Light(randomColor);
+
+                    tile.TileImage = Image.FromFile(@"../../Resources\default_tile.png");
+                    tile.UseTileImage = true;
+                    tile.TileImageAlign = ContentAlignment.MiddleCenter;
+                }         
+                tile.Size = new Size(120, 120);
+                tile.Visible = true;
+                tile.Enabled = true;
+                tile.CustomBackground = true;              
+                tile.Text = addCoin.CoinName;
+                tile.TileTextFontSize = MetroFramework.MetroTileTextSize.Tall;
+                tile.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
+                tile.Click += Tile_Click;
+                tile.Name = addCoin.APILink;
+
+                infoFlowPanel.Controls.Add(tile);
+            }
+            catch
+            {
+
+            }
 
             //Add new value array to price manager
             priceManager.AddNewCoin(addCoin);        
@@ -306,8 +369,27 @@ namespace CryptoTracker
             coinCount++; //Update coin count
         }
 
+        private void Tile_Click(object sender, EventArgs e)
+        {
+            //Need to build link to https://coinmarketcap.com/currencies/coin/ and navigate to website
+            string name = ((MetroFramework.Controls.MetroTile)sender).Name.ToString().Split('/')[5];
+
+            if (name.Contains(((MetroFramework.Controls.MetroTile)sender).Text.ToLower()))
+            {
+                try
+                {
+                    ProcessStartInfo sInfo = new ProcessStartInfo("https://coinmarketcap.com/currencies/" + name + "/");
+                    Process.Start(sInfo);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
         /// <summary>
-        /// Write coin data to text file
+        /// Call save function to save data to file
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

@@ -9,6 +9,7 @@ namespace CryptoTracker
     public class CoinModel
     {
         public string CoinName { get; set; }
+        public string CoinTradeName { get; set; }
 
         public float Percent_Change_1h { get; set; }
         public float Percent_Change_24hr { get; set; }
