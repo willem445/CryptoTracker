@@ -7,6 +7,10 @@ using System.Drawing;
 using System.IO;
 using System.Diagnostics;
 
+using LiveCharts; //Core of the library
+using LiveCharts.Wpf; //The WPF controls
+using LiveCharts.WinForms; //the WinForm wrappers
+
 //Crypto Images
 //https://github.com/cjdowner/cryptocurrency-icons
 
@@ -533,6 +537,47 @@ namespace CryptoTracker
                     Save();
                 }
             }
+        }
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            Func<ChartPoint, string> labelPoint = chartPoint =>
+    string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            pieChart1.Series = new SeriesCollection
+            {
+                new PieSeries
+                {
+                    Title = "Maria",
+                    Values = new ChartValues<double> {3},
+                    PushOut = 15,
+                    DataLabels = true,
+                    LabelPoint = labelPoint
+                },
+                new PieSeries
+                {
+                    Title = "Charles",
+                    Values = new ChartValues<double> {4},
+                    DataLabels = true,
+                    LabelPoint = labelPoint
+                },
+                new PieSeries
+                {
+                    Title = "Frida",
+                    Values = new ChartValues<double> {6},
+                    DataLabels = true,
+                    LabelPoint = labelPoint
+                },
+                new PieSeries
+                {
+                    Title = "Frederic",
+                    Values = new ChartValues<double> {2},
+                    DataLabels = true,
+                    LabelPoint = labelPoint
+                }
+            };
+
+            pieChart1.LegendLocation = LegendLocation.Bottom;
         }
     }
 }
