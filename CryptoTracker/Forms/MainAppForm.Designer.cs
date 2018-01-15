@@ -39,6 +39,9 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBuyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
             this.totalValueLabel = new MetroFramework.Controls.MetroLabel();
@@ -47,19 +50,16 @@
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.totalProfitLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
-            this.metroButton1 = new MetroFramework.Controls.MetroButton();
-            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.refreshButton = new MetroFramework.Controls.MetroButton();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.metroButton2 = new MetroFramework.Controls.MetroButton();
             this.metroComboBox1 = new MetroFramework.Controls.MetroComboBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.metroButton2 = new MetroFramework.Controls.MetroButton();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -140,16 +140,37 @@
             // addBuyToolStripMenuItem
             // 
             this.addBuyToolStripMenuItem.Name = "addBuyToolStripMenuItem";
-            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.addBuyToolStripMenuItem.Text = "Add Coin";
             this.addBuyToolStripMenuItem.Click += new System.EventHandler(this.addBuyToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.editToolStripMenuItem.Text = "Edit Coin";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.helpToolStripMenuItem,
+            this.donateToolStripMenuItem});
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // donateToolStripMenuItem
+            // 
+            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.donateToolStripMenuItem.Text = "Donate";
             // 
             // metroTabControl1
             // 
@@ -159,7 +180,7 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 3;
+            this.metroTabControl1.SelectedIndex = 0;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             // 
@@ -171,7 +192,7 @@
             this.metroTabPage1.Controls.Add(this.metroLabel4);
             this.metroTabPage1.Controls.Add(this.totalProfitLabel);
             this.metroTabPage1.Controls.Add(this.metroLabel6);
-            this.metroTabPage1.Controls.Add(this.metroButton1);
+            this.metroTabPage1.Controls.Add(this.refreshButton);
             this.metroTabPage1.Controls.Add(this.flowLayoutPanel1);
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 35);
@@ -241,24 +262,14 @@
             this.metroLabel6.TabIndex = 11;
             this.metroLabel6.Text = "Profit:";
             // 
-            // metroButton1
+            // refreshButton
             // 
-            this.metroButton1.Location = new System.Drawing.Point(13, 388);
-            this.metroButton1.Name = "metroButton1";
-            this.metroButton1.Size = new System.Drawing.Size(77, 19);
-            this.metroButton1.TabIndex = 10;
-            this.metroButton1.Text = "Refresh";
-            this.metroButton1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.button1_Click);
-            // 
-            // metroTabPage2
-            // 
-            this.metroTabPage2.HorizontalScrollbarBarColor = true;
-            this.metroTabPage2.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(796, 421);
-            this.metroTabPage2.TabIndex = 1;
-            this.metroTabPage2.Text = "Portfolio";
-            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            this.refreshButton.Location = new System.Drawing.Point(13, 388);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(77, 19);
+            this.refreshButton.TabIndex = 10;
+            this.refreshButton.Text = "Refresh";
+            this.refreshButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.refreshButton_Click);
             // 
             // metroTabPage3
             // 
@@ -272,6 +283,14 @@
             this.metroTabPage3.TabIndex = 2;
             this.metroTabPage3.Text = "Trades";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
+            // 
+            // metroButton2
+            // 
+            this.metroButton2.Location = new System.Drawing.Point(702, 29);
+            this.metroButton2.Name = "metroButton2";
+            this.metroButton2.Size = new System.Drawing.Size(75, 23);
+            this.metroButton2.TabIndex = 4;
+            this.metroButton2.Text = "Import";
             // 
             // metroComboBox1
             // 
@@ -299,7 +318,7 @@
             this.metroTabPage4.Name = "metroTabPage4";
             this.metroTabPage4.Size = new System.Drawing.Size(796, 421);
             this.metroTabPage4.TabIndex = 3;
-            this.metroTabPage4.Text = "Info";
+            this.metroTabPage4.Text = "Coin Info";
             this.metroTabPage4.VerticalScrollbarBarColor = true;
             // 
             // infoFlowPanel
@@ -311,40 +330,21 @@
             this.infoFlowPanel.Size = new System.Drawing.Size(777, 415);
             this.infoFlowPanel.TabIndex = 2;
             // 
+            // metroTabPage2
+            // 
+            this.metroTabPage2.HorizontalScrollbarBarColor = true;
+            this.metroTabPage2.Location = new System.Drawing.Point(4, 35);
+            this.metroTabPage2.Name = "metroTabPage2";
+            this.metroTabPage2.Size = new System.Drawing.Size(796, 421);
+            this.metroTabPage2.TabIndex = 1;
+            this.metroTabPage2.Text = "Portfolio";
+            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            // 
             // metroStyleManager1
             // 
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpToolStripMenuItem,
-            this.donateToolStripMenuItem});
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // donateToolStripMenuItem
-            // 
-            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
-            this.donateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.donateToolStripMenuItem.Text = "Donate";
-            // 
-            // metroButton2
-            // 
-            this.metroButton2.Location = new System.Drawing.Point(702, 29);
-            this.metroButton2.Name = "metroButton2";
-            this.metroButton2.Size = new System.Drawing.Size(75, 23);
-            this.metroButton2.TabIndex = 4;
-            this.metroButton2.Text = "Import";
             // 
             // MainAppForm
             // 
@@ -360,7 +360,7 @@
             this.Name = "MainAppForm";
             this.Resizable = false;
             this.Style = MetroFramework.MetroColorStyle.Red;
-            this.Text = "Form1";
+            this.Text = "Crypto Tracker";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.metroTabControl1.ResumeLayout(false);
@@ -395,7 +395,7 @@
         private MetroFramework.Controls.MetroLabel totalInvestedLabel;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         private MetroFramework.Controls.MetroLabel totalValueLabel;
-        private MetroFramework.Controls.MetroButton metroButton1;
+        private MetroFramework.Controls.MetroButton refreshButton;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private MetroFramework.Controls.MetroComboBox metroComboBox1;

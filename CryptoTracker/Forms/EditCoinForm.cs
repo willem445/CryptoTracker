@@ -12,6 +12,7 @@ namespace CryptoTracker
 {
     public partial class EditCoinForm : MetroFramework.Forms.MetroForm
     {
+        //Properties****************************************************************************
         public bool SaveEnabled { get; set; }
 
         public CoinModel Coin
@@ -22,8 +23,10 @@ namespace CryptoTracker
             }
         }
 
+        //Fields********************************************************************************
         private CoinModel coin;
 
+        //Constructor***************************************************************************
         public EditCoinForm(List<string> coinList)
         {
             InitializeComponent();
@@ -37,6 +40,12 @@ namespace CryptoTracker
             }
         }
 
+        //Methods*******************************************************************************
+        /// <summary>
+        /// Check if data is valid and return updated coin data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void okay_Button_Click(object sender, EventArgs e)
         {
             bool error = false;
@@ -95,14 +104,14 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// Cancel and close form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cancel_Button_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void EditCoinForm_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

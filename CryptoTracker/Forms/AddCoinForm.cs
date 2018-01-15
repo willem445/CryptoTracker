@@ -13,6 +13,7 @@ namespace CryptoTracker
 {
     public partial class AddCoinForm : MetroFramework.Forms.MetroForm
     {
+        //Properties****************************************************************************
         public CoinModel Coin
         {
             get
@@ -21,21 +22,27 @@ namespace CryptoTracker
             }
         }
 
+        //Fields********************************************************************************
         private CoinModel coin;
-        
+
+        //Constructor***************************************************************************
         public AddCoinForm()
         {
             InitializeComponent();
             this.Text = "Add New Coin";
             cancelButton.DialogResult = DialogResult.Cancel;
-            //addButton.DialogResult = DialogResult.OK;
 
             apiLink_TB.Text = "https://api.coinmarketcap.com/v1/ticker/";
 
             coin = new CoinModel();
         }
 
-
+        //Methods*******************************************************************************
+        /// <summary>
+        /// Check if data is valid and add new coin to form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton_Click(object sender, EventArgs e)
         {
             bool error = false;
@@ -112,6 +119,11 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// Cancel and close form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cancelButton_Click(object sender, EventArgs e)
         {
             this.Close();

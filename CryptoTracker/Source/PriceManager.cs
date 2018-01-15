@@ -1,15 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CryptoTracker
 {
     class PriceManager
     {
+        //Enums*********************************************************************************
         public enum rowNames
         {
             Quantity,
@@ -19,47 +16,56 @@ namespace CryptoTracker
             ProfitPercent
         }
 
+        //Fields********************************************************************************
         public List<string> coinApiUrlList = new List<string>(); //List of api URLs
         public List<float?[]> valueArrayList = new List<float?[]>(); //Mirrors textbox array list but holds float values
         public List<float?> coinPriceList = new List<float?>(); //Contains current price for each coin updated by APIUpdate()
 
+        //Fields to hold total investement data
         public float totalProfit = 0.0F;
         public float totalValue = 0.0F;
         public float totalInvestment = 0.0F;
 
-        public List<string[]> toolTipValues = new List<string[]>();
+        public List<string[]> toolTipValues = new List<string[]>(); //List of arrays holding tooltip data for each coin (marketcap, rank, % change, etc)
 
-        int coinCount;
+        int coinCount; //Number of coins currently added to the form
 
+        //Constructor***************************************************************************
         public void UpdatePriceData()
         {
             APIUpdate();
             UpdateValues();
         }
 
-
+        //Methods*******************************************************************************
+        /// <summary>
+        /// Connect to coinmarketcap API and retrieve data for each coin added to form
+        /// </summary>
         private void APIUpdate()
         {
+            //Clear lists before updating new data
             coinPriceList.Clear();
             toolTipValues.Clear();
 
-            List<float?> tempCoinPrice = new List<float?>();
+            List<float?> tempCoinPrice = new List<float?>(); //Temp list to hold price data
 
             //Read data from API
             for (int i = 0; i < coinCount; i++)
             {
                 string input = coinApiUrlList[i];
-                string[] values = new string[5];
+                string[] values = new string[5]; //Temp array to hold tool tip data
 
                 try
                 {
+                    //Connect to API
                     var cli = new System.Net.WebClient();
                     string prices = cli.DownloadString(input);
-
                     dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
 
+                    //Add price to temp list
                     tempCoinPrice.Add((float)(Convert.ToDouble(results[0].price_usd)));
 
+                    //Update tool tip array and add array to tool tip list
                     values[0] = results[0].rank;
                     values[1] = results[0].market_cap_usd;
                     values[2] = results[0].percent_change_1h;
@@ -69,6 +75,7 @@ namespace CryptoTracker
                 }
                 catch (System.Net.WebException e)
                 {
+                    //If there is an error connecting to the API, fill list with null data to avoid index out of bounds later
                     tempCoinPrice.Add(null);
                     values[0] = "0";
                     values[1] = "0";
@@ -79,12 +86,16 @@ namespace CryptoTracker
                 }
             }
 
+            //If there wasn't any errors reading data, update the coinPriceList
             if (tempCoinPrice.Count == coinCount)
             {
                 coinPriceList = tempCoinPrice;
             }
         }
 
+        /// <summary>
+        /// Updates values in valueArrayList for each coin. Also calculates total investement data.
+        /// </summary>
         private void UpdateValues()
         {
             totalProfit = 0.0F;
@@ -112,9 +123,13 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// Creates new array in valueArrayList for new coin and populates quantity and net cost
+        /// </summary>
+        /// <param name="addCoin">CoinModel class holding coin related data</param>
         public void AddNewCoin(CoinModel addCoin)
         {
-            coinApiUrlList.Add(addCoin.APILink);
+            coinApiUrlList.Add(addCoin.APILink); //Add api url to apiurllist
 
             float?[] coinValues = new float?[5]; //Create array to be added to valueArrayList
             coinValues[(int)PriceManager.rowNames.Quantity] = (float)Convert.ToDouble(addCoin.Quantity);
@@ -123,6 +138,5 @@ namespace CryptoTracker
 
             coinCount++;
         }
-
     }
 }
