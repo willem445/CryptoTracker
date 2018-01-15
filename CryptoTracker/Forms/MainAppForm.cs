@@ -340,7 +340,7 @@ namespace CryptoTracker
                     Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
                     tile.BackColor = ControlPaint.Light(randomColor);
 
-                    tile.TileImage = Image.FromFile(@"../../Resources\device.png");
+                    tile.TileImage = Image.FromFile(@"../../Resources\default_tile.png");
                     tile.UseTileImage = true;
                     tile.TileImageAlign = ContentAlignment.MiddleCenter;
                 }         
