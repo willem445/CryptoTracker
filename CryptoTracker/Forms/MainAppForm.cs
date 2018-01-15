@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
 
 using LiveCharts; //Core of the library
 using LiveCharts.Wpf; //The WPF controls
@@ -58,6 +59,10 @@ namespace CryptoTracker
             toolTip.InitialDelay = 1000;
             toolTip.ReshowDelay = 500;
             toolTip.ShowAlways = true;
+
+            //Configure portfolio filter
+            filter_CB.Items.Add("Greater Than");
+            filter_CB.Items.Add("Less Than");
 
             //Initialize the new line labels
             AddNewLine();
@@ -539,45 +544,107 @@ namespace CryptoTracker
             }
         }
 
-        private void metroButton1_Click(object sender, EventArgs e)
+        private void metroTabControl1_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage == metroTabPage2)
+            {
+                PortfolioSelected();
+            }
+        }
+
+        private void PortfolioSelected()
         {
             Func<ChartPoint, string> labelPoint = chartPoint =>
-    string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+                string.Format("({0:P})", chartPoint.Participation);
 
-            pieChart1.Series = new SeriesCollection
+            pieChart1.Series.Clear();
+            listView1.Items.Clear();
+
+            for (int i = 0; i < coinCount; i++)
             {
-                new PieSeries
-                {
-                    Title = "Maria",
-                    Values = new ChartValues<double> {3},
-                    PushOut = 15,
-                    DataLabels = true,
-                    LabelPoint = labelPoint
-                },
-                new PieSeries
-                {
-                    Title = "Charles",
-                    Values = new ChartValues<double> {4},
-                    DataLabels = true,
-                    LabelPoint = labelPoint
-                },
-                new PieSeries
-                {
-                    Title = "Frida",
-                    Values = new ChartValues<double> {6},
-                    DataLabels = true,
-                    LabelPoint = labelPoint
-                },
-                new PieSeries
-                {
-                    Title = "Frederic",
-                    Values = new ChartValues<double> {2},
-                    DataLabels = true,
-                    LabelPoint = labelPoint
-                }
-            };
+                double percent = (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue;
 
-            pieChart1.LegendLocation = LegendLocation.Bottom;
+                if (filterTextBox.Text == "" || filter_CB.SelectedIndex == -1)
+                {
+                    pieChart1.Series.Add(new PieSeries
+                    {
+                        Title = coinNamesList[i],
+                        Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+                        DataLabels = true,
+                        LabelPoint = labelPoint,
+                        //LabelPosition = PieLabelPosition.OutsideSlice,
+                    });
+
+                    string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+
+                    listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+                }
+                else if (filter_CB.SelectedIndex == 1)
+                {
+                    if (percent*100 < Convert.ToDouble(filterTextBox.Text))
+                    {
+                        pieChart1.Series.Add(new PieSeries
+                        {
+                            Title = coinNamesList[i],
+                            Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+                            DataLabels = true,
+                            LabelPoint = labelPoint,
+                            //LabelPosition = PieLabelPosition.OutsideSlice,
+                        });
+
+                        string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+
+                        listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+                    }
+                }
+                else if (filter_CB.SelectedIndex == 0)
+                {
+                    if (percent * 100 > Convert.ToDouble(filterTextBox.Text))
+                    {
+                        pieChart1.Series.Add(new PieSeries
+                        {
+                            Title = coinNamesList[i],
+                            Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+                            DataLabels = true,
+                            LabelPoint = labelPoint,
+                            //LabelPosition = PieLabelPosition.OutsideSlice,
+                        });
+
+                        string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+
+                        listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+                    }
+                }
+            }
+
+            pieChart1.LegendLocation = LegendLocation.Right;
+            pieChart1.HoverPushOut = 10;
+            pieChart1.ForeColor = Color.Black;
+            pieChart1.DataTooltip = null;
+        }
+
+        private void filterTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (filterTextBox.Text.IsNumeric() && filterTextBox.Text != "." && filterTextBox.Text != "" && filter_CB.SelectedIndex != -1)
+            {
+                PortfolioSelected();
+            }
+        }
+
+        private void filter_CB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (filterTextBox.Text.IsNumeric() && filterTextBox.Text != "." && filterTextBox.Text != "" && filter_CB.SelectedIndex != -1)
+            {
+                PortfolioSelected();
+            }
+        }
+
+        private void pieChart1_DataHover(object sender, ChartPoint chartPoint)
+        {
+            Console.WriteLine(chartPoint.SeriesView.Title);
         }
     }
 }
