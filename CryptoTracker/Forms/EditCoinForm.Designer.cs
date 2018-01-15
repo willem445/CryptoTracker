@@ -137,7 +137,6 @@
             this.Resizable = false;
             this.Style = MetroFramework.MetroColorStyle.Red;
             this.Text = "Edit Coin";
-            this.Load += new System.EventHandler(this.EditCoinForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

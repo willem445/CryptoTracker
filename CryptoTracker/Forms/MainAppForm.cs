@@ -1,71 +1,96 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Timers;
-using System.Net.Http;
-using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Diagnostics;
 
-using MetroFramework;
-using MetroFramework.Forms;
-
 //Crypto Images
 //https://github.com/cjdowner/cryptocurrency-icons
+
+//Good stock computer icons
+//https://www.shareicon.net/motherboard-device-hardware-chip-graphic-card-smps-112175
 
 namespace CryptoTracker
 {
     public partial class MainAppForm : MetroFramework.Forms.MetroForm
     {
+        //Fields********************************************************************************
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
 
         List<string> coinNamesList = new List<string>(); //Stores the names of each coin added
-        public List<string> coinTradeName = new List<string>();
 
         //UI Lists
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
         List<MetroFramework.Controls.MetroTextBox[]> textBoxArrayList = new List<MetroFramework.Controls.MetroTextBox[]>(); //Array of textboxes for each coin, stored in a list
 
-        //Program variables
+        //MainApp fields
         int flowControlRowCount = 0; //Tracks coins added to row in flow control
         bool updatingUiFlag = false; //Tracks if UI is currently being updated, prevents thread interference
         int coinCount = 0; //Count of coins added to project
 
+        //Constructor***************************************************************************
         public MainAppForm()
         {
             InitializeComponent();
-            this.Text = "Crypto Tracker";
 
             priceManager = new PriceManager();
 
+            //Configure the autoupdate timer
             updatePrices = new System.Timers.Timer();
             updatePrices.Interval = 30000; //30 seconds
             updatePrices.Elapsed += new ElapsedEventHandler(UpdatePrices);
             updatePrices.Start();
 
-            // Set up the delays for the ToolTip.
+            //Configure the tooltip
             toolTip.AutoPopDelay = 15000;
             toolTip.InitialDelay = 1000;
             toolTip.ReshowDelay = 500;
-            // Force the ToolTip text to be displayed whether or not the form is active.
             toolTip.ShowAlways = true;
 
+            //Initialize the new line labels
             AddNewLine();     
         }
 
+        //Methods*******************************************************************************
+        /// <summary>
+        /// Called by timer every 30 seconds to update prices
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void UpdatePrices(object sender, ElapsedEventArgs e)
         {
-            priceManager.UpdatePriceData();
+            //Get data from API
+            priceManager.UpdatePriceData(); 
+
+            //Update the UI if it is not currently being updated already
             if (!updatingUiFlag)
             {
                 UpdateUI();
             }  
         }
 
+        /// <summary>
+        /// Button to manually update data
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void refreshButton_Click(object sender, MouseEventArgs e)
+        {
+            priceManager.UpdatePriceData();
+            if (!updatingUiFlag)
+            {
+                UpdateUI();
+            }
+        }
+
+        /// <summary>
+        /// Updates the UI with values from priceManager updated by API
+        /// </summary>
         private void UpdateUI()
         {
             updatingUiFlag = true;
@@ -120,6 +145,7 @@ namespace CryptoTracker
                 }
                 else
                 {
+                    //if priceManager is null, print error
                     this.Invoke((MethodInvoker)delegate {
                         foreach (var item in textBoxArrayList[i])
                         {
@@ -130,55 +156,6 @@ namespace CryptoTracker
             }
 
             updatingUiFlag = false;
-        }
-
-        //Open saved file
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                ParseSavedData(openFileDialog1.FileName);
-            }
-
-            priceManager.UpdatePriceData();
-            UpdateUI();
-        }
-
-        private void addBuyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddCoinForm addCoin = new AddCoinForm(); //Instantiate form
-
-            if (addCoin.ShowDialog() == DialogResult.OK) //Show form
-            {
-                CoinModel coinModel = addCoin.Coin; //Create new coin model and add data from form
-
-                AddNewCoinToFlowControl(coinModel); //Add coin to form
-            }
-        }
-
-        public void ParseSavedData(string path)
-        {
-            string[] lines = System.IO.File.ReadAllLines(path);
-
-            foreach (string line in lines)
-            {
-                CoinModel newCoin = new CoinModel();
-
-                string[] data = line.Split(',');
-                newCoin.CoinName = data[0];
-                newCoin.Quantity = (float)(Convert.ToDouble(data[1]));
-                newCoin.NetCost = (float)(Convert.ToDouble(data[2]));
-                newCoin.APILink = data[3];
-
-                AddNewCoinToFlowControl(newCoin);
-            }
         }
 
         /// <summary>
@@ -228,6 +205,7 @@ namespace CryptoTracker
         /// <param name="addCoin"></param>
         public void AddNewCoinToFlowControl(CoinModel addCoin)
         {
+            //Track if we need to add new row labels or not
             if (flowControlRowCount == 7)
             {
                 AddNewLine();
@@ -299,31 +277,30 @@ namespace CryptoTracker
                 item.CustomBackground = false;
                 item.CustomForeColor = true;
             }
-
-
-            
-            //Get trade name
+        
+            //Update tiles with picture, name, and url link
             try
             {
+                //Create metro tile
                 MetroFramework.Controls.MetroTile tile = new MetroFramework.Controls.MetroTile();
 
+                //Connect to API to get trade name
                 var cli = new System.Net.WebClient();
                 string prices = cli.DownloadString(addCoin.APILink);
-
                 dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
 
-                //coinTradeName.Add();
-
-                //Sample pixel color
-                int x4 = 16;
-                int y = 16;
-
+                //Update path to correct image
                 string result = results[0].symbol;
                 result = result.ToLower();
                 string path = @"../../Resources\" + result + "@2x.png";
 
+                //If there is an image for the coin, update tile color and add image to tile
                 if (File.Exists(path))
                 {
+                    //Sample pixel color
+                    int x4 = 16;
+                    int y = 16;
+
                     Bitmap b = new Bitmap(path);
                     Color x = b.GetPixel(x4, y);
 
@@ -333,7 +310,7 @@ namespace CryptoTracker
                     tile.TileImageAlign = ContentAlignment.MiddleCenter;
                     tile.BackColor = ControlPaint.Light(x);
                 }
-                else
+                else //If there is no image for the coin, select random color and add default image
                 {
                     tile.UseTileImage = true;
                     Random rnd = new Random();
@@ -343,7 +320,9 @@ namespace CryptoTracker
                     tile.TileImage = Image.FromFile(@"../../Resources\default_tile.png");
                     tile.UseTileImage = true;
                     tile.TileImageAlign = ContentAlignment.MiddleCenter;
-                }         
+                }
+                
+                //Update tile name and other parameters         
                 tile.Size = new Size(120, 120);
                 tile.Visible = true;
                 tile.Enabled = true;
@@ -369,15 +348,25 @@ namespace CryptoTracker
             coinCount++; //Update coin count
         }
 
+        /// <summary>
+        /// Parse and build url to navigate to coin page on coinmarketcap
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Tile_Click(object sender, EventArgs e)
         {
             //Need to build link to https://coinmarketcap.com/currencies/coin/ and navigate to website
+
+            //The api url was saved as name, parse the coin name from the url since the coin name in url
+            //can differ from the official name
             string name = ((MetroFramework.Controls.MetroTile)sender).Name.ToString().Split('/')[5];
 
+            //Check if the parsed name matches the official name, some protection if the parsing fails
             if (name.Contains(((MetroFramework.Controls.MetroTile)sender).Text.ToLower()))
             {
                 try
                 {
+                    //Open the url in web browser for the user
                     ProcessStartInfo sInfo = new ProcessStartInfo("https://coinmarketcap.com/currencies/" + name + "/");
                     Process.Start(sInfo);
                 }
@@ -385,6 +374,53 @@ namespace CryptoTracker
                 {
 
                 }
+            }
+        }
+
+        /// <summary>
+        /// Open text file where saved coin data is stored
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //Parse data from text file and update UI
+                ParseSavedData(openFileDialog1.FileName);
+            }
+
+            //Update price data and UI with values for newly added coins
+            priceManager.UpdatePriceData();
+            UpdateUI();
+        }
+
+        /// <summary>
+        /// Parses data from text file and adds coin to form
+        /// </summary>
+        /// <param name="path"></param>
+        public void ParseSavedData(string path)
+        {
+            string[] lines = System.IO.File.ReadAllLines(path);
+
+            foreach (string line in lines)
+            {
+                CoinModel newCoin = new CoinModel();
+
+                string[] data = line.Split(',');
+                newCoin.CoinName = data[0];
+                newCoin.Quantity = (float)(Convert.ToDouble(data[1]));
+                newCoin.NetCost = (float)(Convert.ToDouble(data[2]));
+                newCoin.APILink = data[3];
+
+                AddNewCoinToFlowControl(newCoin);
             }
         }
 
@@ -398,6 +434,9 @@ namespace CryptoTracker
             Save();
         }
 
+        /// <summary>
+        /// Save data to text file
+        /// </summary>
         private void Save()
         {
             //TODO - Option for user to select save location
@@ -435,6 +474,29 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// Adds new coin to the form. User enters relevant data and UI is updated
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addBuyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddCoinForm addCoin = new AddCoinForm(); //Instantiate form
+
+            if (addCoin.ShowDialog() == DialogResult.OK) //Show form
+            {
+                CoinModel coinModel = addCoin.Coin; //Create new coin model and add data from form
+
+                AddNewCoinToFlowControl(coinModel); //Add coin to form
+            }
+        }
+
+        /// <summary>
+        /// Open the edit coin window
+        /// Used to change the quantity and net cost if user makes any trades since last save
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EditCoinForm editCoin = new EditCoinForm(coinNamesList);
@@ -465,15 +527,6 @@ namespace CryptoTracker
                 {
                     Save();
                 }
-            }
-        }
-
-        private void button1_Click(object sender, MouseEventArgs e)
-        {
-            priceManager.UpdatePriceData();
-            if (!updatingUiFlag)
-            {
-                UpdateUI();
             }
         }
     }
