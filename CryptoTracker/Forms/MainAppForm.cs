@@ -544,6 +544,11 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void metroTabControl1_Selected(object sender, TabControlEventArgs e)
         {
             if (e.TabPage == metroTabPage2)
@@ -552,6 +557,9 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void PortfolioSelected()
         {
             Func<ChartPoint, string> labelPoint = chartPoint =>
@@ -626,6 +634,11 @@ namespace CryptoTracker
             pieChart1.DataTooltip = null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void filterTextBox_TextChanged(object sender, EventArgs e)
         {
             if (filterTextBox.Text.IsNumeric() && filterTextBox.Text != "." && filterTextBox.Text != "" && filter_CB.SelectedIndex != -1)
@@ -634,6 +647,11 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void filter_CB_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (filterTextBox.Text.IsNumeric() && filterTextBox.Text != "." && filterTextBox.Text != "" && filter_CB.SelectedIndex != -1)
@@ -642,9 +660,24 @@ namespace CryptoTracker
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="chartPoint"></param>
         private void pieChart1_DataHover(object sender, ChartPoint chartPoint)
         {
-            Console.WriteLine(chartPoint.SeriesView.Title);
+            foreach (ListViewItem lvw in listView1.Items)
+            {
+                lvw.BackColor = Color.White;
+
+                string value = lvw.SubItems[0].Text;
+                if (lvw.SubItems[0].Text == chartPoint.SeriesView.Title)
+                {
+                    lvw.BackColor = Color.LightGreen;
+                }
+            }
+
         }
     }
 }
