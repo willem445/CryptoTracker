@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
+
+using LiveCharts; //Core of the library
+using LiveCharts.Wpf; //The WPF controls
+using LiveCharts.WinForms; //the WinForm wrappers
 
 //Crypto Images
 //https://github.com/cjdowner/cryptocurrency-icons
@@ -54,6 +59,10 @@ namespace CryptoTracker
             toolTip.InitialDelay = 1000;
             toolTip.ReshowDelay = 500;
             toolTip.ShowAlways = true;
+
+            //Configure portfolio filter
+            filter_CB.Items.Add("Greater Than");
+            filter_CB.Items.Add("Less Than");
 
             //Initialize the new line labels
             AddNewLine();
@@ -533,6 +542,142 @@ namespace CryptoTracker
                     Save();
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void metroTabControl1_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPage == metroTabPage2)
+            {
+                PortfolioSelected();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void PortfolioSelected()
+        {
+            Func<ChartPoint, string> labelPoint = chartPoint =>
+                string.Format("({0:P})", chartPoint.Participation);
+
+            pieChart1.Series.Clear();
+            listView1.Items.Clear();
+
+            for (int i = 0; i < coinCount; i++)
+            {
+                double percent = (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue;
+
+                if (filterTextBox.Text == "" || filter_CB.SelectedIndex == -1)
+                {
+                    pieChart1.Series.Add(new PieSeries
+                    {
+                        Title = coinNamesList[i],
+                        Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+                        DataLabels = true,
+                        LabelPoint = labelPoint,
+                        //LabelPosition = PieLabelPosition.OutsideSlice,
+                    });
+
+                    string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+
+                    listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+                }
+                else if (filter_CB.SelectedIndex == 1)
+                {
+                    if (percent*100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
+                    {
+                        pieChart1.Series.Add(new PieSeries
+                        {
+                            Title = coinNamesList[i],
+                            Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+                            DataLabels = true,
+                            LabelPoint = labelPoint,
+                            //LabelPosition = PieLabelPosition.OutsideSlice,
+                        });
+
+                        string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+
+                        listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+                    }
+                }
+                else if (filter_CB.SelectedIndex == 0)
+                {
+                    if (percent * 100 > Convert.ToDouble(filterTextBox.Text))
+                    {
+                        pieChart1.Series.Add(new PieSeries
+                        {
+                            Title = coinNamesList[i],
+                            Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+                            DataLabels = true,
+                            LabelPoint = labelPoint,
+                            //LabelPosition = PieLabelPosition.OutsideSlice,
+                        });
+
+                        string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+
+                        listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+                    }
+                }
+            }
+
+            pieChart1.LegendLocation = LegendLocation.Right;
+            pieChart1.HoverPushOut = 10;
+            pieChart1.ForeColor = Color.Black;
+            pieChart1.DataTooltip = null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void filterTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (filterTextBox.Text.IsNumeric() && filterTextBox.Text != "." && filterTextBox.Text != "" && filter_CB.SelectedIndex != -1)
+            {
+                PortfolioSelected();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void filter_CB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (filterTextBox.Text.IsNumeric() && filterTextBox.Text != "." && filterTextBox.Text != "" && filter_CB.SelectedIndex != -1)
+            {
+                PortfolioSelected();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="chartPoint"></param>
+        private void pieChart1_DataHover(object sender, ChartPoint chartPoint)
+        {
+            foreach (ListViewItem lvw in listView1.Items)
+            {
+                lvw.BackColor = Color.White;
+
+                string value = lvw.SubItems[0].Text;
+                if (lvw.SubItems[0].Text == chartPoint.SeriesView.Title)
+                {
+                    lvw.BackColor = Color.LightGreen;
+                }
+            }
+
         }
     }
 }
