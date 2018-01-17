@@ -68,6 +68,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -334,6 +335,7 @@
             // 
             // metroTabPage2
             // 
+            this.metroTabPage2.Controls.Add(this.metroLabel3);
             this.metroTabPage2.Controls.Add(this.listView1);
             this.metroTabPage2.Controls.Add(this.filter_CB);
             this.metroTabPage2.Controls.Add(this.filterTextBox);
@@ -378,7 +380,7 @@
             // 
             this.filterTextBox.Location = new System.Drawing.Point(655, 8);
             this.filterTextBox.Name = "filterTextBox";
-            this.filterTextBox.Size = new System.Drawing.Size(75, 23);
+            this.filterTextBox.Size = new System.Drawing.Size(44, 23);
             this.filterTextBox.TabIndex = 7;
             this.filterTextBox.TextChanged += new System.EventHandler(this.filterTextBox_TextChanged);
             // 
@@ -422,6 +424,15 @@
             // columnHeader4
             // 
             this.columnHeader4.Text = "Percent";
+            // 
+            // metroLabel3
+            // 
+            this.metroLabel3.AutoSize = true;
+            this.metroLabel3.Location = new System.Drawing.Point(700, 10);
+            this.metroLabel3.Name = "metroLabel3";
+            this.metroLabel3.Size = new System.Drawing.Size(20, 19);
+            this.metroLabel3.TabIndex = 10;
+            this.metroLabel3.Text = "%";
             // 
             // MainAppForm
             // 
@@ -493,6 +504,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
+        private MetroFramework.Controls.MetroLabel metroLabel3;
     }
 }
 

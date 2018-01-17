@@ -590,7 +590,7 @@ namespace CryptoTracker
                 }
                 else if (filter_CB.SelectedIndex == 1)
                 {
-                    if (percent*100 < Convert.ToDouble(filterTextBox.Text))
+                    if (percent*100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
                     {
                         pieChart1.Series.Add(new PieSeries
                         {
