@@ -12,6 +12,39 @@ namespace CryptoTracker
 {
     public static class GeneralImport
     {
+        public struct TradePair
+        {
+            public string trade;
+            public string baseTrade;
+        };
+
+        public enum Type
+        {
+            BUY,
+            SELL
+        };
+
+        public enum Status
+        {
+            FILLED,
+            CANCELED
+        };
+
+        public struct TradeData
+        {
+            public DateTime date;
+            public GeneralImport.TradePair tradePair;
+            public Type type;
+            public double orderPrice;
+            public float orderAmount;
+            public double? avgTradePrice;
+            public float? filled;
+            public double total;
+            public GeneralImport.Status? status;
+            public float fee;
+            public float usdValue;
+        };
+
         public static float GetHistoricalUsdValue(DateTime date, string currency)
         {
             string input = "https://min-api.cryptocompare.com/data/pricehistorical?fsym=" + currency + "&tsyms=USD&ts=" + date.DateTimeToUNIX().ToString();

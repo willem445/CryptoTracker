@@ -710,7 +710,7 @@ namespace CryptoTracker
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
             openFileDialog1.InitialDirectory = @"C:\Users\Willem\Desktop";
-            openFileDialog1.Filter = "xlsx files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
             openFileDialog1.FilterIndex = 2;
             openFileDialog1.RestoreDirectory = true;
 
@@ -718,18 +718,26 @@ namespace CryptoTracker
             {
                 try
                 {
+                    List<GeneralImport.TradeData> data = new List<GeneralImport.TradeData>();
+
                     if (importSelect_CB.Text == "Binance")
                     {
                         BinanceImport importBinance = new BinanceImport();
-                        importBinance.ImportBinanceTradeData(openFileDialog1.FileName);
+                        data = importBinance.ImportBinanceTradeData(openFileDialog1.FileName);
+
+
                     }
                     else if (importSelect_CB.Text == "Coinbase")
                     {
                         CoinbaseImport importCoinbase = new CoinbaseImport();
-                        importCoinbase.ImportCoinbaseTradeData(openFileDialog1.FileName);
+                        data = importCoinbase.ImportCoinbaseTradeData(openFileDialog1.FileName);
                     }
 
-
+                    foreach (var item in data)
+                    {
+                        string[] row = { item.tradePair.trade + "/" + item.tradePair.baseTrade, item.type == GeneralImport.Type.BUY ? "Buy" : "Sell", item.orderAmount.ToString() + " " + item.tradePair.trade, item.avgTradePrice.ToString() + " " + item.tradePair.baseTrade, item.total + " " + item.tradePair.baseTrade, "$" + item.usdValue.ToString("0.00") };
+                        tradeListView.Items.Add(item.date.ToString()).SubItems.AddRange(row);
+                    }
                 }
                 catch (System.IO.IOException ex)
                 {

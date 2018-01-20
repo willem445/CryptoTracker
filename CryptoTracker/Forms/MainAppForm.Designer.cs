@@ -71,8 +71,15 @@
             this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
             this.addButton = new MetroFramework.Controls.MetroButton();
             this.saveImportButton = new MetroFramework.Controls.MetroButton();
-            this.listView2 = new System.Windows.Forms.ListView();
+            this.tradeListView = new System.Windows.Forms.ListView();
             this.importSelect_CB = new MetroFramework.Controls.MetroComboBox();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -376,7 +383,7 @@
             // metroTabPage3
             // 
             this.metroTabPage3.Controls.Add(this.importSelect_CB);
-            this.metroTabPage3.Controls.Add(this.listView2);
+            this.metroTabPage3.Controls.Add(this.tradeListView);
             this.metroTabPage3.Controls.Add(this.saveImportButton);
             this.metroTabPage3.Controls.Add(this.addButton);
             this.metroTabPage3.Controls.Add(this.metroLabel5);
@@ -461,13 +468,25 @@
             this.saveImportButton.TabIndex = 7;
             this.saveImportButton.Text = "Save";
             // 
-            // listView2
+            // tradeListView
             // 
-            this.listView2.Location = new System.Drawing.Point(3, 58);
-            this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(774, 348);
-            this.listView2.TabIndex = 8;
-            this.listView2.UseCompatibleStateImageBehavior = false;
+            this.metroStyleExtender1.SetApplyMetroTheme(this.tradeListView, true);
+            this.tradeListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.tradeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader6,
+            this.columnHeader7,
+            this.columnHeader5,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader10,
+            this.columnHeader11});
+            this.tradeListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.tradeListView.Location = new System.Drawing.Point(3, 58);
+            this.tradeListView.Name = "tradeListView";
+            this.tradeListView.Size = new System.Drawing.Size(774, 348);
+            this.tradeListView.TabIndex = 8;
+            this.tradeListView.UseCompatibleStateImageBehavior = false;
+            this.tradeListView.View = System.Windows.Forms.View.Details;
             // 
             // importSelect_CB
             // 
@@ -478,6 +497,40 @@
             this.importSelect_CB.Name = "importSelect_CB";
             this.importSelect_CB.Size = new System.Drawing.Size(83, 25);
             this.importSelect_CB.TabIndex = 9;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Date";
+            this.columnHeader6.Width = 125;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Trade Pair";
+            this.columnHeader7.Width = 80;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Order Quantity";
+            this.columnHeader8.Width = 120;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Trade Price";
+            this.columnHeader9.Width = 120;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Text = "Order Cost";
+            this.columnHeader10.Width = 120;
+            // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Text = "Net Cost (USD)";
+            this.columnHeader11.Width = 120;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Type";
             // 
             // MainAppForm
             // 
@@ -550,11 +603,18 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private MetroFramework.Controls.MetroLabel metroLabel3;
-        private System.Windows.Forms.ListView listView2;
+        private System.Windows.Forms.ListView tradeListView;
         private MetroFramework.Controls.MetroButton saveImportButton;
         private MetroFramework.Controls.MetroButton addButton;
         private MetroFramework.Controls.MetroLabel metroLabel5;
         private MetroFramework.Controls.MetroComboBox importSelect_CB;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.ColumnHeader columnHeader9;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.ColumnHeader columnHeader11;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }
 

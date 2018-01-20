@@ -13,34 +13,17 @@ namespace CryptoTracker
         {
             DATE = 0,
             AMOUNT = 2,
-            CURRENCY = 3,
+            TRADE_CURRENCY = 3,
             TYPE = 5,
             TRANSFER_TOTAL = 7,
-            TRANSFER_TOTAL_CURRENCY = 8,
+            BASE_CURRENCY = 8,
             TRANSFER_FEE = 9
         }
 
-        public enum Type
-        {
-            BUY,
-            SELL
-        };
-
-        public struct CoinbaseData
-        {
-            public DateTime date;
-            public float amount;
-            public string currency;
-            public Type type;
-            public float transferTotal;
-            public string transferCurrency;
-            public float transferFee;
-        };
-
-        List<CoinbaseData> coinbaseTradeList = new List<CoinbaseData>();
+        List<GeneralImport.TradeData> coinbaseTradeList = new List<GeneralImport.TradeData>();
 
 
-        public List<CoinbaseData> ImportCoinbaseTradeData(string filePath)
+        public List<GeneralImport.TradeData> ImportCoinbaseTradeData(string filePath)
         {
             var excelData = GeneralImport.ExcelToDataSet(filePath).Tables[0];
 
@@ -50,14 +33,19 @@ namespace CryptoTracker
 
                 if (DateTime.TryParse(excelData.Rows[i][(int)CoinbaseColumns.DATE].ToString(), out dateValue) && excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString() != "")
                 {
-                    CoinbaseData newData;
+                    GeneralImport.TradeData newData;
                     newData.date = dateValue;
-                    newData.amount = (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT]);
-                    newData.currency = excelData.Rows[i][(int)CoinbaseColumns.CURRENCY].ToString();
-                    newData.type = excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString().Split(' ')[0] == "Bought" ? Type.BUY : Type.SELL;
-                    newData.transferTotal = (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL]);
-                    newData.transferCurrency = excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL_CURRENCY].ToString();
-                    newData.transferFee = (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_FEE]);
+                    newData.tradePair.trade = excelData.Rows[i][(int)CoinbaseColumns.TRADE_CURRENCY].ToString();
+                    newData.tradePair.baseTrade = excelData.Rows[i][(int)CoinbaseColumns.BASE_CURRENCY].ToString();
+                    newData.type = excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString().Split(' ')[0] == "Bought" ? GeneralImport.Type.BUY : GeneralImport.Type.SELL;
+                    newData.orderPrice = GeneralImport.GetHistoricalUsdValue(newData.date, newData.tradePair.trade);
+                    newData.orderAmount = (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT]);
+                    newData.avgTradePrice = newData.orderPrice;
+                    newData.filled = null;
+                    newData.total = (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL]);
+                    newData.status = null;
+                    newData.fee = (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_FEE]);
+                    newData.usdValue = (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL]);
 
                     coinbaseTradeList.Add(newData);
                 }
