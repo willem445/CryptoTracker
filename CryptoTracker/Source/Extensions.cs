@@ -20,5 +20,10 @@ namespace CryptoTracker
 
             return true;
         }
+
+        public static UInt64 DateTimeToUNIX(this DateTime s)
+        {
+            return (UInt64)s.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        }
     }
 }

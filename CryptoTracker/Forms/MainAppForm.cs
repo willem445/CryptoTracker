@@ -12,6 +12,9 @@ using LiveCharts; //Core of the library
 using LiveCharts.Wpf; //The WPF controls
 using LiveCharts.WinForms; //the WinForm wrappers
 
+using System.Data;
+using ExcelDataReader;
+
 //Crypto Images
 //https://github.com/cjdowner/cryptocurrency-icons
 
@@ -68,7 +71,19 @@ namespace CryptoTracker
             AddNewLine();
 
             //Parse data in documents folder
-            ParseSavedData();     
+            ParseSavedData();
+
+            //Configure import trades tab
+            foreach (var item in coinNamesList)
+            {
+                selectCoin_CB.Items.Add(item);
+            }
+
+            saveImportButton.Enabled = false;
+            saveImportButton.Visible = false;
+
+            importSelect_CB.Items.Add("Binance");
+            importSelect_CB.Items.Add("Coinbase");
         }
 
         //Methods*******************************************************************************
@@ -678,6 +693,49 @@ namespace CryptoTracker
                 }
             }
 
+        }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            
+
+
+
+        }
+
+        private void importButton_Click(object sender, EventArgs e)
+        {
+            
+
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.InitialDirectory = @"C:\Users\Willem\Desktop";
+            openFileDialog1.Filter = "xlsx files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if (importSelect_CB.Text == "Binance")
+                    {
+                        BinanceImport importBinance = new BinanceImport();
+                        importBinance.ImportBinanceTradeData(openFileDialog1.FileName);
+                    }
+                    else if (importSelect_CB.Text == "Coinbase")
+                    {
+                        CoinbaseImport importCoinbase = new CoinbaseImport();
+                        importCoinbase.ImportCoinbaseTradeData(openFileDialog1.FileName);
+                    }
+
+
+                }
+                catch (System.IO.IOException ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
+            }
         }
     }
 }
