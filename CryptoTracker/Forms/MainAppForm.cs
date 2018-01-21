@@ -208,28 +208,29 @@ namespace CryptoTracker
 
             MetroFramework.Controls.MetroLabel coinPrice = new MetroFramework.Controls.MetroLabel();
             coinPrice.Name = addCoin.Name + "Label";
-            coinPrice.DataBindings.Add(new Binding("Text", addCoin, "Price"));
+            coinPrice.DataBindings.Add(new Binding("Text", addCoin, "PriceToString"));
 
 
             MetroFramework.Controls.MetroTextBox coinQuantity = new MetroFramework.Controls.MetroTextBox();
             coinQuantity.Name = addCoin.Name + "Quantity_TB";
-           // coinQuantity.DataBindings.Add("Text", addCoin.Quantity.ToString(), "Quantity");
+            coinQuantity.DataBindings.Add("Text", addCoin, "QuantityToString");
 
             MetroFramework.Controls.MetroTextBox coinInvested = new MetroFramework.Controls.MetroTextBox();
             coinInvested.Name = addCoin.Name + "Invested_TB";
-            //coinInvested.DataBindings.Add("Text", addCoin.NetCost.ToString(), "NetCost");
+            coinInvested.DataBindings.Add("Text", addCoin, "NetCostToString");
 
             MetroFramework.Controls.MetroTextBox coinValue = new MetroFramework.Controls.MetroTextBox();
             coinValue.Name = addCoin.Name + "Value_TB";
-            //coinValue.DataBindings.Add("Text", addCoin.Value.ToString(), "Value");
+            coinValue.DataBindings.Add("Text", addCoin, "ValueToString");
 
             MetroFramework.Controls.MetroTextBox coinProfit = new MetroFramework.Controls.MetroTextBox();
             coinProfit.Name = addCoin.Name + "Profit_TB";
-            //coinProfit.DataBindings.Add("Text", addCoin.Profit.ToString(), "Profit");
+            coinProfit.DataBindings.Add("Text", addCoin, "ProfitToString");
+            coinProfit.DataBindings.Add("Forecolor", addCoin, "Color");
 
             MetroFramework.Controls.MetroTextBox coinProfitPercent = new MetroFramework.Controls.MetroTextBox();
             coinProfitPercent.Name = addCoin.Name + "ProfitPercent_TB";
-            //coinProfitPercent.DataBindings.Add("Text", addCoin.ProfitPercent.ToString(), "ProfitPercent");
+            coinProfitPercent.DataBindings.Add("Text", addCoin, "ProfitPercentToString");
 
             //Add controls to coin specifc flow panel
             newFlowPanel.Controls.Add(coinName);

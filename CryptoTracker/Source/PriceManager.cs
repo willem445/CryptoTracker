@@ -43,7 +43,7 @@ namespace CryptoTracker
                     dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
 
                     //Add price to temp list
-                    coinModelList[i].Price = results[0].price_usd;
+                    coinModelList[i].Price = (float)(Convert.ToDouble(results[0].price_usd));
 
                     //Update tool tip array and add array to tool tip list
                     coinModelList[i].Rank = results[0].rank;
@@ -56,7 +56,7 @@ namespace CryptoTracker
                 catch (System.Net.WebException e)
                 {
                     //If there is an error connecting to the API, fill list with null data to avoid index out of bounds later
-                    coinModelList[i].Price = "";
+                    coinModelList[i].Price = 0.0F;
                 }
             }
         }
@@ -72,13 +72,22 @@ namespace CryptoTracker
 
             for (int i = 0; i < coinModelList.Count; i++)
             {              
-                    coinModelList[i].Value = coinModelList[i].Quantity * (float)Convert.ToDouble(coinModelList[i].Price);
+                if (coinModelList[i].Price != 0.0)
+                {
+                    coinModelList[i].Value = coinModelList[i].Quantity * coinModelList[i].Price;
                     coinModelList[i].Profit = coinModelList[i].Value - coinModelList[i].NetCost;
                     coinModelList[i].ProfitPercent = (coinModelList[i].Profit / coinModelList[i].Value) * 100;
 
                     totalInvestment += coinModelList[i].NetCost;
-                    totalValue += coinModelList[i].Value;
-                    totalProfit += coinModelList[i].Profit;
+                    totalValue += coinModelList[i].Value.Value;
+                    totalProfit += coinModelList[i].Profit.Value;
+                }
+                else
+                {
+                    coinModelList[i].Value = null;
+                    coinModelList[i].Profit = null;
+                    coinModelList[i].ProfitPercent = null;
+                }
             }
         }
 

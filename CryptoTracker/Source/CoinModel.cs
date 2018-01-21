@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace CryptoTracker
     {
         private string name;
         private string symbol;
-        private string price;
+        private float? price;
         private string rank;
         private string marketcap;
         private string percent_changed_1h;
@@ -19,12 +20,12 @@ namespace CryptoTracker
         private string percent_changed_7d;
         private float quantity;
         private float netCost;
-        private float value;
-        private float profit;
-        private float profitPercent;
+        private float? value;
+        private float? profit;
+        private float? profitPercent;
         private string apiLink;
 
-
+        //TODO - Add convertsion properties to convert float to string to bind to textboxes
         public string Name
         {
             get
@@ -51,7 +52,7 @@ namespace CryptoTracker
             }
         }
 
-        public string Price
+        public float? Price
         {
             get
             {
@@ -61,6 +62,18 @@ namespace CryptoTracker
             {
                 price = value;
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Price)));
+            }
+        }
+
+        public string PriceToString
+        {
+            get
+            {
+                if (price.HasValue)
+                {
+                    return "$" + price.Value.ToString("0.00");
+                }
+                return null;
             }
         }
 
@@ -142,6 +155,15 @@ namespace CryptoTracker
             }
 
         }
+
+        public string QuantityToString
+        {
+            get
+            {
+                return quantity.ToString();
+            }
+        }
+
         public float NetCost
         {
             get
@@ -153,10 +175,17 @@ namespace CryptoTracker
                 netCost = value;
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(NetCost)));
             }
-
         }
 
-        public float Value
+        public string NetCostToString
+        {
+            get
+            {
+                return "$" + netCost.ToString("0.00");
+            }
+        }
+
+        public float? Value
         {
             get
             {
@@ -169,7 +198,19 @@ namespace CryptoTracker
             }
         }
 
-        public float Profit
+        public string ValueToString
+        {
+            get
+            {
+                if (value.HasValue)
+                {
+                    return "$" + value.Value.ToString("0.00");
+                }
+                return null;
+            }
+        }
+
+        public float? Profit
         {
             get
             {
@@ -179,10 +220,32 @@ namespace CryptoTracker
             {
                 profit = value;
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Profit)));
+                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Color)));
             }
         }
 
-        public float ProfitPercent
+        public Color Color
+        {
+            get
+            {
+                return (Profit > 0) ? Color.Green : Color.Red;
+            }
+        }
+
+
+        public string ProfitToString
+        {
+            get
+            {
+                if (profit.HasValue)
+                {
+                    return "$" + profit.Value.ToString("0.00");
+                }
+                return null;
+            }
+        }
+
+        public float? ProfitPercent
         {
             get
             {
@@ -192,6 +255,18 @@ namespace CryptoTracker
             {
                 profitPercent = value;
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(ProfitPercent)));
+            }
+        }
+
+        public string ProfitPercentToString
+        {
+            get
+            {
+                if (profitPercent.HasValue)
+                {
+                    return profitPercent.Value.ToString("0.0") + "%";
+                }
+                return null;
             }
         }
 
