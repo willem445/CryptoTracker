@@ -89,6 +89,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\FileIO.cs" />
+    <Compile Include="Source\Import\SortTrades.cs" />
     <Compile Include="Source\Import\CoinbaseImport.cs" />
     <Compile Include="Forms\EditCoinForm.cs">
       <SubType>Form</SubType>

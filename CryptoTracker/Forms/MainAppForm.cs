@@ -25,12 +25,19 @@ namespace CryptoTracker
 {
     public partial class MainAppForm : MetroFramework.Forms.MetroForm
     {
+        public enum rowNames
+        {
+            Quantity,
+            TotalInvested,
+            Value,
+            Profit,
+            ProfitPercent
+        }
+
         //Fields********************************************************************************
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
-
-        List<string> coinNamesList = new List<string>(); //Stores the names of each coin added
 
         //UI Lists
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
@@ -70,13 +77,12 @@ namespace CryptoTracker
             //Initialize the new line labels
             AddNewLine();
 
-            //Parse data in documents folder
-            ParseSavedData();
+            AppDataInitialization();
 
             //Configure import trades tab
-            foreach (var item in coinNamesList)
+            foreach (var item in priceManager.coinModelList)
             {
-                selectCoin_CB.Items.Add(item);
+                selectCoin_CB.Items.Add(item.Name);
             }
 
             saveImportButton.Enabled = false;
@@ -84,6 +90,23 @@ namespace CryptoTracker
 
             importSelect_CB.Items.Add("Binance");
             importSelect_CB.Items.Add("Coinbase");
+        }
+
+        private void AppDataInitialization()
+        {
+            //Parse data in documents folder
+            FileIO file = new FileIO();
+            priceManager.coinModelList = file.ParseSavedData();
+            priceManager.UpdatePriceData();
+
+            foreach (var item in priceManager.coinModelList)
+            {
+                AddNewCoinToFlowControl(item);
+            }
+
+           
+
+            //AddNewCoinToFlowControl(newCoin);
         }
 
         //Methods*******************************************************************************
@@ -94,7 +117,7 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void MainAppForm_HandleCreated(object sender, EventArgs e)
         {
-            UpdateUI();
+            //UpdateUI();
         }
 
         /// <summary>
@@ -105,13 +128,7 @@ namespace CryptoTracker
         public void UpdatePrices(object sender, ElapsedEventArgs e)
         {
             //Get data from API
-            priceManager.UpdatePriceData(); 
-
-            //Update the UI if it is not currently being updated already
-            if (!updatingUiFlag)
-            {
-                UpdateUI();
-            }  
+            priceManager.UpdatePriceData();  
         }
 
         /// <summary>
@@ -122,80 +139,6 @@ namespace CryptoTracker
         private void refreshButton_Click(object sender, MouseEventArgs e)
         {
             priceManager.UpdatePriceData();
-            if (!updatingUiFlag)
-            {
-                UpdateUI();
-            }
-        }
-
-        /// <summary>
-        /// Updates the UI with values from priceManager updated by API
-        /// </summary>
-        private void UpdateUI()
-        {
-            updatingUiFlag = true;
-
-            for (int i = 0; i < coinCount; i++)
-            {
-                if (priceManager.coinPriceList[i].HasValue)
-                {
-                    this.Invoke((MethodInvoker)delegate {
-                        priceLabelList[i].Text = "$" + priceManager.coinPriceList[i].Value.ToString("0.00"); // runs on UI thread
-
-                        //Update textboxes
-                        for (int j = 0; j < 5; j++)
-                        {
-                            if (j == 0)
-                            {
-                                textBoxArrayList[i][j].Text = priceManager.valueArrayList[i][j].Value.ToString("0.000000"); // runs on UI thread
-                            }
-                            else if (j >= 1 && j <= 3)
-                            {
-                                textBoxArrayList[i][j].Text = "$" + priceManager.valueArrayList[i][j].Value.ToString("0.00"); // runs on UI thread
-                            }
-                            else if (j == 4)
-                            {
-                                textBoxArrayList[i][j].Text = priceManager.valueArrayList[i][j].Value.ToString("0.00") + "%"; // runs on UI thread
-                            }
-
-                            if (j == 3)
-                            {
-                                if (priceManager.valueArrayList[i][j] <= 0)
-                                {
-                                    textBoxArrayList[i][j].ForeColor = Color.Red; // runs on UI thread
-                                }
-                                else
-                                {
-                                    textBoxArrayList[i][j].ForeColor = Color.Green; // runs on UI thread
-                                }
-                            }
-                        }
-
-                        //Update tooltip
-                        if (priceManager.toolTipValues.Count == coinCount)
-                        {
-                            string comma = String.Format("{0:#,###0.#}", Convert.ToDouble(priceManager.toolTipValues[i][1]));
-                            toolTip.SetToolTip(priceLabelList[i], "Rank: " + priceManager.toolTipValues[i][0] + "\n" + "Market Cap: $" + comma + "\n" + "% Change 1h: " + priceManager.toolTipValues[i][2] + "%\n" + "% Change 24h: " + priceManager.toolTipValues[i][3] + "%\n" + "% Change 7d: " + priceManager.toolTipValues[i][4] + "%");
-                        }
-                        
-                        totalProfitLabel.Text = "$" + priceManager.totalProfit.ToString("0.00"); // runs on UI thread
-                        totalInvestedLabel.Text = "$" + priceManager.totalInvestment.ToString("0.00");
-                        totalValueLabel.Text = "$" + priceManager.totalValue.ToString("0.00");
-                    });
-                }
-                else
-                {
-                    //if priceManager is null, print error
-                    this.Invoke((MethodInvoker)delegate {
-                        foreach (var item in textBoxArrayList[i])
-                        {
-                            item.Text = "Error";
-                        }
-                    });
-                }
-            }
-
-            updatingUiFlag = false;
         }
 
         /// <summary>
@@ -261,28 +204,32 @@ namespace CryptoTracker
 
             //Create controls
             MetroFramework.Controls.MetroLabel coinName = new MetroFramework.Controls.MetroLabel();
-            coinName.Text = addCoin.CoinName;
+            coinName.Text = addCoin.Name;
 
             MetroFramework.Controls.MetroLabel coinPrice = new MetroFramework.Controls.MetroLabel();
-            coinPrice.Name = addCoin.CoinName + "Label";
-            coinPrice.Text = "$100,000";
+            coinPrice.Name = addCoin.Name + "Label";
+            coinPrice.DataBindings.Add(new Binding("Text", addCoin, "Price"));
+
 
             MetroFramework.Controls.MetroTextBox coinQuantity = new MetroFramework.Controls.MetroTextBox();
-            coinQuantity.Name = addCoin.CoinName + "Quantity_TB";
-            coinQuantity.Text = addCoin.Quantity.ToString();
+            coinQuantity.Name = addCoin.Name + "Quantity_TB";
+           // coinQuantity.DataBindings.Add("Text", addCoin.Quantity.ToString(), "Quantity");
 
             MetroFramework.Controls.MetroTextBox coinInvested = new MetroFramework.Controls.MetroTextBox();
-            coinInvested.Name = addCoin.CoinName + "Invested_TB";
-            coinInvested.Text = addCoin.NetCost.ToString();
+            coinInvested.Name = addCoin.Name + "Invested_TB";
+            //coinInvested.DataBindings.Add("Text", addCoin.NetCost.ToString(), "NetCost");
 
             MetroFramework.Controls.MetroTextBox coinValue = new MetroFramework.Controls.MetroTextBox();
-            coinValue.Name = addCoin.CoinName + "Value_TB";
+            coinValue.Name = addCoin.Name + "Value_TB";
+            //coinValue.DataBindings.Add("Text", addCoin.Value.ToString(), "Value");
 
             MetroFramework.Controls.MetroTextBox coinProfit = new MetroFramework.Controls.MetroTextBox();
-            coinProfit.Name = addCoin.CoinName + "Profit_TB";
+            coinProfit.Name = addCoin.Name + "Profit_TB";
+            //coinProfit.DataBindings.Add("Text", addCoin.Profit.ToString(), "Profit");
 
             MetroFramework.Controls.MetroTextBox coinProfitPercent = new MetroFramework.Controls.MetroTextBox();
-            coinProfitPercent.Name = addCoin.CoinName + "ProfitPercent_TB";
+            coinProfitPercent.Name = addCoin.Name + "ProfitPercent_TB";
+            //coinProfitPercent.DataBindings.Add("Text", addCoin.ProfitPercent.ToString(), "ProfitPercent");
 
             //Add controls to coin specifc flow panel
             newFlowPanel.Controls.Add(coinName);
@@ -298,7 +245,6 @@ namespace CryptoTracker
 
             //Update Lists
             priceLabelList.Add(coinPrice);
-            coinNamesList.Add(addCoin.CoinName);
 
             //Create new textbox array and add to textbox array list
             MetroFramework.Controls.MetroTextBox[] newArray = new MetroFramework.Controls.MetroTextBox[5];
@@ -367,7 +313,7 @@ namespace CryptoTracker
                 tile.Visible = true;
                 tile.Enabled = true;
                 tile.CustomBackground = true;              
-                tile.Text = addCoin.CoinName;
+                tile.Text = addCoin.Name;
                 tile.TileTextFontSize = MetroFramework.MetroTileTextSize.Tall;
                 tile.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
                 tile.Click += Tile_Click;
@@ -418,38 +364,6 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// Parses data from text file and adds coin to form
-        /// </summary>
-        /// <param name="path"></param>
-        public void ParseSavedData()
-        {
-            string path = System.IO.Path.Combine(Environment.GetFolderPath(
-                Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
-
-            string[] lines;
-
-            if (Directory.Exists(path))
-            {
-                lines = System.IO.File.ReadAllLines(Path.Combine(path, "CoinData.txt"));
-
-                foreach (string line in lines)
-                {
-                    CoinModel newCoin = new CoinModel();
-
-                    string[] data = line.Split(',');
-                    newCoin.CoinName = data[0];
-                    newCoin.Quantity = (float)(Convert.ToDouble(data[1]));
-                    newCoin.NetCost = (float)(Convert.ToDouble(data[2]));
-                    newCoin.APILink = data[3];
-
-                    AddNewCoinToFlowControl(newCoin);
-                }
-
-                priceManager.UpdatePriceData();
-            }
-        }
-
-        /// <summary>
         /// Call save function to save data to file
         /// </summary>
         /// <param name="sender"></param>
@@ -475,7 +389,7 @@ namespace CryptoTracker
             {
                 try
                 {
-                    textFileArray[i] = coinNamesList[i] + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.TrimStart('$') + ", " + priceManager.coinApiUrlList[i];
+                    textFileArray[i] = priceManager.coinModelList[i].Name + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.TrimStart('$') + ", " + priceManager.coinModelList[i].APILink;
                 }
                 catch
                 {
@@ -528,7 +442,7 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditCoinForm editCoin = new EditCoinForm(coinNamesList);
+            EditCoinForm editCoin = new EditCoinForm(priceManager.coinModelList);
 
             if (editCoin.ShowDialog() == DialogResult.OK) //Show form
             {
@@ -538,18 +452,18 @@ namespace CryptoTracker
                 int index;
                 for (index = 0; index < coinCount; index++)
                 {
-                    if (coinNamesList[index] ==  coinModel.CoinName)
+                    if (priceManager.coinModelList[index].Name ==  coinModel.Name)
                     {
                         break;
                     }
                 }
 
                 //Update lists with new values
-                priceManager.valueArrayList[index][0] = coinModel.Quantity;
-                priceManager.valueArrayList[index][1] = coinModel.TotalInvested;
+                priceManager.coinModelList[index].Quantity = coinModel.Quantity;
+                priceManager.coinModelList[index].NetCost = coinModel.NetCost;
 
                 textBoxArrayList[index][0].Text = coinModel.Quantity.ToString();
-                textBoxArrayList[index][1].Text ="$" + coinModel.TotalInvested.ToString();
+                textBoxArrayList[index][1].Text ="$" + coinModel.NetCost.ToString();
 
                 //Save data if enabled
                 if (editCoin.SaveEnabled == true)
@@ -577,76 +491,76 @@ namespace CryptoTracker
         /// </summary>
         private void PortfolioSelected()
         {
-            Func<ChartPoint, string> labelPoint = chartPoint =>
-                string.Format("({0:P})", chartPoint.Participation);
+            //Func<ChartPoint, string> labelPoint = chartPoint =>
+            //    string.Format("({0:P})", chartPoint.Participation);
 
-            pieChart1.Series.Clear();
-            listView1.Items.Clear();
+            //pieChart1.Series.Clear();
+            //listView1.Items.Clear();
 
-            for (int i = 0; i < coinCount; i++)
-            {
-                double percent = (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue;
+            //for (int i = 0; i < coinCount; i++)
+            //{
+            //    double percent = (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue;
 
-                if (filterTextBox.Text == "" || filter_CB.SelectedIndex == -1)
-                {
-                    pieChart1.Series.Add(new PieSeries
-                    {
-                        Title = coinNamesList[i],
-                        Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
-                        DataLabels = true,
-                        LabelPoint = labelPoint,
-                        //LabelPosition = PieLabelPosition.OutsideSlice,
-                    });
+            //    if (filterTextBox.Text == "" || filter_CB.SelectedIndex == -1)
+            //    {
+            //        pieChart1.Series.Add(new PieSeries
+            //        {
+            //            Title = coinNamesList[i],
+            //            Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+            //            DataLabels = true,
+            //            LabelPoint = labelPoint,
+            //            //LabelPosition = PieLabelPosition.OutsideSlice,
+            //        });
 
-                    string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
-                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+            //        string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+            //            "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
 
-                    listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
-                }
-                else if (filter_CB.SelectedIndex == 1)
-                {
-                    if (percent*100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
-                    {
-                        pieChart1.Series.Add(new PieSeries
-                        {
-                            Title = coinNamesList[i],
-                            Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
-                            DataLabels = true,
-                            LabelPoint = labelPoint,
-                            //LabelPosition = PieLabelPosition.OutsideSlice,
-                        });
+            //        listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+            //    }
+            //    else if (filter_CB.SelectedIndex == 1)
+            //    {
+            //        if (percent*100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
+            //        {
+            //            pieChart1.Series.Add(new PieSeries
+            //            {
+            //                Title = coinNamesList[i],
+            //                Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+            //                DataLabels = true,
+            //                LabelPoint = labelPoint,
+            //                //LabelPosition = PieLabelPosition.OutsideSlice,
+            //            });
 
-                        string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
-                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+            //            string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+            //            "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
 
-                        listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
-                    }
-                }
-                else if (filter_CB.SelectedIndex == 0)
-                {
-                    if (percent * 100 > Convert.ToDouble(filterTextBox.Text))
-                    {
-                        pieChart1.Series.Add(new PieSeries
-                        {
-                            Title = coinNamesList[i],
-                            Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
-                            DataLabels = true,
-                            LabelPoint = labelPoint,
-                            //LabelPosition = PieLabelPosition.OutsideSlice,
-                        });
+            //            listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+            //        }
+            //    }
+            //    else if (filter_CB.SelectedIndex == 0)
+            //    {
+            //        if (percent * 100 > Convert.ToDouble(filterTextBox.Text))
+            //        {
+            //            pieChart1.Series.Add(new PieSeries
+            //            {
+            //                Title = coinNamesList[i],
+            //                Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
+            //                DataLabels = true,
+            //                LabelPoint = labelPoint,
+            //                //LabelPosition = PieLabelPosition.OutsideSlice,
+            //            });
 
-                        string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
-                        "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+            //            string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
+            //            "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
 
-                        listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
-                    }
-                }
-            }
+            //            listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
+            //        }
+            //    }
+            //}
 
-            pieChart1.LegendLocation = LegendLocation.Right;
-            pieChart1.HoverPushOut = 10;
-            pieChart1.ForeColor = Color.Black;
-            pieChart1.DataTooltip = null;
+            //pieChart1.LegendLocation = LegendLocation.Right;
+            //pieChart1.HoverPushOut = 10;
+            //pieChart1.ForeColor = Color.Black;
+            //pieChart1.DataTooltip = null;
         }
 
         /// <summary>
@@ -724,8 +638,6 @@ namespace CryptoTracker
                     {
                         BinanceImport importBinance = new BinanceImport();
                         data = importBinance.ImportBinanceTradeData(openFileDialog1.FileName);
-
-
                     }
                     else if (importSelect_CB.Text == "Coinbase")
                     {
@@ -733,9 +645,15 @@ namespace CryptoTracker
                         data = importCoinbase.ImportCoinbaseTradeData(openFileDialog1.FileName);
                     }
 
+                    //Add data to listview
                     foreach (var item in data)
                     {
-                        string[] row = { item.tradePair.trade + "/" + item.tradePair.baseTrade, item.type == GeneralImport.Type.BUY ? "Buy" : "Sell", item.orderAmount.ToString() + " " + item.tradePair.trade, item.avgTradePrice.ToString() + " " + item.tradePair.baseTrade, item.total + " " + item.tradePair.baseTrade, "$" + item.usdValue.ToString("0.00") };
+                        string[] row = { item.tradePair.trade + "/" + item.tradePair.baseTrade,
+                                        item.type == GeneralImport.Type.BUY ? "Buy" : "Sell",
+                                        item.orderAmount.ToString() + " " + item.tradePair.trade,
+                                        item.avgTradePrice.ToString() + " " + item.tradePair.baseTrade,
+                                        item.total + " " + item.tradePair.baseTrade,
+                                        "$" + item.usdValue.ToString("0.00") };
                         tradeListView.Items.Add(item.date.ToString()).SubItems.AddRange(row);
                     }
                 }

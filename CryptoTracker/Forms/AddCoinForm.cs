@@ -109,7 +109,7 @@ namespace CryptoTracker
             //If no errors, continue
             if(!error)
             {
-                coin.CoinName = coinName_TB.Text;
+                coin.Name = coinName_TB.Text;
                 coin.Quantity = (float)Convert.ToDouble(quantity_TB.Text);
                 coin.NetCost = (float)Convert.ToDouble(netCost_TB.Text);
                 coin.APILink = apiLink_TB.Text;

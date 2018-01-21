@@ -27,7 +27,7 @@ namespace CryptoTracker
         private CoinModel coin;
 
         //Constructor***************************************************************************
-        public EditCoinForm(List<string> coinList)
+        public EditCoinForm(List<CoinModel> coinList)
         {
             InitializeComponent();
             this.Text = "Edit Coin";
@@ -36,7 +36,7 @@ namespace CryptoTracker
 
             foreach (var item in coinList)
             {
-                selectCoin_CB.Items.Add(item);
+                selectCoin_CB.Items.Add(item.Name);
             }
         }
 
@@ -96,8 +96,8 @@ namespace CryptoTracker
             if (!error)
             {
                 coin.Quantity = (float)Convert.ToDouble(quantity_TB.Text);
-                coin.TotalInvested = (float)Convert.ToDouble(netCost_TB.Text);
-                coin.CoinName = selectCoin_CB.Text;
+                coin.NetCost = (float)Convert.ToDouble(netCost_TB.Text);
+                coin.Name = selectCoin_CB.Text;
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
