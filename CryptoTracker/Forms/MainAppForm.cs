@@ -21,6 +21,9 @@ using ExcelDataReader;
 //Good stock computer icons
 //https://www.shareicon.net/motherboard-device-hardware-chip-graphic-card-smps-112175
 
+//Crypto history api
+//https://www.cryptocompare.com/api/#-api-data-pricehistorical-
+
 namespace CryptoTracker
 {
     public partial class MainAppForm : MetroFramework.Forms.MetroForm
@@ -69,6 +72,7 @@ namespace CryptoTracker
             toolTip.InitialDelay = 1000;
             toolTip.ReshowDelay = 500;
             toolTip.ShowAlways = true;
+            toolTip.Popup += ToolTip_Popup;
 
             //Configure portfolio filter
             filter_CB.Items.Add("Greater Than");
@@ -90,6 +94,24 @@ namespace CryptoTracker
 
             importSelect_CB.Items.Add("Binance");
             importSelect_CB.Items.Add("Coinbase");
+        }
+
+        private void ToolTip_Popup(object sender, PopupEventArgs e)
+        {
+            //TODO- Tooltip not workign correctly
+            string text = "";
+            foreach(var item in priceManager.coinModelList)
+            {
+                if (e.AssociatedControl.Name.Contains(item.Name))
+                {
+                    text = item.MarketCap;
+                }
+            }
+
+            //toolTip.SetToolTip(, text);
+
+            //e.AssociatedControl.Name
+            //throw new NotImplementedException();
         }
 
         private void AppDataInitialization()
@@ -209,6 +231,8 @@ namespace CryptoTracker
             MetroFramework.Controls.MetroLabel coinPrice = new MetroFramework.Controls.MetroLabel();
             coinPrice.Name = addCoin.Name + "Label";
             coinPrice.DataBindings.Add(new Binding("Text", addCoin, "PriceToString"));
+
+            toolTip.SetToolTip(coinPrice, "Test");
 
 
             MetroFramework.Controls.MetroTextBox coinQuantity = new MetroFramework.Controls.MetroTextBox();

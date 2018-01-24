@@ -38,7 +38,7 @@ namespace CryptoTracker
             {
                 DateTime dateValue;
 
-                if (DateTime.TryParseExact(excelData.Rows[i][(int)BinanceColumns.DATE].ToString(), "yyyy-MM-dd h:mm:ss", new CultureInfo("en-US"), DateTimeStyles.None, out dateValue))
+                if (DateTime.TryParseExact(excelData.Rows[i][(int)BinanceColumns.DATE].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue))
                 {
                     GeneralImport.TradeData newData;
                     newData.date = dateValue;
