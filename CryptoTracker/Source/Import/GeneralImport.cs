@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CryptoTracker
 {
-    public static class GeneralImport
+    public class GeneralImport
     {
         public struct TradePair
         {
@@ -45,7 +45,7 @@ namespace CryptoTracker
             public float usdValue;
         };
 
-        public static float GetHistoricalUsdValue(DateTime date, string currency)
+        protected float GetHistoricalUsdValue(DateTime date, string currency)
         {
             string input = "https://min-api.cryptocompare.com/data/pricehistorical?fsym=" + currency + "&tsyms=USD&ts=" + date.DateTimeToUNIX().ToString();
             float price = 0.0F;
@@ -69,7 +69,7 @@ namespace CryptoTracker
             //Console.WriteLine(tradePrice.ToString());
         }
 
-        public static DataSet ExcelToDataSet(string _filePath)
+        protected DataSet ExcelToDataSet(string _filePath)
         {
             DataSet result;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CryptoTracker
 {
-    class CoinbaseImport
+    class CoinbaseImport : GeneralImport
     {
         public enum CoinbaseColumns
         {
@@ -20,12 +20,12 @@ namespace CryptoTracker
             TRANSFER_FEE = 9
         }
 
-        List<GeneralImport.TradeData> coinbaseTradeList = new List<GeneralImport.TradeData>();
+        List<TradeData> coinbaseTradeList = new List<TradeData>();
 
 
-        public List<GeneralImport.TradeData> ImportCoinbaseTradeData(string filePath)
+        public List<TradeData> ImportCoinbaseTradeData(string filePath)
         {
-            var excelData = GeneralImport.ExcelToDataSet(filePath).Tables[0];
+            var excelData = ExcelToDataSet(filePath).Tables[0];
 
             for (int i = 0; i < excelData.Rows.Count; i++)
             {
@@ -33,12 +33,12 @@ namespace CryptoTracker
 
                 if (DateTime.TryParse(excelData.Rows[i][(int)CoinbaseColumns.DATE].ToString(), out dateValue) && excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString() != "")
                 {
-                    GeneralImport.TradeData newData;
+                    TradeData newData;
                     newData.date = dateValue;
                     newData.tradePair.trade = excelData.Rows[i][(int)CoinbaseColumns.TRADE_CURRENCY].ToString();
                     newData.tradePair.baseTrade = excelData.Rows[i][(int)CoinbaseColumns.BASE_CURRENCY].ToString();
-                    newData.type = excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString().Split(' ')[0] == "Bought" ? GeneralImport.Type.BUY : GeneralImport.Type.SELL;
-                    newData.orderPrice = GeneralImport.GetHistoricalUsdValue(newData.date, newData.tradePair.trade);
+                    newData.type = excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString().Split(' ')[0] == "Bought" ? Type.BUY : Type.SELL;
+                    newData.orderPrice = GetHistoricalUsdValue(newData.date, newData.tradePair.trade);
                     newData.orderAmount = (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT]);
                     newData.avgTradePrice = newData.orderPrice;
                     newData.filled = null;

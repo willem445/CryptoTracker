@@ -41,6 +41,7 @@ namespace CryptoTracker
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
+        DataTable table = new DataTable();
 
         //UI Lists
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
@@ -94,6 +95,8 @@ namespace CryptoTracker
 
             importSelect_CB.Items.Add("Binance");
             importSelect_CB.Items.Add("Coinbase");
+
+            dataGridView2.DataSource = table;
         }
 
         private void ToolTip_Popup(object sender, PopupEventArgs e)
@@ -644,8 +647,6 @@ namespace CryptoTracker
 
         private void importButton_Click(object sender, EventArgs e)
         {
-            
-
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
             openFileDialog1.InitialDirectory = @"C:\Users\Willem\Desktop";
@@ -662,7 +663,7 @@ namespace CryptoTracker
                     if (importSelect_CB.Text == "Binance")
                     {
                         BinanceImport importBinance = new BinanceImport();
-                        data = importBinance.ImportBinanceTradeData(openFileDialog1.FileName);
+                        table.Merge(importBinance.ImportBinanceTradeData(openFileDialog1.FileName));
                     }
                     else if (importSelect_CB.Text == "Coinbase")
                     {
@@ -670,23 +671,42 @@ namespace CryptoTracker
                         data = importCoinbase.ImportCoinbaseTradeData(openFileDialog1.FileName);
                     }
 
-                    //Add data to listview
-                    foreach (var item in data)
-                    {
-                        string[] row = { item.tradePair.trade + "/" + item.tradePair.baseTrade,
-                                        item.type == GeneralImport.Type.BUY ? "Buy" : "Sell",
-                                        item.orderAmount.ToString() + " " + item.tradePair.trade,
-                                        item.avgTradePrice.ToString() + " " + item.tradePair.baseTrade,
-                                        item.total + " " + item.tradePair.baseTrade,
-                                        "$" + item.usdValue.ToString("0.00") };
-                        tradeListView.Items.Add(item.date.ToString()).SubItems.AddRange(row);
-                    }
+                    
+
+                    saveImportButton.Enabled = true;
+                    saveImportButton.Visible = true;
+                    //table.Columns.Add("Name", typeof(string));
+
+                    //foreach (var item in data)
+                    //{
+                    //    table.Rows.Add(item.tradePair.trade);
+                    //}
+
+
+
+                    ////Add data to listview
+                    //foreach (var item in data)
+                    //{
+                    //    string[] row = { item.tradePair.trade + "/" + item.tradePair.baseTrade,
+                    //                    item.type == GeneralImport.Type.BUY ? "Buy" : "Sell",
+                    //                    item.orderAmount.ToString() + " " + item.tradePair.trade,
+                    //                    item.avgTradePrice.ToString() + " " + item.tradePair.baseTrade,
+                    //                    item.total + " " + item.tradePair.baseTrade,
+                    //                    "$" + item.usdValue.ToString("0.00") };
+                    //    //tradeListView.Items.Add(item.date.ToString()).SubItems.AddRange(row);
+                    //}
                 }
                 catch (System.IO.IOException ex)
                 {
                     MessageBox.Show(ex.Message.ToString());
                 }
             }
+        }
+
+        private void saveImportButton_Click(object sender, EventArgs e)
+        {
+            FileIO file = new FileIO();
+            file.SaveToXML(dataGridView2);
         }
     }
 }

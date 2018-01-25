@@ -62,30 +62,25 @@
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.pieChart1 = new LiveCharts.WinForms.PieChart();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.importSelect_CB = new MetroFramework.Controls.MetroComboBox();
+            this.saveImportButton = new MetroFramework.Controls.MetroButton();
+            this.addButton = new MetroFramework.Controls.MetroButton();
+            this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
             this.importButton = new MetroFramework.Controls.MetroButton();
             this.selectCoin_CB = new MetroFramework.Controls.MetroComboBox();
             this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
-            this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
-            this.addButton = new MetroFramework.Controls.MetroButton();
-            this.saveImportButton = new MetroFramework.Controls.MetroButton();
-            this.tradeListView = new System.Windows.Forms.ListView();
-            this.importSelect_CB = new MetroFramework.Controls.MetroComboBox();
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.metroProgressBar1 = new MetroFramework.Controls.MetroProgressBar();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             this.metroTabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,7 +95,9 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.White;
+            this.metroStyleExtender1.SetApplyMetroTheme(this.menuStrip1, true);
+            this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.menuStrip1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -132,6 +129,7 @@
             // 
             // toolStripMenuItem1
             // 
+            this.toolStripMenuItem1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(113, 6);
             // 
@@ -196,6 +194,7 @@
             this.metroTabControl1.SelectedIndex = 2;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
+            this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
             this.metroTabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.metroTabControl1_Selected);
             // 
             // metroTabPage1
@@ -382,8 +381,9 @@
             // 
             // metroTabPage3
             // 
+            this.metroTabPage3.Controls.Add(this.metroProgressBar1);
+            this.metroTabPage3.Controls.Add(this.dataGridView2);
             this.metroTabPage3.Controls.Add(this.importSelect_CB);
-            this.metroTabPage3.Controls.Add(this.tradeListView);
             this.metroTabPage3.Controls.Add(this.saveImportButton);
             this.metroTabPage3.Controls.Add(this.addButton);
             this.metroTabPage3.Controls.Add(this.metroLabel5);
@@ -396,6 +396,43 @@
             this.metroTabPage3.TabIndex = 2;
             this.metroTabPage3.Text = "Trades";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
+            // 
+            // importSelect_CB
+            // 
+            this.importSelect_CB.FontSize = MetroFramework.MetroLinkSize.Small;
+            this.importSelect_CB.FormattingEnabled = true;
+            this.importSelect_CB.ItemHeight = 19;
+            this.importSelect_CB.Location = new System.Drawing.Point(613, 27);
+            this.importSelect_CB.Name = "importSelect_CB";
+            this.importSelect_CB.Size = new System.Drawing.Size(83, 25);
+            this.importSelect_CB.TabIndex = 9;
+            // 
+            // saveImportButton
+            // 
+            this.saveImportButton.Location = new System.Drawing.Point(294, 29);
+            this.saveImportButton.Name = "saveImportButton";
+            this.saveImportButton.Size = new System.Drawing.Size(75, 23);
+            this.saveImportButton.TabIndex = 7;
+            this.saveImportButton.Text = "Save";
+            this.saveImportButton.Click += new System.EventHandler(this.saveImportButton_Click);
+            // 
+            // addButton
+            // 
+            this.addButton.Location = new System.Drawing.Point(213, 29);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(75, 23);
+            this.addButton.TabIndex = 6;
+            this.addButton.Text = "Add";
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            // 
+            // metroLabel5
+            // 
+            this.metroLabel5.AutoSize = true;
+            this.metroLabel5.Location = new System.Drawing.Point(3, 29);
+            this.metroLabel5.Name = "metroLabel5";
+            this.metroLabel5.Size = new System.Drawing.Size(77, 19);
+            this.metroLabel5.TabIndex = 5;
+            this.metroLabel5.Text = "Select Coin:";
             // 
             // importButton
             // 
@@ -436,101 +473,27 @@
             this.infoFlowPanel.Size = new System.Drawing.Size(777, 415);
             this.infoFlowPanel.TabIndex = 2;
             // 
+            // dataGridView2
+            // 
+            this.dataGridView2.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(3, 58);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(774, 338);
+            this.dataGridView2.TabIndex = 2;
+            // 
             // metroStyleManager1
             // 
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
             // 
-            // metroLabel5
+            // metroProgressBar1
             // 
-            this.metroLabel5.AutoSize = true;
-            this.metroLabel5.Location = new System.Drawing.Point(3, 29);
-            this.metroLabel5.Name = "metroLabel5";
-            this.metroLabel5.Size = new System.Drawing.Size(77, 19);
-            this.metroLabel5.TabIndex = 5;
-            this.metroLabel5.Text = "Select Coin:";
-            // 
-            // addButton
-            // 
-            this.addButton.Location = new System.Drawing.Point(213, 29);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(75, 23);
-            this.addButton.TabIndex = 6;
-            this.addButton.Text = "Add";
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
-            // 
-            // saveImportButton
-            // 
-            this.saveImportButton.Location = new System.Drawing.Point(294, 29);
-            this.saveImportButton.Name = "saveImportButton";
-            this.saveImportButton.Size = new System.Drawing.Size(75, 23);
-            this.saveImportButton.TabIndex = 7;
-            this.saveImportButton.Text = "Save";
-            // 
-            // tradeListView
-            // 
-            this.metroStyleExtender1.SetApplyMetroTheme(this.tradeListView, true);
-            this.tradeListView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.tradeListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader6,
-            this.columnHeader7,
-            this.columnHeader5,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader10,
-            this.columnHeader11});
-            this.tradeListView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.tradeListView.Location = new System.Drawing.Point(3, 58);
-            this.tradeListView.Name = "tradeListView";
-            this.tradeListView.Size = new System.Drawing.Size(774, 348);
-            this.tradeListView.TabIndex = 8;
-            this.tradeListView.UseCompatibleStateImageBehavior = false;
-            this.tradeListView.View = System.Windows.Forms.View.Details;
-            // 
-            // importSelect_CB
-            // 
-            this.importSelect_CB.FontSize = MetroFramework.MetroLinkSize.Small;
-            this.importSelect_CB.FormattingEnabled = true;
-            this.importSelect_CB.ItemHeight = 19;
-            this.importSelect_CB.Location = new System.Drawing.Point(613, 27);
-            this.importSelect_CB.Name = "importSelect_CB";
-            this.importSelect_CB.Size = new System.Drawing.Size(83, 25);
-            this.importSelect_CB.TabIndex = 9;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Date";
-            this.columnHeader6.Width = 125;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Trade Pair";
-            this.columnHeader7.Width = 80;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Order Quantity";
-            this.columnHeader8.Width = 120;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Trade Price";
-            this.columnHeader9.Width = 120;
-            // 
-            // columnHeader10
-            // 
-            this.columnHeader10.Text = "Order Cost";
-            this.columnHeader10.Width = 120;
-            // 
-            // columnHeader11
-            // 
-            this.columnHeader11.Text = "Net Cost (USD)";
-            this.columnHeader11.Width = 120;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Type";
+            this.metroProgressBar1.Location = new System.Drawing.Point(507, 29);
+            this.metroProgressBar1.Name = "metroProgressBar1";
+            this.metroProgressBar1.Size = new System.Drawing.Size(100, 23);
+            this.metroProgressBar1.TabIndex = 10;
             // 
             // MainAppForm
             // 
@@ -557,6 +520,7 @@
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage3.PerformLayout();
             this.metroTabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -603,18 +567,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private MetroFramework.Controls.MetroLabel metroLabel3;
-        private System.Windows.Forms.ListView tradeListView;
         private MetroFramework.Controls.MetroButton saveImportButton;
         private MetroFramework.Controls.MetroButton addButton;
         private MetroFramework.Controls.MetroLabel metroLabel5;
         private MetroFramework.Controls.MetroComboBox importSelect_CB;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.ColumnHeader columnHeader8;
-        private System.Windows.Forms.ColumnHeader columnHeader9;
-        private System.Windows.Forms.ColumnHeader columnHeader10;
-        private System.Windows.Forms.ColumnHeader columnHeader11;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private MetroFramework.Controls.MetroProgressBar metroProgressBar1;
     }
 }
 
