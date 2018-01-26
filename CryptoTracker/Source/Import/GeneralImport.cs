@@ -6,6 +6,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CryptoTracker
@@ -30,20 +31,38 @@ namespace CryptoTracker
             CANCELED
         };
 
-        public struct TradeData
+        protected DataTable table;
+
+        public GeneralImport()
         {
-            public DateTime date;
-            public GeneralImport.TradePair tradePair;
-            public Type type;
-            public double orderPrice;
-            public float orderAmount;
-            public double? avgTradePrice;
-            public float? filled;
-            public double total;
-            public GeneralImport.Status? status;
-            public float fee;
-            public float usdValue;
-        };
+            table = new DataTable();
+            table.Columns.Add("Date", typeof(DateTime));
+            table.Columns.Add("Exchange", typeof(string));
+            table.Columns.Add("Trade Pair", typeof(string));
+            table.Columns.Add("Type", typeof(string));
+            table.Columns.Add("Order Quantity", typeof(float));
+            table.Columns.Add("Trade Price", typeof(float));
+            table.Columns.Add("Order Cost", typeof(float));
+            table.Columns.Add("Net Cost (USD)", typeof(float));
+        }
+
+        public DataTable ImportFromExchange(string exchange, string fileName)
+        {
+            DataTable table = new DataTable();
+
+            if (exchange == "Binance")
+            {
+                BinanceImport importBinance = new BinanceImport();
+                table = importBinance.ImportBinanceTradeData(fileName);
+            }
+            else if (exchange == "Coinbase")
+            {
+                CoinbaseImport importCoinbase = new CoinbaseImport();
+                table = importCoinbase.ImportCoinbaseTradeData(fileName);
+            }
+
+            return table;
+        }
 
         protected float GetHistoricalUsdValue(DateTime date, string currency)
         {
@@ -64,9 +83,6 @@ namespace CryptoTracker
             }
 
             return price;
-            //float tradePrice = price * 0.173699F;
-
-            //Console.WriteLine(tradePrice.ToString());
         }
 
         protected DataSet ExcelToDataSet(string _filePath)

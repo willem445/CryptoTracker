@@ -74,6 +74,7 @@
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroProgressBar1 = new MetroFramework.Controls.MetroProgressBar();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -381,6 +382,7 @@
             // 
             // metroTabPage3
             // 
+            this.metroTabPage3.Controls.Add(this.button1);
             this.metroTabPage3.Controls.Add(this.metroProgressBar1);
             this.metroTabPage3.Controls.Add(this.dataGridView2);
             this.metroTabPage3.Controls.Add(this.importSelect_CB);
@@ -495,6 +497,16 @@
             this.metroProgressBar1.Size = new System.Drawing.Size(100, 23);
             this.metroProgressBar1.TabIndex = 10;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(408, 29);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -573,6 +585,7 @@
         private MetroFramework.Controls.MetroComboBox importSelect_CB;
         private System.Windows.Forms.DataGridView dataGridView2;
         private MetroFramework.Controls.MetroProgressBar metroProgressBar1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

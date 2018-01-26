@@ -13,7 +13,7 @@ namespace CryptoTracker
 {
     class BinanceImport : GeneralImport
     {
-        DataTable table;
+
 
         enum BinanceColumns
         {
@@ -32,15 +32,7 @@ namespace CryptoTracker
 
         public BinanceImport()
         {
-            table = new DataTable();
-            table.Columns.Add("Date", typeof(DateTime));
-            table.Columns.Add("Exchange", typeof(string));
-            table.Columns.Add("Trade Pair", typeof(string));
-            table.Columns.Add("Type", typeof(string));
-            table.Columns.Add("Order Quantity", typeof(float));
-            table.Columns.Add("Trade Price", typeof(float));
-            table.Columns.Add("Order Cost", typeof(float));
-            table.Columns.Add("Net Cost (USD)", typeof(float));
+
         }
 
         public DataTable ImportBinanceTradeData(string filePath)

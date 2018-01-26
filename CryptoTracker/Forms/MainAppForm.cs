@@ -14,6 +14,8 @@ using LiveCharts.WinForms; //the WinForm wrappers
 
 using System.Data;
 using ExcelDataReader;
+using System.Threading;
+using System.Threading.Tasks;
 
 //Crypto Images
 //https://github.com/cjdowner/cryptocurrency-icons
@@ -42,6 +44,8 @@ namespace CryptoTracker
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
         DataTable table = new DataTable();
+        Thread importThread;
+        DataTable fuckoff = new DataTable();
 
         //UI Lists
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
@@ -637,15 +641,22 @@ namespace CryptoTracker
 
         }
 
+        /// <summary>
+        /// Manually add a trade to the table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton_Click(object sender, EventArgs e)
         {
             
-
-
-
         }
 
-        private void importButton_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Import trades from an exchange report
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void importButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
@@ -656,57 +667,47 @@ namespace CryptoTracker
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                try
-                {
-                    List<GeneralImport.TradeData> data = new List<GeneralImport.TradeData>();
+                string file = openFileDialog1.FileName;
+                string exchange = importSelect_CB.Text;
 
-                    if (importSelect_CB.Text == "Binance")
-                    {
-                        BinanceImport importBinance = new BinanceImport();
-                        table.Merge(importBinance.ImportBinanceTradeData(openFileDialog1.FileName));
-                    }
-                    else if (importSelect_CB.Text == "Coinbase")
-                    {
-                        CoinbaseImport importCoinbase = new CoinbaseImport();
-                        data = importCoinbase.ImportCoinbaseTradeData(openFileDialog1.FileName);
-                    }
+                DataTable test = await Task.Factory.StartNew(() => ImportDataThread(exchange, file));
 
-                    
+                table.Merge(test);
 
-                    saveImportButton.Enabled = true;
-                    saveImportButton.Visible = true;
-                    //table.Columns.Add("Name", typeof(string));
+                
 
-                    //foreach (var item in data)
-                    //{
-                    //    table.Rows.Add(item.tradePair.trade);
-                    //}
-
-
-
-                    ////Add data to listview
-                    //foreach (var item in data)
-                    //{
-                    //    string[] row = { item.tradePair.trade + "/" + item.tradePair.baseTrade,
-                    //                    item.type == GeneralImport.Type.BUY ? "Buy" : "Sell",
-                    //                    item.orderAmount.ToString() + " " + item.tradePair.trade,
-                    //                    item.avgTradePrice.ToString() + " " + item.tradePair.baseTrade,
-                    //                    item.total + " " + item.tradePair.baseTrade,
-                    //                    "$" + item.usdValue.ToString("0.00") };
-                    //    //tradeListView.Items.Add(item.date.ToString()).SubItems.AddRange(row);
-                    //}
-                }
-                catch (System.IO.IOException ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
-                }
+                //Enable save button if an import was successfull
+                saveImportButton.Enabled = true;
+                saveImportButton.Visible = true;
             }
         }
 
+        /// <summary>
+        /// Save data from imports to an xml file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveImportButton_Click(object sender, EventArgs e)
         {
             FileIO file = new FileIO();
             file.SaveToXML(dataGridView2);
+        }
+
+        public DataTable ImportDataThread(string exchange, string fileName)
+        {
+
+                GeneralImport import = new GeneralImport();
+                DataTable test = import.ImportFromExchange(exchange, fileName);
+
+                Console.WriteLine("Done");
+
+            return test;
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
