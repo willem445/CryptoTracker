@@ -48,6 +48,21 @@ namespace CryptoTracker
             return parsedDataList;
         }
 
+        public DataTable ParseTradesFile()
+        {
+            DataSet temp = new DataSet();
+
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
+
+            if (Directory.Exists(path))
+            {
+                temp.ReadXml(Path.Combine(path, "TradeData.xml"));
+            }
+
+            return temp.Tables[0];
+        }
+
         public void SaveToXML(DataGridView table)
         {
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
@@ -68,7 +83,7 @@ namespace CryptoTracker
                 {
                     // You could potentially name the column based on the DGV column name (beware of dupes)
                     // or assign a type based on the data type of the data bound to this DGV column.
-                    dt.Columns.Add();
+                    dt.Columns.Add(column.Name);
                 }
             }
 

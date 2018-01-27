@@ -43,9 +43,8 @@ namespace CryptoTracker
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
-        DataTable table = new DataTable();
-        Thread importThread;
-        DataTable fuckoff = new DataTable();
+        DataTable tableBindToDataGridView = new DataTable(); //Contains both unsaved and saved data which is bound to data grid view for viewing
+        DataTable unsavedTradesDataTable = new DataTable(); //Contains unsaved data that has not yet been written to file, used to avoid adding duplicate trades to price tracking totals
 
         //UI Lists
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
@@ -62,8 +61,36 @@ namespace CryptoTracker
 
             priceManager = new PriceManager();
 
+            ApplicationDataInitialize();
+            ApplicationFormInitialize();
+            
+        }
+
+        private void ToolTip_Popup(object sender, PopupEventArgs e)
+        {
+            //TODO- Tooltip not workign correctly
+            string text = "";
+            foreach(var item in priceManager.coinModelList)
+            {
+                if (e.AssociatedControl.Name.Contains(item.Name))
+                {
+                    text = item.MarketCap;
+                }
+            }
+
+            //toolTip.SetToolTip(, text);
+
+            //e.AssociatedControl.Name
+            //throw new NotImplementedException();
+        }
+
+        private void ApplicationFormInitialize()
+        {
             //Create handle created event
             HandleCreated += MainAppForm_HandleCreated;
+
+            //Set datasource for dataGridView trades table
+            dataGridView2.DataSource = tableBindToDataGridView;
 
             //Configure the autoupdate timer
             updatePrices = new System.Timers.Timer();
@@ -85,8 +112,6 @@ namespace CryptoTracker
             //Initialize the new line labels
             AddNewLine();
 
-            AppDataInitialization();
-
             //Configure import trades tab
             foreach (var item in priceManager.coinModelList)
             {
@@ -99,42 +124,24 @@ namespace CryptoTracker
             importSelect_CB.Items.Add("Binance");
             importSelect_CB.Items.Add("Coinbase");
 
-            dataGridView2.DataSource = table;
-        }
-
-        private void ToolTip_Popup(object sender, PopupEventArgs e)
-        {
-            //TODO- Tooltip not workign correctly
-            string text = "";
-            foreach(var item in priceManager.coinModelList)
-            {
-                if (e.AssociatedControl.Name.Contains(item.Name))
-                {
-                    text = item.MarketCap;
-                }
-            }
-
-            //toolTip.SetToolTip(, text);
-
-            //e.AssociatedControl.Name
-            //throw new NotImplementedException();
-        }
-
-        private void AppDataInitialization()
-        {
-            //Parse data in documents folder
-            FileIO file = new FileIO();
-            priceManager.coinModelList = file.ParseSavedData();
-            priceManager.UpdatePriceData();
-
+            //Add controls for each parsed coin to form
             foreach (var item in priceManager.coinModelList)
             {
                 AddNewCoinToFlowControl(item);
             }
+        }
 
-           
+        private void ApplicationDataInitialize()
+        {
+            //Parse data in documents folder
+            FileIO file = new FileIO();
+            priceManager.coinModelList = file.ParseSavedData();
 
-            //AddNewCoinToFlowControl(newCoin);
+            //Update prices based on parsed data
+            priceManager.UpdatePriceData();
+
+            //Update trades data grid view from xml file
+            tableBindToDataGridView.Merge(file.ParseTradesFile());
         }
 
         //Methods*******************************************************************************
@@ -647,12 +654,13 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void addButton_Click(object sender, EventArgs e)
         {
-            AddTradeForm addTrade = new AddTradeForm();
+            AddTradeForm importTrade = new AddTradeForm();
 
-            if (addTrade.ShowDialog() == DialogResult.OK)
+            if (importTrade.ShowDialog() == DialogResult.OK)
             {
                 //Add data from add trade window to data grid view
-                table.Merge(addTrade.table);
+                tableBindToDataGridView.Merge(importTrade.table);
+                unsavedTradesDataTable.Merge(importTrade.table);
             }
         }
 
@@ -680,7 +688,8 @@ namespace CryptoTracker
 
                 //Start new thread and wait until complete
                 DataTable importTable = await Task.Factory.StartNew(() => ImportDataThread(exchange, file));
-                table.Merge(importTable);
+                tableBindToDataGridView.Merge(importTable);
+                unsavedTradesDataTable.Merge(importTable);
 
                 metroProgressSpinner1.EnsureVisible = false;
                 importButton.Enabled = true;
@@ -698,8 +707,15 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void saveImportButton_Click(object sender, EventArgs e)
         {
+            //Save data to xml file
             FileIO file = new FileIO();
             file.SaveToXML(dataGridView2);
+
+            //TODO - TradesTabIntegration - update price tracking quantity and net cost values in pricemanager
+            priceManager.UpdatePriceDataFromTrades(unsavedTradesDataTable);
+
+            //Clear unsaved data table once data has been saved to file
+            unsavedTradesDataTable.Clear();
         }
 
         //Threads********************************************************************************

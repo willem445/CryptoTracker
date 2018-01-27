@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace CryptoTracker
 {
@@ -89,6 +90,13 @@ namespace CryptoTracker
                     coinModelList[i].ProfitPercent = null;
                 }
             }
+        }
+
+        public void UpdatePriceDataFromTrades(DataTable table)
+        {
+            //Need to update quantity and net cost for each coin currently being tracked
+
+
         }
 
         /// <summary>
