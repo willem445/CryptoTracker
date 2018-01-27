@@ -112,11 +112,11 @@
     </Compile>
     <Compile Include="Source\Import\GeneralImport.cs" />
     <Compile Include="Source\Import\BinanceImport.cs" />
-    <Compile Include="Forms\ImportTradesForm.cs">
+    <Compile Include="Forms\AddTradesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ImportTradesForm.Designer.cs">
-      <DependentUpon>ImportTradesForm.cs</DependentUpon>
+    <Compile Include="Forms\AddTradesForm.Designer.cs">
+      <DependentUpon>AddTradesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\CoinModel.cs" />
     <Compile Include="Source\Extensions.cs" />
@@ -141,8 +141,8 @@
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ImportTradesForm.resx">
-      <DependentUpon>ImportTradesForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AddTradesForm.resx">
+      <DependentUpon>AddTradesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

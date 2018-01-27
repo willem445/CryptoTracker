@@ -53,7 +53,6 @@ namespace CryptoTracker
 
         //MainApp fields
         int flowControlRowCount = 0; //Tracks coins added to row in flow control
-        bool updatingUiFlag = false; //Tracks if UI is currently being updated, prevents thread interference
         int coinCount = 0; //Count of coins added to project
 
         //Constructor***************************************************************************
@@ -648,7 +647,13 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void addButton_Click(object sender, EventArgs e)
         {
-            
+            AddTradeForm addTrade = new AddTradeForm();
+
+            if (addTrade.ShowDialog() == DialogResult.OK)
+            {
+                //Add data from add trade window to data grid view
+                table.Merge(addTrade.table);
+            }
         }
 
         /// <summary>
@@ -670,11 +675,15 @@ namespace CryptoTracker
                 string file = openFileDialog1.FileName;
                 string exchange = importSelect_CB.Text;
 
-                DataTable test = await Task.Factory.StartNew(() => ImportDataThread(exchange, file));
+                metroProgressSpinner1.EnsureVisible = true;
+                importButton.Enabled = false;
 
-                table.Merge(test);
+                //Start new thread and wait until complete
+                DataTable importTable = await Task.Factory.StartNew(() => ImportDataThread(exchange, file));
+                table.Merge(importTable);
 
-                
+                metroProgressSpinner1.EnsureVisible = false;
+                importButton.Enabled = true;
 
                 //Enable save button if an import was successfull
                 saveImportButton.Enabled = true;
@@ -693,6 +702,7 @@ namespace CryptoTracker
             file.SaveToXML(dataGridView2);
         }
 
+        //Threads********************************************************************************
         public DataTable ImportDataThread(string exchange, string fileName)
         {
 
@@ -702,11 +712,6 @@ namespace CryptoTracker
                 Console.WriteLine("Done");
 
             return test;
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
 
         }
     }

@@ -13,12 +13,14 @@ namespace CryptoTracker
 {
     public class GeneralImport
     {
+        //Structures*************************************************************************************
         public struct TradePair
         {
             public string trade;
             public string baseTrade;
         };
 
+        //Enumerations***********************************************************************************
         public enum Type
         {
             BUY,
@@ -31,8 +33,10 @@ namespace CryptoTracker
             CANCELED
         };
 
+        //Fields*****************************************************************************************
         protected DataTable table;
 
+        //Constructor************************************************************************************
         public GeneralImport()
         {
             table = new DataTable();
@@ -46,8 +50,16 @@ namespace CryptoTracker
             table.Columns.Add("Net Cost (USD)", typeof(float));
         }
 
+        //Methods*****************************************************************************************
+        /// <summary>
+        /// Calls correct import function based on exchange name, parses data, and returns a datatable
+        /// </summary>
+        /// <param name="exchange"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public DataTable ImportFromExchange(string exchange, string fileName)
         {
+            //TODO - TradesTabIntegration - Check that imported file is in correct format before attempting to parse data
             DataTable table = new DataTable();
 
             if (exchange == "Binance")
@@ -64,8 +76,15 @@ namespace CryptoTracker
             return table;
         }
 
-        protected float GetHistoricalUsdValue(DateTime date, string currency)
+        /// <summary>
+        /// Gets the historical price of a coin based on timestamp
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="currency"></param>
+        /// <returns></returns>
+        public float GetHistoricalUsdValue(DateTime date, string currency)
         {
+            //TODO - TradesTabIntegration - return null float if trying to access api for non existent coin
             string input = "https://min-api.cryptocompare.com/data/pricehistorical?fsym=" + currency + "&tsyms=USD&ts=" + date.DateTimeToUNIX().ToString();
             float price = 0.0F;
 
@@ -74,7 +93,7 @@ namespace CryptoTracker
             string prices = cli.DownloadString(input);
             dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
 
-            //TODO - Add other trade pair and default cases
+            //TODO - TradesTabIntegration - Add other trade pair and default cases
             switch (currency)
             {
                 case "ETH":
@@ -85,6 +104,11 @@ namespace CryptoTracker
             return price;
         }
 
+        /// <summary>
+        /// Converts an excel document worksheet to a DataSet
+        /// </summary>
+        /// <param name="_filePath"></param>
+        /// <returns></returns>
         protected DataSet ExcelToDataSet(string _filePath)
         {
             DataSet result;

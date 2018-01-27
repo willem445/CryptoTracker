@@ -10,6 +10,7 @@ namespace CryptoTracker
 {
     class CoinbaseImport : GeneralImport
     {
+        //Enumerations***********************************************************************************
         public enum CoinbaseColumns
         {
             DATE = 0,
@@ -21,6 +22,12 @@ namespace CryptoTracker
             TRANSFER_FEE = 9
         }
 
+        //Methods*****************************************************************************************
+        /// <summary>
+        /// Parse data from coinbase generated report
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public DataTable ImportCoinbaseTradeData(string filePath)
         {
             var excelData = ExcelToDataSet(filePath).Tables[0];
@@ -46,6 +53,5 @@ namespace CryptoTracker
 
             return table;
         }
-
     }
 }

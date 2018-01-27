@@ -25,7 +25,6 @@ namespace CryptoTracker
         private float? profitPercent;
         private string apiLink;
 
-        //TODO - Add convertsion properties to convert float to string to bind to textboxes
         public string Name
         {
             get

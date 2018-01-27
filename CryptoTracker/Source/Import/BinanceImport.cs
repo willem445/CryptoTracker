@@ -13,8 +13,7 @@ namespace CryptoTracker
 {
     class BinanceImport : GeneralImport
     {
-
-
+        //Enumerations***********************************************************************************
         enum BinanceColumns
         {
             DATE,
@@ -28,13 +27,15 @@ namespace CryptoTracker
             STATUS
         };
 
+        //Fields*****************************************************************************************
         private string[] binanceTradeBases = new string[] { "BTC", "ETH", "BNB", "USDT" };
 
-        public BinanceImport()
-        {
-
-        }
-
+        //Methods*****************************************************************************************
+        /// <summary>
+        /// Parse data from binance generated report
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public DataTable ImportBinanceTradeData(string filePath)
         {
             var excelData = ExcelToDataSet(filePath).Tables[0];
@@ -45,12 +46,9 @@ namespace CryptoTracker
 
                 if (DateTime.TryParseExact(excelData.Rows[i][(int)BinanceColumns.DATE].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue))
                 {
-                    //TradeData newData;
-                    //newData.date = dateValue;
-
-                    //TODO - Possible exception here if can't find base trade
+                    //TODO - TradesTabIntegration - Possible exception here if can't find base trade
                     TradePair tradePair = new TradePair();
-                    //newData.tradePair.baseTrade = "BTC";
+
                     foreach (var item in binanceTradeBases)
                     {
                         if (excelData.Rows[i][(int)BinanceColumns.PAIR].ToString().Contains(item))
@@ -70,23 +68,8 @@ namespace CryptoTracker
                         Convert.ToDouble(excelData.Rows[i][(int)BinanceColumns.TOTAL]),
                         GetHistoricalUsdValue(dateValue, tradePair.baseTrade) * (float)Convert.ToDouble(excelData.Rows[i][(int)BinanceColumns.TOTAL])
                         );
-
-                    //newData.tradePair.trade = excelData.Rows[i][(int)BinanceColumns.PAIR].ToString().Replace(newData.tradePair.baseTrade, "");           
-                    //newData.type = excelData.Rows[i][(int)BinanceColumns.TYPE].ToString() == "BUY" ? Type.BUY : Type.SELL;
-                    //newData.orderPrice = Convert.ToDouble(excelData.Rows[i][(int)BinanceColumns.ORDER_PRICE]);
-                    //newData.orderAmount = (float)Convert.ToDouble(excelData.Rows[i][(int)BinanceColumns.ORDER_AMOUNT]);
-                    //newData.avgTradePrice = Convert.ToDouble(excelData.Rows[i][(int)BinanceColumns.AVG_TRADE_PRICE]);
-                    //newData.filled = (float)Convert.ToDouble(excelData.Rows[i][(int)BinanceColumns.FILLED]);
-                    //newData.total = Convert.ToDouble(excelData.Rows[i][(int)BinanceColumns.TOTAL]);
-                    //newData.status = excelData.Rows[i][(int)BinanceColumns.STATUS].ToString() == "Filled" ? Status.FILLED : Status.CANCELED;
-                    //newData.fee = 0.0F;
-                    //newData.usdValue = GetHistoricalUsdValue(newData.date, newData.tradePair.baseTrade) * (float)newData.total;
-
-                    //binanceTradeList.Add(newData);
                 }
             }
-
-            //return binanceTradeList;
             return table;
         }
 
