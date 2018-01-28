@@ -13,6 +13,8 @@ namespace CryptoTracker
 {
     public partial class AddCoinForm : MetroFramework.Forms.MetroForm
     {
+        List<CoinModel.CoinNameStruct> CoinNames = new List<CoinModel.CoinNameStruct>();
+
         //Properties****************************************************************************
         public CoinModel Coin
         {
@@ -26,13 +28,18 @@ namespace CryptoTracker
         private CoinModel coin;
 
         //Constructor***************************************************************************
-        public AddCoinForm()
+        public AddCoinForm(List<CoinModel.CoinNameStruct> coinNames)
         {
             InitializeComponent();
             this.Text = "Add New Coin";
             cancelButton.DialogResult = DialogResult.Cancel;
 
-            apiLink_TB.Text = "https://api.coinmarketcap.com/v1/ticker/";
+            CoinNames = coinNames;
+
+            foreach (var item in CoinNames)
+            {
+                selectCoin_CB.Items.Add(item.Name);
+            }
 
             coin = new CoinModel();
         }
@@ -48,7 +55,7 @@ namespace CryptoTracker
             bool error = false;
 
             //Check for valid coin name
-            if ((coinName_TB.Text == null) || (coinName_TB.Text == ""))
+            if ((selectCoin_CB.Text == null) || (selectCoin_CB.Text == ""))
             {
                 MessageBox.Show("Enter coin name!");
                 error = true;
@@ -86,33 +93,13 @@ namespace CryptoTracker
                 }
             }
 
-            //Check for valid api link
-            if ((apiLink_TB.Text == null) || (apiLink_TB.Text == ""))
-            {
-                MessageBox.Show("Enter api link!");
-                error = true;
-            }
-            else
-            {
-                try
-                {
-                    var cli = new System.Net.WebClient();
-                    string prices = cli.DownloadString(apiLink_TB.Text);
-                }
-                catch
-                {
-                    MessageBox.Show("Enter valid api url!");
-                    error = true;
-                }
-            }
-
             //If no errors, continue
             if(!error)
             {
-                coin.Name = coinName_TB.Text;
+                coin.Name = selectCoin_CB.Text;
                 coin.Quantity = (float)Convert.ToDouble(quantity_TB.Text);
                 coin.NetCost = (float)Convert.ToDouble(netCost_TB.Text);
-                coin.APILink = apiLink_TB.Text;
+                coin.APILink = "https://api.coinmarketcap.com/v1/ticker/" + CoinNames[selectCoin_CB.SelectedIndex].Id + "/";
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();

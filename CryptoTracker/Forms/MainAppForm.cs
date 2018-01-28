@@ -466,7 +466,7 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void addBuyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddCoinForm addCoin = new AddCoinForm(); //Instantiate form
+            AddCoinForm addCoin = new AddCoinForm(priceManager.AllCoinNames); //Instantiate form
 
             if (addCoin.ShowDialog() == DialogResult.OK) //Show form
             {

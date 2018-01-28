@@ -48,6 +48,10 @@ namespace CryptoTracker
             return parsedDataList;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public DataTable ParseTradesFile()
         {
             DataSet temp = new DataSet();
@@ -65,6 +69,10 @@ namespace CryptoTracker
             return null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="table"></param>
         public void SaveToXML(DataGridView table)
         {
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
@@ -76,6 +84,11 @@ namespace CryptoTracker
             dS.WriteXml(File.OpenWrite(Path.Combine(path, "TradeData.xml")));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dgv"></param>
+        /// <returns></returns>
         private DataTable GetDataTableFromDGV(DataGridView dgv)
         {
             var dt = new DataTable();

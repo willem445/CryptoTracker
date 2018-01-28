@@ -8,6 +8,8 @@ namespace CryptoTracker
 {
     class PriceManager
     {
+        private const string ALL_COIN_LIMIT = "0";
+
         //Enums*********************************************************************************
 
 
@@ -42,9 +44,12 @@ namespace CryptoTracker
             UpdateValues();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void GetAllCoinNames()
         {
-            string input = "https://api.coinmarketcap.com/v1/ticker/?limit=200";
+            string input = "https://api.coinmarketcap.com/v1/ticker/?limit=" + ALL_COIN_LIMIT;
 
             //Connect to API
             var cli = new System.Net.WebClient();
@@ -62,6 +67,8 @@ namespace CryptoTracker
 
                 i++;
             }
+
+            AllCoinNames.Sort((x, y) => x.Name.CompareTo(y.Name));
         }
 
 
