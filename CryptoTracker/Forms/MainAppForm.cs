@@ -90,7 +90,9 @@ namespace CryptoTracker
             HandleCreated += MainAppForm_HandleCreated;
 
             //Set datasource for dataGridView trades table
-            dataGridView2.DataSource = tableBindToDataGridView;
+            BindingSource source = new BindingSource();
+            source.DataSource = tableBindToDataGridView;
+            dataGridView2.DataSource = source;
 
             //Configure the autoupdate timer
             updatePrices = new System.Timers.Timer();
@@ -694,10 +696,20 @@ namespace CryptoTracker
 
                 //Start new thread and wait until complete
                 temp = await Task.Factory.StartNew(() => ImportDataThread(exchange, file));
-                tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
-                unsavedTradesDataTable.Merge(temp, true, MissingSchemaAction.Ignore);
 
-                dataGridView2.DataSource = tableBindToDataGridView;
+                if (dataGridView2.RowCount > 0)
+                {
+                    tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
+                    unsavedTradesDataTable.Merge(temp, true, MissingSchemaAction.Ignore);
+                }
+                else
+                {
+                    tableBindToDataGridView.Merge(temp);
+                    unsavedTradesDataTable.Merge(temp);
+                }
+
+
+                dataGridView2.Refresh();
 
 
                 metroProgressSpinner1.EnsureVisible = false;
