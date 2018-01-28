@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 
 namespace CryptoTracker
 {
@@ -12,20 +13,58 @@ namespace CryptoTracker
 
         //Fields********************************************************************************
         public List<CoinModel> coinModelList = new List<CoinModel>();
+        private List<CoinModel.CoinNameStruct> allCoinNames = new List<CoinModel.CoinNameStruct>();
 
         //Fields to hold total investement data
         public float totalProfit = 0.0F;
         public float totalValue = 0.0F;
         public float totalInvestment = 0.0F;
 
+        public List<CoinModel.CoinNameStruct> AllCoinNames
+        {
+            get
+            {
+                return allCoinNames;
+            }
+        }
+
         //Constructor***************************************************************************
+        public PriceManager()
+        {
+            Thread getCoinNames = new Thread(new ThreadStart(GetAllCoinNames));
+            getCoinNames.Start();
+        }
+
+        //Methods*******************************************************************************
         public void UpdatePriceData()
         {
             APIUpdate();
             UpdateValues();
         }
 
-        //Methods*******************************************************************************
+        public void GetAllCoinNames()
+        {
+            string input = "https://api.coinmarketcap.com/v1/ticker/?limit=200";
+
+            //Connect to API
+            var cli = new System.Net.WebClient();
+            string prices = cli.DownloadString(input);
+            dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
+
+            int i = 0;
+            foreach (var item in results)
+            {
+                CoinModel.CoinNameStruct newCoin = new CoinModel.CoinNameStruct();
+                newCoin.Id = item.id;
+                newCoin.Name = item.name;
+                newCoin.Symbol = item.symbol;
+                allCoinNames.Add(newCoin);
+
+                i++;
+            }
+        }
+
+
         /// <summary>
         /// Connect to coinmarketcap API and retrieve data for each coin added to form
         /// </summary>

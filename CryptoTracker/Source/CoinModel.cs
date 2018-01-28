@@ -25,6 +25,13 @@ namespace CryptoTracker
         private float? profitPercent;
         private string apiLink;
 
+        public struct CoinNameStruct
+        {
+            public string Id;
+            public string Name;
+            public string Symbol;
+        }
+
         public string Name
         {
             get
