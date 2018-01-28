@@ -687,13 +687,16 @@ namespace CryptoTracker
                 string file = openFileDialog1.FileName;
                 string exchange = importSelect_CB.Text;
 
+                DataTable temp = new DataTable();
+
                 metroProgressSpinner1.EnsureVisible = true;
                 importButton.Enabled = false;
 
                 //Start new thread and wait until complete
-                DataTable importTable = await Task.Factory.StartNew(() => ImportDataThread(exchange, file));
-                tableBindToDataGridView.Merge(importTable);
-                unsavedTradesDataTable.Merge(importTable);
+                temp = await Task.Factory.StartNew(() => ImportDataThread(exchange, file));
+                tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
+                unsavedTradesDataTable.Merge(temp, true, MissingSchemaAction.Ignore);
+
 
                 metroProgressSpinner1.EnsureVisible = false;
                 importButton.Enabled = true;

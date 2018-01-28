@@ -58,6 +58,7 @@ namespace CryptoTracker
             if (File.Exists(Path.Combine(path, "TradeData.xml"))) //TODO - TradesTabIntegration - Change to file exists, fails when file does not exists but path does
             {
                 temp.ReadXml(Path.Combine(path, "TradeData.xml"));
+                temp.Tables[0].Rows[temp.Tables[0].Rows.Count-1].Delete();
                 return temp.Tables[0];
             }
 
