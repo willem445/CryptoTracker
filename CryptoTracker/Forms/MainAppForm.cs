@@ -697,6 +697,8 @@ namespace CryptoTracker
                 tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
                 unsavedTradesDataTable.Merge(temp, true, MissingSchemaAction.Ignore);
 
+                dataGridView2.DataSource = tableBindToDataGridView;
+
 
                 metroProgressSpinner1.EnsureVisible = false;
                 importButton.Enabled = true;
@@ -717,6 +719,15 @@ namespace CryptoTracker
             //Save data to xml file
             FileIO file = new FileIO();
             file.SaveToXML(dataGridView2);
+
+            //TODO - TradesTabIntegration - Check to see if coin is currently being tracked, if not, ask user if they want to 
+            for (int i = 0; i < tableBindToDataGridView.Rows.Count; i++)
+            {
+                if (priceManager.CoinModelList.Exists(x => x.Symbol == tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0]))
+                {
+                    Console.WriteLine(tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0] + "not being tracked");
+                }
+            }
 
             //TODO - TradesTabIntegration - update price tracking quantity and net cost values in pricemanager
             priceManager.UpdatePriceDataFromTrades(unsavedTradesDataTable);

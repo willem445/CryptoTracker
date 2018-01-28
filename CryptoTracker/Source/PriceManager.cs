@@ -30,6 +30,16 @@ namespace CryptoTracker
             }
         }
 
+        public List<CoinModel> CoinModelList
+        {
+            get
+            {
+                return coinModelList;
+            }
+        }
+            
+
+
         //Constructor***************************************************************************
         public PriceManager()
         {
@@ -146,7 +156,7 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// Creates new array in valueArrayList for new coin and populates quantity and net cost
+        /// 
         /// </summary>
         /// <param name="addCoin">CoinModel class holding coin related data</param>
         public void AddNewCoin(CoinModel addCoin)
