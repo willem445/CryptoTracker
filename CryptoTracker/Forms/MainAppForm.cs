@@ -141,7 +141,11 @@ namespace CryptoTracker
             priceManager.UpdatePriceData();
 
             //Update trades data grid view from xml file
-            tableBindToDataGridView.Merge(file.ParseTradesFile());
+            DataTable temp = file.ParseTradesFile();
+            if (temp != null)
+            {
+                tableBindToDataGridView.Merge(temp);
+            }
         }
 
         //Methods*******************************************************************************

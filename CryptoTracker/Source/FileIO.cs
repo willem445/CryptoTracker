@@ -55,12 +55,13 @@ namespace CryptoTracker
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
 
-            if (Directory.Exists(path))
+            if (File.Exists(Path.Combine(path, "TradeData.xml"))) //TODO - TradesTabIntegration - Change to file exists, fails when file does not exists but path does
             {
                 temp.ReadXml(Path.Combine(path, "TradeData.xml"));
+                return temp.Tables[0];
             }
 
-            return temp.Tables[0];
+            return null;
         }
 
         public void SaveToXML(DataGridView table)
