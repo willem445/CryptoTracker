@@ -732,12 +732,31 @@ namespace CryptoTracker
             FileIO file = new FileIO();
             file.SaveToXML(dataGridView2);
 
+            List<string> trackedCoins = new List<string>();
+
+            foreach (var item in priceManager.CoinModelList)
+            {
+                trackedCoins.Add(item.Symbol);
+            }
+
             //TODO - TradesTabIntegration - Check to see if coin is currently being tracked, if not, ask user if they want to 
             for (int i = 0; i < tableBindToDataGridView.Rows.Count; i++)
             {
-                if (priceManager.CoinModelList.Exists(x => x.Symbol == tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0]))
+                if (!trackedCoins.Contains(tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0]))
                 {
-                    Console.WriteLine(tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0] + "not being tracked");
+                    //Console.WriteLine("Index" + i.ToString() + "not found" + tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0]);
+                    AddCoinForm addNewCoin = new AddCoinForm(tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0], priceManager.AllCoinNames);
+
+                    MessageBoxForm message = new MessageBoxForm(tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0] + "is not currently being tracked. Would you like to track it?");
+                    if (message.ShowDialog() == DialogResult.OK)
+                    {
+                        if (addNewCoin.ShowDialog() == DialogResult.OK)
+                        {
+                            //AddNewCoinToFlowControl
+                        }
+                    }
+
+
                 }
             }
 

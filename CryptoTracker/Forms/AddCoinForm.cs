@@ -44,6 +44,33 @@ namespace CryptoTracker
             coin = new CoinModel();
         }
 
+        public AddCoinForm(string coinSymbol, List<CoinModel.CoinNameStruct> coinNames)
+        {
+            InitializeComponent();
+            this.Text = "Add New Coin";
+
+            CoinNames = coinNames;
+
+            foreach (var item in CoinNames)
+            {
+                selectCoin_CB.Items.Add(item.Name);
+            }
+
+            coin = new CoinModel();
+
+            int i = 0;
+            foreach (var item in CoinNames)
+            {
+                if(coinSymbol == item.Symbol)
+                {
+                    break;
+                }
+                i++;
+            }
+
+            selectCoin_CB.SelectedIndex = i;
+        }
+
         //Methods*******************************************************************************
         /// <summary>
         /// Check if data is valid and add new coin to form

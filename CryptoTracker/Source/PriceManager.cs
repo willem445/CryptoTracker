@@ -156,11 +156,14 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Add newly added coin to coin model list
         /// </summary>
         /// <param name="addCoin">CoinModel class holding coin related data</param>
         public void AddNewCoin(CoinModel addCoin)
         {
+            //Call price manager add new coin before adding new control coin to correctly bind data
+
+
             //coinApiUrlList.Add(addCoin.APILink); //Add api url to apiurllist
 
             //float?[] coinValues = new float?[5]; //Create array to be added to valueArrayList
