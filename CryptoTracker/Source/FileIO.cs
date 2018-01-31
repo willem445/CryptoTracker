@@ -24,10 +24,11 @@ namespace CryptoTracker
 
             string[] lines;
 
-            if (Directory.Exists(path))
+            if (File.Exists(Path.Combine(path, "CoinData.txt")))
             {
                 lines = System.IO.File.ReadAllLines(Path.Combine(path, "CoinData.txt"));
 
+                //TODO - Crashed if text file is empty
                 foreach (string line in lines)
                 {
                     CoinModel newCoin = new CoinModel();

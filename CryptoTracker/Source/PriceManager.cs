@@ -9,9 +9,21 @@ namespace CryptoTracker
     class PriceManager
     {
         private const string ALL_COIN_LIMIT = "0";
+        private const string BUY = "BUY";
+        private const string SELL = "SELL";
 
         //Enums*********************************************************************************
-
+        enum DataTableRows
+        {
+            Date,
+            Exchange,
+            TradePair,
+            Type,
+            OrderQuantity,
+            TradePrice,
+            OrderCost,
+            NetCost
+        }
 
         //Fields********************************************************************************
         public List<CoinModel> coinModelList = new List<CoinModel>(); //TODO - TradesTabIntegration - Make this private
@@ -152,6 +164,24 @@ namespace CryptoTracker
         {
             //Need to update quantity and net cost for each coin currently being tracked
 
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                int index = coinModelList.FindIndex(a => a.Symbol == table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[0]);
+
+                if (index > -1)
+                {
+                    if (table.Rows[i][(int)DataTableRows.Type].ToString() == BUY)
+                    {
+                        coinModelList[index].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
+                        coinModelList[index].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                    }
+                    else
+                    {
+                        coinModelList[index].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
+                        coinModelList[index].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                    }
+                }
+            }
 
         }
 

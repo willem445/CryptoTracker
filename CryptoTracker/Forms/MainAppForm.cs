@@ -424,15 +424,15 @@ namespace CryptoTracker
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
 
-            string[] textFileArray = new string[coinCount];
+            string[] textFileArray = new string[priceManager.CoinModelList.Count];
             bool readError = false;
 
             //Loop through each coin and put data in string array, if there is an error, do not write
-            for (int i = 0; i < coinCount; i++)
+            for (int i = 0; i < priceManager.CoinModelList.Count; i++)
             {
                 try
                 {
-                    textFileArray[i] = priceManager.coinModelList[i].Name + ", " + textBoxArrayList[i][0].Text + ", " + textBoxArrayList[i][1].Text.TrimStart('$') + ", " + priceManager.coinModelList[i].APILink;
+                    textFileArray[i] = priceManager.coinModelList[i].Name + ", " + priceManager.CoinModelList[i].QuantityToString + ", " + priceManager.CoinModelList[i].NetCost.ToString() + ", " + priceManager.coinModelList[i].APILink;
                 }
                 catch
                 {
@@ -451,7 +451,7 @@ namespace CryptoTracker
                 using (System.IO.StreamWriter file =
                     new System.IO.StreamWriter(Path.Combine(path, "CoinData.txt")))
                 {
-                    for (int i = 0; i < coinCount; i++)
+                    for (int i = 0; i < priceManager.CoinModelList.Count; i++)
                     {
                         //Print name, quantity, net cost, and api link to text file
                         file.WriteLine(textFileArray[i]);
@@ -702,7 +702,7 @@ namespace CryptoTracker
                 if (dataGridView2.RowCount > 0)
                 {
                     tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
-                    unsavedTradesDataTable.Merge(temp, true, MissingSchemaAction.Ignore);
+                    unsavedTradesDataTable.Merge(temp);
                 }
                 else
                 {
@@ -744,18 +744,37 @@ namespace CryptoTracker
             {
                 if (!trackedCoins.Contains(unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0]))
                 {
-                    AddCoinForm addNewCoin = new AddCoinForm(unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0], priceManager.AllCoinNames);
-
                     MessageBoxForm message = new MessageBoxForm(unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0] + " is not currently being tracked. Would you like to track it?");
+
                     if (message.ShowDialog() == DialogResult.OK)
                     {
-                        if (addNewCoin.ShowDialog() == DialogResult.OK)
-                        {
-                            //Add new value array to price manager
-                            priceManager.AddNewCoin(addNewCoin.Coin);
+                        CoinModel addCoin = new CoinModel();
 
-                            AddNewCoinToFlowControl(addNewCoin.Coin);
+                        int index = 0;
+                        foreach (var item in priceManager.AllCoinNames)
+                        {
+                            if (unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0] == item.Symbol)
+                            {
+                                break;
+                            }
+                            index++;
                         }
+
+                        //TODO - If a coin is not in the list (ie IOTA in binance report, MIOTA in CMC) we get index out of bounds error
+                        addCoin.Quantity = 0;
+                        addCoin.NetCost = 0;
+                        addCoin.Name = priceManager.AllCoinNames[index].Name;
+                        addCoin.APILink = "https://api.coinmarketcap.com/v1/ticker/" + priceManager.AllCoinNames[index].Id;
+
+                        //Add new value array to price manager
+                        priceManager.AddNewCoin(addCoin);
+
+                        AddNewCoinToFlowControl(addCoin);
+
+                        priceManager.UpdatePriceData();
+
+                        trackedCoins.Add(addCoin.Symbol);
+
                     }
                 }
             }
