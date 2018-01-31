@@ -67,8 +67,9 @@ namespace CryptoTracker
                 }
                 i++;
             }
-
-            selectCoin_CB.SelectedIndex = i;
+            
+            if (i < coinNames.Count)
+                selectCoin_CB.SelectedIndex = i;
         }
 
         //Methods*******************************************************************************

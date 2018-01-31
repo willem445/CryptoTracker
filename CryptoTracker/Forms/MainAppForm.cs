@@ -370,9 +370,6 @@ namespace CryptoTracker
 
             }
 
-            //Add new value array to price manager
-            priceManager.AddNewCoin(addCoin);        
-
             //Update counts
             flowControlRowCount++; //Update row count
             coinCount++; //Update coin count
@@ -422,6 +419,8 @@ namespace CryptoTracker
         /// </summary>
         private void Save()
         {
+            //TODO - Move this to FileIO
+
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
 
@@ -473,6 +472,9 @@ namespace CryptoTracker
             if (addCoin.ShowDialog() == DialogResult.OK) //Show form
             {
                 CoinModel coinModel = addCoin.Coin; //Create new coin model and add data from form
+
+                //Add new value array to price manager
+                priceManager.AddNewCoin(coinModel);
 
                 AddNewCoinToFlowControl(coinModel); //Add coin to form
             }
@@ -728,35 +730,33 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void saveImportButton_Click(object sender, EventArgs e)
         {
-            //Save data to xml file
             FileIO file = new FileIO();
-            file.SaveToXML(dataGridView2);
-
+            
+            //Create list of coins currently being tracked to compare to trades being added 
             List<string> trackedCoins = new List<string>();
-
             foreach (var item in priceManager.CoinModelList)
             {
                 trackedCoins.Add(item.Symbol);
             }
 
-            //TODO - TradesTabIntegration - Check to see if coin is currently being tracked, if not, ask user if they want to 
-            for (int i = 0; i < tableBindToDataGridView.Rows.Count; i++)
+            //Check to see if coin is currently being tracked, if not, ask user if they want to 
+            for (int i = 0; i < unsavedTradesDataTable.Rows.Count; i++)
             {
-                if (!trackedCoins.Contains(tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0]))
+                if (!trackedCoins.Contains(unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0]))
                 {
-                    //Console.WriteLine("Index" + i.ToString() + "not found" + tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0]);
-                    AddCoinForm addNewCoin = new AddCoinForm(tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0], priceManager.AllCoinNames);
+                    AddCoinForm addNewCoin = new AddCoinForm(unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0], priceManager.AllCoinNames);
 
-                    MessageBoxForm message = new MessageBoxForm(tableBindToDataGridView.Rows[i][2].ToString().Split('/')[0] + "is not currently being tracked. Would you like to track it?");
+                    MessageBoxForm message = new MessageBoxForm(unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0] + " is not currently being tracked. Would you like to track it?");
                     if (message.ShowDialog() == DialogResult.OK)
                     {
                         if (addNewCoin.ShowDialog() == DialogResult.OK)
                         {
-                            //AddNewCoinToFlowControl
+                            //Add new value array to price manager
+                            priceManager.AddNewCoin(addNewCoin.Coin);
+
+                            AddNewCoinToFlowControl(addNewCoin.Coin);
                         }
                     }
-
-
                 }
             }
 
@@ -765,6 +765,10 @@ namespace CryptoTracker
 
             //Clear unsaved data table once data has been saved to file
             unsavedTradesDataTable.Clear();
+
+            //Save data to file
+            Save();
+            file.SaveToXML(dataGridView2);
         }
 
         //Threads********************************************************************************

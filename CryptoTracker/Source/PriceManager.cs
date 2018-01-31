@@ -14,7 +14,7 @@ namespace CryptoTracker
 
 
         //Fields********************************************************************************
-        public List<CoinModel> coinModelList = new List<CoinModel>();
+        public List<CoinModel> coinModelList = new List<CoinModel>(); //TODO - TradesTabIntegration - Make this private
         private List<CoinModel.CoinNameStruct> allCoinNames = new List<CoinModel.CoinNameStruct>();
 
         //Fields to hold total investement data
@@ -162,16 +162,7 @@ namespace CryptoTracker
         public void AddNewCoin(CoinModel addCoin)
         {
             //Call price manager add new coin before adding new control coin to correctly bind data
-
-
-            //coinApiUrlList.Add(addCoin.APILink); //Add api url to apiurllist
-
-            //float?[] coinValues = new float?[5]; //Create array to be added to valueArrayList
-            //coinValues[(int)PriceManager.rowNames.Quantity] = (float)Convert.ToDouble(addCoin.Quantity);
-            //coinValues[(int)PriceManager.rowNames.TotalInvested] = (float)Convert.ToDouble(addCoin.NetCost);
-            //valueArrayList.Add(coinValues);
-
-            //coinCount++;
+            coinModelList.Add(addCoin);
         }
     }
 }
