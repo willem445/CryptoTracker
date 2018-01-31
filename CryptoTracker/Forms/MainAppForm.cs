@@ -168,6 +168,8 @@ namespace CryptoTracker
         /// <param name="e"></param>
         public void UpdatePrices(object sender, ElapsedEventArgs e)
         {
+            //TODOHP - Causes system reflection exception error when updating, does not update binding
+
             //Get data from API
             priceManager.UpdatePriceData();  
         }
@@ -249,31 +251,31 @@ namespace CryptoTracker
 
             MetroFramework.Controls.MetroLabel coinPrice = new MetroFramework.Controls.MetroLabel();
             coinPrice.Name = addCoin.Name + "Label";
-            coinPrice.DataBindings.Add(new Binding("Text", addCoin, "PriceToString"));
+            coinPrice.DataBindings.Add(new Binding("Text", addCoin, "PriceToString", false, DataSourceUpdateMode.OnPropertyChanged));
 
             toolTip.SetToolTip(coinPrice, "Test");
 
 
             MetroFramework.Controls.MetroTextBox coinQuantity = new MetroFramework.Controls.MetroTextBox();
             coinQuantity.Name = addCoin.Name + "Quantity_TB";
-            coinQuantity.DataBindings.Add("Text", addCoin, "QuantityToString");
+            coinQuantity.DataBindings.Add("Text", addCoin, "QuantityToString", false, DataSourceUpdateMode.OnPropertyChanged);
 
             MetroFramework.Controls.MetroTextBox coinInvested = new MetroFramework.Controls.MetroTextBox();
             coinInvested.Name = addCoin.Name + "Invested_TB";
-            coinInvested.DataBindings.Add("Text", addCoin, "NetCostToString");
+            coinInvested.DataBindings.Add("Text", addCoin, "NetCostToString", false, DataSourceUpdateMode.OnPropertyChanged);
 
             MetroFramework.Controls.MetroTextBox coinValue = new MetroFramework.Controls.MetroTextBox();
             coinValue.Name = addCoin.Name + "Value_TB";
-            coinValue.DataBindings.Add("Text", addCoin, "ValueToString");
+            coinValue.DataBindings.Add("Text", addCoin, "ValueToString", false, DataSourceUpdateMode.OnPropertyChanged);
 
             MetroFramework.Controls.MetroTextBox coinProfit = new MetroFramework.Controls.MetroTextBox();
             coinProfit.Name = addCoin.Name + "Profit_TB";
-            coinProfit.DataBindings.Add("Text", addCoin, "ProfitToString");
-            coinProfit.DataBindings.Add("Forecolor", addCoin, "Color");
+            coinProfit.DataBindings.Add("Text", addCoin, "ProfitToString", false, DataSourceUpdateMode.OnPropertyChanged);
+            coinProfit.DataBindings.Add("Forecolor", addCoin, "Color", false, DataSourceUpdateMode.OnPropertyChanged);
 
             MetroFramework.Controls.MetroTextBox coinProfitPercent = new MetroFramework.Controls.MetroTextBox();
             coinProfitPercent.Name = addCoin.Name + "ProfitPercent_TB";
-            coinProfitPercent.DataBindings.Add("Text", addCoin, "ProfitPercentToString");
+            coinProfitPercent.DataBindings.Add("Text", addCoin, "ProfitPercentToString", false, DataSourceUpdateMode.OnPropertyChanged);
 
             //Add controls to coin specifc flow panel
             newFlowPanel.Controls.Add(coinName);
@@ -779,7 +781,6 @@ namespace CryptoTracker
                 }
             }
 
-            //TODO - TradesTabIntegration - update price tracking quantity and net cost values in pricemanager
             priceManager.UpdatePriceDataFromTrades(unsavedTradesDataTable);
 
             //Clear unsaved data table once data has been saved to file

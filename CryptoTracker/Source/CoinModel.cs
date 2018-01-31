@@ -13,6 +13,7 @@ namespace CryptoTracker
         private string name;
         private string symbol;
         private float? price;
+        private string priceToString;
         private string rank;
         private string marketcap;
         private string percent_changed_1h;
@@ -23,6 +24,8 @@ namespace CryptoTracker
         private float? value;
         private float? profit;
         private float? profitPercent;
+        private string profitToString;
+        private string profitPercentToString;
         private string apiLink;
 
         public struct CoinNameStruct
@@ -32,6 +35,7 @@ namespace CryptoTracker
             public string Symbol;
         }
 
+        //TODOHP - TradesTabIntegration - Fix binding issues with string values
         public string Name
         {
             get
@@ -58,6 +62,7 @@ namespace CryptoTracker
             }
         }
 
+        //PRICE**************************
         public float? Price
         {
             get
@@ -67,6 +72,7 @@ namespace CryptoTracker
             set
             {
                 price = value;
+                PriceToString = "$" + price.Value.ToString("0.00");
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Price)));
             }
         }
@@ -81,8 +87,14 @@ namespace CryptoTracker
                 }
                 return null;
             }
+            set
+            {
+                priceToString = value;
+                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(PriceToString)));
+            }
         }
 
+        //RANK***************************
         public string Rank
         {
             get
@@ -260,6 +272,7 @@ namespace CryptoTracker
             set
             {
                 profitPercent = value;
+                ProfitPercentToString = profitPercent.Value.ToString("0.0") + "%";
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(ProfitPercent)));
             }
         }
@@ -273,6 +286,11 @@ namespace CryptoTracker
                     return profitPercent.Value.ToString("0.0") + "%";
                 }
                 return null;
+            }
+            set
+            {
+                profitPercentToString = value;
+                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(ProfitPercentToString)));
             }
         }
 

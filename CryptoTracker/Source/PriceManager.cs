@@ -162,27 +162,43 @@ namespace CryptoTracker
 
         public void UpdatePriceDataFromTrades(DataTable table)
         {
-            //Need to update quantity and net cost for each coin currently being tracked
-
+            //Update quantity and net cost for each coin currently being tracked
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                int index = coinModelList.FindIndex(a => a.Symbol == table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[0]);
+                int buyindex = coinModelList.FindIndex(a => a.Symbol == table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[0]);
+                int tradeindex = coinModelList.FindIndex(a => a.Symbol == table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[1]);
 
-                if (index > -1)
+                if (buyindex > -1)
                 {
+                    //TODO - Need to add/sub trade pair value as well
                     if (table.Rows[i][(int)DataTableRows.Type].ToString() == BUY)
                     {
-                        coinModelList[index].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
-                        coinModelList[index].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                        //Update coin being traded for
+                        coinModelList[buyindex].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
+                        coinModelList[buyindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+
+                        if (tradeindex > -1)
+                        {
+                            //Update coin being traded with
+                            coinModelList[tradeindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                            coinModelList[tradeindex].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderCost]);
+                        }
                     }
-                    else
+                    else //TODO - Need to account for USD sells
                     {
-                        coinModelList[index].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
-                        coinModelList[index].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                        //Update coin being traded for
+                        coinModelList[buyindex].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
+                        coinModelList[buyindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+
+                        if (tradeindex > -1)
+                        {
+                            //Update coin being traded with
+                            coinModelList[tradeindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                            coinModelList[tradeindex].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderCost]);
+                        }
                     }
                 }
             }
-
         }
 
         /// <summary>
