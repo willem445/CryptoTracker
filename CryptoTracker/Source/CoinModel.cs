@@ -10,22 +10,34 @@ namespace CryptoTracker
 {
     public class CoinModel : INotifyPropertyChanged
     {
+
         private string name;
         private string symbol;
+
         private float? price;
         private string priceToString;
+
         private string rank;
         private string marketcap;
         private string percent_changed_1h;
         private string percent_changed_24h;
         private string percent_changed_7d;
+
         private float quantity;
+        private string quantityToString;
+
         private float netCost;
+        private string netCostToString;
+
         private float? value;
+        private string valueToString;
+
         private float? profit;
-        private float? profitPercent;
         private string profitToString;
+
+        private float? profitPercent;
         private string profitPercentToString;
+
         private string apiLink;
 
         public struct CoinNameStruct
@@ -81,11 +93,7 @@ namespace CryptoTracker
         {
             get
             {
-                if (price.HasValue)
-                {
-                    return "$" + price.Value.ToString("0.00");
-                }
-                return null;
+                return priceToString;
             }
             set
             {
@@ -160,6 +168,7 @@ namespace CryptoTracker
             }
         }
 
+        //Quantity***************************
         public float Quantity
         {
             get
@@ -169,6 +178,7 @@ namespace CryptoTracker
             set
             {
                 quantity = value;
+                QuantityToString = quantity.ToString();
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Quantity)));
             }
 
@@ -178,10 +188,16 @@ namespace CryptoTracker
         {
             get
             {
-                return quantity.ToString();
+                return quantityToString;
+            }
+            set
+            {
+                quantityToString = value;
+                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(QuantityToString)));
             }
         }
 
+        //Net Cost*************************
         public float NetCost
         {
             get
@@ -191,6 +207,7 @@ namespace CryptoTracker
             set
             {
                 netCost = value;
+                NetCostToString = netCost.ToString();
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(NetCost)));
             }
         }
@@ -199,10 +216,16 @@ namespace CryptoTracker
         {
             get
             {
-                return "$" + netCost.ToString("0.00");
+                return netCostToString;
+            }
+            set
+            {
+                netCostToString = value;
+                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(NetCostToString)));
             }
         }
 
+        //Value*************************
         public float? Value
         {
             get
@@ -212,6 +235,7 @@ namespace CryptoTracker
             set
             {
                 this.value = value;
+                ValueToString = this.value.Value.ToString("0.00");
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Value)));
             }
         }
@@ -220,14 +244,16 @@ namespace CryptoTracker
         {
             get
             {
-                if (value.HasValue)
-                {
-                    return "$" + value.Value.ToString("0.00");
-                }
-                return null;
+                return valueToString;
+            }
+            set
+            {
+                valueToString = value;
+                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(ValueToString)));
             }
         }
 
+        //Profit*************************
         public float? Profit
         {
             get
@@ -237,6 +263,7 @@ namespace CryptoTracker
             set
             {
                 profit = value;
+                ProfitToString = "$" + profit.Value.ToString("0.00");
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Profit)));
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Color)));
             }
@@ -255,14 +282,16 @@ namespace CryptoTracker
         {
             get
             {
-                if (profit.HasValue)
-                {
-                    return "$" + profit.Value.ToString("0.00");
-                }
-                return null;
+                return profitToString;
+            }
+            set
+            {
+                profitToString = value;
+                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(ProfitToString)));
             }
         }
 
+        //Profit Percent********************
         public float? ProfitPercent
         {
             get
@@ -281,11 +310,7 @@ namespace CryptoTracker
         {
             get
             {
-                if (profitPercent.HasValue)
-                {
-                    return profitPercent.Value.ToString("0.0") + "%";
-                }
-                return null;
+                return profitPercentToString;
             }
             set
             {

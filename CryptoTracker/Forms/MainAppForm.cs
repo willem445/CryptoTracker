@@ -16,6 +16,7 @@ using System.Data;
 using ExcelDataReader;
 using System.Threading;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 //Crypto Images
 //https://github.com/cjdowner/cryptocurrency-icons
@@ -171,7 +172,7 @@ namespace CryptoTracker
             //TODOHP - Causes system reflection exception error when updating, does not update binding
 
             //Get data from API
-            priceManager.UpdatePriceData();  
+           priceManager.UpdatePriceData();
         }
 
         /// <summary>
