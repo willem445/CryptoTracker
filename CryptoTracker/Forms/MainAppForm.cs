@@ -68,10 +68,26 @@ namespace CryptoTracker
 
         //Methods*******************************************************************************
 
+        //General Methods
+        /// <summary>
+        /// Initializes form and data
+        /// </summary>
         private void Init()
         {
             priceManager = new PriceManager();
             ApplicationFormInitialize();
+        }
+
+        /// <summary>
+        /// Common method for updating tracking data and UI
+        /// </summary>
+        private void UpdatePriceAndUI()
+        {
+            //Get data from API
+            priceManager.UpdatePriceData();
+
+            //Invoke UI update
+            UpdateUI();
         }
 
         //UI Update Methods
@@ -366,7 +382,6 @@ namespace CryptoTracker
         public void UpdatePrices(object sender, ElapsedEventArgs e)
         {
             //TODO - Make update time value a setting
-
             UpdatePriceAndUI();
         }
 
@@ -378,20 +393,7 @@ namespace CryptoTracker
         private void refreshButton_Click(object sender, MouseEventArgs e)
         {
             //TODO - Replace ugly button with F5 key press handler
-
             UpdatePriceAndUI();
-        }
-
-        /// <summary>
-        /// Common method for updating tracking data and UI
-        /// </summary>
-        private void UpdatePriceAndUI()
-        {
-            //Get data from API
-            priceManager.UpdatePriceData();
-
-            //Invoke UI update
-            UpdateUI();
         }
 
         /// <summary>

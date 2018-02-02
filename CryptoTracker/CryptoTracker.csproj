@@ -124,7 +124,7 @@
     <Compile Include="Forms\AddTradesForm.Designer.cs">
       <DependentUpon>AddTradesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\CoinModel.cs" />
+    <Compile Include="Source\Models\CoinModel.cs" />
     <Compile Include="Source\Extensions.cs" />
     <Compile Include="Forms\MainAppForm.cs">
       <SubType>Form</SubType>
@@ -132,7 +132,7 @@
     <Compile Include="Forms\MainAppForm.Designer.cs">
       <DependentUpon>MainAppForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\PriceManager.cs" />
+    <Compile Include="Source\Controllers\PriceManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\EditCoinForm.resx">
