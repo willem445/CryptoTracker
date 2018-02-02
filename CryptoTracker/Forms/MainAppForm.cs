@@ -662,13 +662,22 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void addButton_Click(object sender, EventArgs e)
         {
-            AddTradeForm importTrade = new AddTradeForm();
+            AddTradeForm importTrade = new AddTradeForm(priceManager.AllCoinNames);
 
             if (importTrade.ShowDialog() == DialogResult.OK)
             {
-                //Add data from add trade window to data grid view
-                tableBindToDataGridView.Merge(importTrade.table);
-                unsavedTradesDataTable.Merge(importTrade.table);
+                if (importTrade.AddTradeTable != null)
+                {
+                    //TODO - Fix data conflicting types here
+
+                    //Add data from add trade window to data grid view
+                    tableBindToDataGridView.Merge(importTrade.AddTradeTable, true, MissingSchemaAction.Ignore);
+                    unsavedTradesDataTable.Merge(importTrade.AddTradeTable);
+
+                    //Enable save button if an import was successfull
+                    saveImportButton.Enabled = true;
+                    saveImportButton.Visible = true;
+                }
             }
         }
 
@@ -780,6 +789,8 @@ namespace CryptoTracker
             }
 
             priceManager.UpdatePriceDataFromTrades(unsavedTradesDataTable);
+
+            UpdatePriceAndUI();
 
             //Clear unsaved data table once data has been saved to file
             unsavedTradesDataTable.Clear();

@@ -47,7 +47,6 @@ namespace CryptoTracker
             public string Symbol;
         }
 
-        //TODOHP - TradesTabIntegration - Fix binding issues with string values
         public string Name
         {
             get

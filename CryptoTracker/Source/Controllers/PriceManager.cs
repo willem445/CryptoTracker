@@ -158,6 +158,8 @@ namespace CryptoTracker
                 }
                 catch (System.Net.WebException e)
                 {
+                    Console.WriteLine(e.Message);
+
                     //If there is an error connecting to the API, fill list with null data to avoid index out of bounds later
                     trackedCoinList[i].Price = 0.0F;
                 }

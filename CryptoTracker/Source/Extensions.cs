@@ -27,6 +27,13 @@ namespace CryptoTracker
             return true;
         }
 
+        public static string StripDollarSign(this string s)
+        {
+            if (s.Contains('$'))
+                return s.Replace("$", "");
+            return s;
+        }
+
         /// <summary>
         /// Converts a float value to a human readable monetary value
         /// </summary>
