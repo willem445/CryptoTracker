@@ -30,9 +30,33 @@ namespace CryptoTracker
         private List<CoinModel.CoinNameStruct> allCoinNames = new List<CoinModel.CoinNameStruct>();
 
         //Fields to hold total investement data
-        public float totalProfit = 0.0F;
-        public float totalValue = 0.0F;
-        public float totalInvestment = 0.0F;
+        private float totalProfit = 0.0F;
+        private float totalValue = 0.0F;
+        private float totalInvestment = 0.0F;
+
+        public float TotalProfit
+        {
+            get
+            {
+                return totalProfit;
+            }
+        }
+
+        public float TotalValue
+        {
+            get
+            {
+                return totalValue;
+            }
+        }
+
+        public float TotalInvestment
+        {
+            get
+            {
+                return totalInvestment;
+            }
+        }
 
         public List<CoinModel.CoinNameStruct> AllCoinNames
         {
@@ -57,6 +81,13 @@ namespace CryptoTracker
         {
             Thread getCoinNames = new Thread(new ThreadStart(GetAllCoinNames));
             getCoinNames.Start();
+
+            //Parse data in documents folder
+            FileIO file = new FileIO();
+            coinModelList = file.ParseSavedData();
+
+            //Update prices based on parsed data
+            UpdatePriceData();
         }
 
         //Methods*******************************************************************************

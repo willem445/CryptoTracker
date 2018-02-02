@@ -12,7 +12,7 @@ namespace CryptoTracker
     class FileIO
     {
         /// <summary>
-        /// Parses data from text file and adds coin to form
+        /// Parses data from text file and returns a list of coin models
         /// </summary>
         /// <param name="path"></param>
         public List<CoinModel> ParseSavedData()
@@ -50,11 +50,56 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Saves data being tracked by form to text file 
+        /// </summary>
+        public void SavePriceTrackingToFile(List<CoinModel> trackedCoins)
+        {
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(
+    Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
+
+            string[] textFileArray = new string[trackedCoins.Count];
+            bool readError = false;
+
+            //Loop through each coin and put data in string array, if there is an error, do not write
+            for (int i = 0; i < trackedCoins.Count; i++)
+            {
+                try
+                {
+                    textFileArray[i] = trackedCoins[i].Name + ", " + trackedCoins[i].QuantityToString + ", " + trackedCoins[i].NetCost.ToString() + ", " + trackedCoins[i].APILink;
+                }
+                catch
+                {
+                    MessageBox.Show("Error reading data");
+                    readError = true;
+                }
+            }
+
+            if (!readError)
+            {
+                if (!Directory.Exists(Path.Combine(path, "CoinData.txt")))
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+
+                using (System.IO.StreamWriter file =
+                    new System.IO.StreamWriter(Path.Combine(path, "CoinData.txt")))
+                {
+                    for (int i = 0; i < trackedCoins.Count; i++)
+                    {
+                        //Print name, quantity, net cost, and api link to text file
+                        file.WriteLine(textFileArray[i]);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parses an xml file into a data table
         /// </summary>
         /// <returns></returns>
-        public DataTable ParseTradesFile()
+        public DataTable XmlToDatatable()
         {
+            //TODO - Refactor to add optional my documents and path
             DataSet temp = new DataSet();
 
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
@@ -71,11 +116,12 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Saves datagridview data to an xml file
         /// </summary>
         /// <param name="table"></param>
-        public void SaveToXML(DataGridView table)
+        public void DataGridViewToXML(DataGridView table)
         {
+            //TODO - Refactor to add optional my documents and path
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
 
@@ -86,7 +132,7 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Converts data grid view to a data table
         /// </summary>
         /// <param name="dgv"></param>
         /// <returns></returns>

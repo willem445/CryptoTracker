@@ -95,6 +95,7 @@
     <Compile Include="Forms\MessageBoxForm.Designer.cs">
       <DependentUpon>MessageBoxForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Import\KucoinImport.cs" />
     <Compile Include="Source\FileIO.cs" />
     <Compile Include="Source\Import\CoinbaseImport.cs" />
     <Compile Include="Forms\EditCoinForm.cs">

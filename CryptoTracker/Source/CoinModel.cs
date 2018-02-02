@@ -84,7 +84,7 @@ namespace CryptoTracker
             set
             {
                 price = value;
-                PriceToString = "$" + price.Value.ToString("0.00");
+                PriceToString = price.Value.FloatToMonetary();
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Price)));
             }
         }
@@ -207,7 +207,7 @@ namespace CryptoTracker
             set
             {
                 netCost = value;
-                NetCostToString = netCost.ToString();
+                NetCostToString = netCost.FloatToMonetary();
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(NetCost)));
             }
         }
@@ -235,7 +235,7 @@ namespace CryptoTracker
             set
             {
                 this.value = value;
-                ValueToString = this.value.Value.ToString("0.00");
+                ValueToString = this.value.Value.FloatToMonetary();
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Value)));
             }
         }
@@ -263,7 +263,7 @@ namespace CryptoTracker
             set
             {
                 profit = value;
-                ProfitToString = "$" + profit.Value.ToString("0.00");
+                ProfitToString = profit.Value.FloatToMonetary();
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Profit)));
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Color)));
             }
@@ -301,7 +301,7 @@ namespace CryptoTracker
             set
             {
                 profitPercent = value;
-                ProfitPercentToString = profitPercent.Value.ToString("0.0") + "%";
+                ProfitPercentToString = profitPercent.Value.FloatToPercent();
                 InvokePropertyChanged(new PropertyChangedEventArgs(nameof(ProfitPercent)));
             }
         }
