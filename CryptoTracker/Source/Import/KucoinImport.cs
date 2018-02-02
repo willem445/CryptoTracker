@@ -8,5 +8,6 @@ namespace CryptoTracker
 {
     class KucoinImport
     {
+        //TODO - TradesTabIntegration - Add logic for parsing Kucoin data
     }
 }

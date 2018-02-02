@@ -7,16 +7,13 @@ using System.Drawing;
 using System.IO;
 using System.Diagnostics;
 using System.Linq;
-
 using LiveCharts; //Core of the library
 using LiveCharts.Wpf; //The WPF controls
 using LiveCharts.WinForms; //the WinForm wrappers
-
 using System.Data;
 using ExcelDataReader;
 using System.Threading;
 using System.Threading.Tasks;
-using System.ComponentModel;
 
 //Crypto Images
 //https://github.com/cjdowner/cryptocurrency-icons
@@ -31,7 +28,11 @@ namespace CryptoTracker
 {
     public partial class MainAppForm : MetroFramework.Forms.MetroForm
     {
-        public enum rowNames
+        //Enumerations*************************************************************************
+        /// <summary>
+        /// Enumeration for each row in textbox array
+        /// </summary>
+        public enum RowNames
         {
             Quantity,
             TotalInvested,
@@ -44,16 +45,15 @@ namespace CryptoTracker
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
         System.Timers.Timer updatePrices;
+
+        //UI Lists and Tables
+        List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
+        List<MetroFramework.Controls.MetroTextBox[]> textBoxArrayList = new List<MetroFramework.Controls.MetroTextBox[]>(); //Array of textboxes for each coin, stored in a list
         DataTable tableBindToDataGridView = new DataTable(); //Contains both unsaved and saved data which is bound to data grid view for viewing
         DataTable unsavedTradesDataTable = new DataTable(); //Contains unsaved data that has not yet been written to file, used to avoid adding duplicate trades to price tracking totals
 
-        //UI Lists
-        List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
-        List<MetroFramework.Controls.MetroTextBox[]> textBoxArrayList = new List<MetroFramework.Controls.MetroTextBox[]>(); //Array of textboxes for each coin, stored in a list
-
         //MainApp fields
-        int flowControlRowCount = 0; //Tracks coins added to row in flow control
-        int coinCount = 0; //Count of coins added to project
+        UInt16 flowControlRowCount = 0; //Tracks coins added to row in flow control
 
         //Constructor***************************************************************************
         public MainAppForm()
@@ -113,7 +113,7 @@ namespace CryptoTracker
             AddNewLine();
 
             //Configure import trades tab
-            foreach (var item in priceManager.coinModelList)
+            foreach (var item in priceManager.TrackedCoinList)
             {
                 selectCoin_CB.Items.Add(item.Name);
             }
@@ -125,7 +125,7 @@ namespace CryptoTracker
             importSelect_CB.Items.Add("Coinbase");
 
             //Add controls for each parsed coin to form
-            foreach (var item in priceManager.coinModelList)
+            foreach (var item in priceManager.TrackedCoinList)
             {
                 AddNewCoinToFlowControl(item);
             }
@@ -140,7 +140,7 @@ namespace CryptoTracker
         {
             //Update UI for each individual coin being tracked
             int i = 0;
-            foreach (var item in priceManager.CoinModelList)
+            foreach (var item in priceManager.TrackedCoinList)
             {
                 priceLabelList[i].Invoke(new Action(() => priceLabelList[i].Text = item.PriceToString));
                 textBoxArrayList[i][0].Invoke(new Action(() => textBoxArrayList[i][0].Text = item.QuantityToString));
@@ -355,7 +355,6 @@ namespace CryptoTracker
 
             //Update counts
             flowControlRowCount++; //Update row count
-            coinCount++; //Update coin count
         }
 
         //UI Event Handlers
@@ -368,11 +367,7 @@ namespace CryptoTracker
         {
             //TODO - Make update time value a setting
 
-            //Get data from API
-            priceManager.UpdatePriceData();
-
-            //Invoke UI update
-            UpdateUI();
+            UpdatePriceAndUI();
         }
 
         /// <summary>
@@ -384,6 +379,14 @@ namespace CryptoTracker
         {
             //TODO - Replace ugly button with F5 key press handler
 
+            UpdatePriceAndUI();
+        }
+
+        /// <summary>
+        /// Common method for updating tracking data and UI
+        /// </summary>
+        private void UpdatePriceAndUI()
+        {
             //Get data from API
             priceManager.UpdatePriceData();
 
@@ -400,7 +403,7 @@ namespace CryptoTracker
         {
             //TODO- Tooltip not workign correctly
             string text = "";
-            foreach(var item in priceManager.coinModelList)
+            foreach(var item in priceManager.TrackedCoinList)
             {
                 if (e.AssociatedControl.Name.Contains(item.Name))
                 {
@@ -451,7 +454,7 @@ namespace CryptoTracker
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FileIO save = new FileIO();
-            save.SavePriceTrackingToFile(priceManager.CoinModelList);
+            save.SavePriceTrackingToFile(priceManager.TrackedCoinList);
         }
 
         /// <summary>
@@ -469,8 +472,8 @@ namespace CryptoTracker
 
                 //Add new value array to price manager
                 priceManager.AddNewCoin(coinModel);
-
                 AddNewCoinToFlowControl(coinModel); //Add coin to form
+                UpdatePriceAndUI();
             }
         }
 
@@ -482,7 +485,7 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EditCoinForm editCoin = new EditCoinForm(priceManager.coinModelList);
+            EditCoinForm editCoin = new EditCoinForm(priceManager.TrackedCoinList);
 
             if (editCoin.ShowDialog() == DialogResult.OK) //Show form
             {
@@ -490,17 +493,17 @@ namespace CryptoTracker
 
                 //Find index of coin to edit
                 int index;
-                for (index = 0; index < coinCount; index++)
+                for (index = 0; index < priceManager.TrackedCoinList.Count; index++)
                 {
-                    if (priceManager.coinModelList[index].Name ==  coinModel.Name)
+                    if (priceManager.TrackedCoinList[index].Name ==  coinModel.Name)
                     {
                         break;
                     }
                 }
 
                 //Update lists with new values
-                priceManager.coinModelList[index].Quantity = coinModel.Quantity;
-                priceManager.coinModelList[index].NetCost = coinModel.NetCost;
+                priceManager.TrackedCoinList[index].Quantity = coinModel.Quantity;
+                priceManager.TrackedCoinList[index].NetCost = coinModel.NetCost;
 
                 textBoxArrayList[index][0].Text = coinModel.Quantity.ToString();
                 textBoxArrayList[index][1].Text ="$" + coinModel.NetCost.ToString();
@@ -509,7 +512,7 @@ namespace CryptoTracker
                 if (editCoin.SaveEnabled == true)
                 {
                     FileIO save = new FileIO();
-                    save.SavePriceTrackingToFile(priceManager.CoinModelList);
+                    save.SavePriceTrackingToFile(priceManager.TrackedCoinList);
                 }
             }
         }
@@ -729,7 +732,7 @@ namespace CryptoTracker
             
             //Create list of coins currently being tracked to compare to trades being added 
             List<string> trackedCoins = new List<string>();
-            foreach (var item in priceManager.CoinModelList)
+            foreach (var item in priceManager.TrackedCoinList)
             {
                 trackedCoins.Add(item.Symbol);
             }
@@ -780,7 +783,7 @@ namespace CryptoTracker
             unsavedTradesDataTable.Clear();
 
             //Save data to file
-            file.SavePriceTrackingToFile(priceManager.CoinModelList);
+            file.SavePriceTrackingToFile(priceManager.TrackedCoinList);
             file.DataGridViewToXML(dataGridView2);
         }
 

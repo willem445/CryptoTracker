@@ -8,11 +8,17 @@ namespace CryptoTracker
 {
     class PriceManager
     {
-        private const string ALL_COIN_LIMIT = "0";
+        //Constants****************************************************************************
+        private const string ALL_COIN_LIMIT = "0"; 
         private const string BUY = "BUY";
         private const string SELL = "SELL";
+        private const int TRADE_COIN = 0;
+        private const int TRADE_BASE = 1;
 
         //Enums*********************************************************************************
+        /// <summary>
+        /// Enumeration to describe each index in the data table
+        /// </summary>
         enum DataTableRows
         {
             Date,
@@ -26,7 +32,7 @@ namespace CryptoTracker
         }
 
         //Fields********************************************************************************
-        public List<CoinModel> coinModelList = new List<CoinModel>(); //TODO - TradesTabIntegration - Make this private
+        private List<CoinModel> trackedCoinList = new List<CoinModel>();
         private List<CoinModel.CoinNameStruct> allCoinNames = new List<CoinModel.CoinNameStruct>();
 
         //Fields to hold total investement data
@@ -34,6 +40,7 @@ namespace CryptoTracker
         private float totalValue = 0.0F;
         private float totalInvestment = 0.0F;
 
+        //Properties****************************************************************************
         public float TotalProfit
         {
             get
@@ -41,7 +48,6 @@ namespace CryptoTracker
                 return totalProfit;
             }
         }
-
         public float TotalValue
         {
             get
@@ -49,7 +55,6 @@ namespace CryptoTracker
                 return totalValue;
             }
         }
-
         public float TotalInvestment
         {
             get
@@ -57,7 +62,6 @@ namespace CryptoTracker
                 return totalInvestment;
             }
         }
-
         public List<CoinModel.CoinNameStruct> AllCoinNames
         {
             get
@@ -65,16 +69,13 @@ namespace CryptoTracker
                 return allCoinNames;
             }
         }
-
-        public List<CoinModel> CoinModelList
+        public List<CoinModel> TrackedCoinList
         {
             get
             {
-                return coinModelList;
+                return trackedCoinList;
             }
         }
-            
-
 
         //Constructor***************************************************************************
         public PriceManager()
@@ -84,13 +85,16 @@ namespace CryptoTracker
 
             //Parse data in documents folder
             FileIO file = new FileIO();
-            coinModelList = file.ParseSavedData();
+            trackedCoinList = file.ParseSavedData();
 
             //Update prices based on parsed data
             UpdatePriceData();
         }
 
         //Methods*******************************************************************************
+        /// <summary>
+        /// Gets data from API and calculates profits, value, etc.
+        /// </summary>
         public void UpdatePriceData()
         {
             APIUpdate();
@@ -98,9 +102,9 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Retrieves the names of all current cryptocurrencies listed on coinmarketcap
         /// </summary>
-        public void GetAllCoinNames()
+        private void GetAllCoinNames()
         {
             string input = "https://api.coinmarketcap.com/v1/ticker/?limit=" + ALL_COIN_LIMIT;
 
@@ -124,16 +128,15 @@ namespace CryptoTracker
             AllCoinNames.Sort((x, y) => x.Name.CompareTo(y.Name));
         }
 
-
         /// <summary>
-        /// Connect to coinmarketcap API and retrieve data for each coin added to form
+        /// Connect to coinmarketcap API and retrieve data for each coin in tracked coin list
         /// </summary>
         private void APIUpdate()
         {
             //Read data from API
-            for (int i = 0; i < coinModelList.Count; i++)
+            for (int i = 0; i < trackedCoinList.Count; i++)
             {
-                string input = coinModelList[i].APILink;
+                string input = trackedCoinList[i].APILink;
 
                 try
                 {
@@ -143,26 +146,26 @@ namespace CryptoTracker
                     dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
 
                     //Add price to temp list
-                    coinModelList[i].Price = (float)(Convert.ToDouble(results[0].price_usd));
+                    trackedCoinList[i].Price = (float)(Convert.ToDouble(results[0].price_usd));
 
                     //Update tool tip array and add array to tool tip list
-                    coinModelList[i].Rank = results[0].rank;
-                    coinModelList[i].MarketCap = results[0].market_cap_usd;
-                    coinModelList[i].Percent_Change_1h = results[0].percent_change_1h;
-                    coinModelList[i].Percent_Change_24hr = results[0].percent_change_24h;
-                    coinModelList[i].Percent_Change_7d = results[0].percent_change_7d;
-                    coinModelList[i].Symbol = results[0].symbol;
+                    trackedCoinList[i].Rank = results[0].rank;
+                    trackedCoinList[i].MarketCap = results[0].market_cap_usd;
+                    trackedCoinList[i].Percent_Change_1h = results[0].percent_change_1h;
+                    trackedCoinList[i].Percent_Change_24hr = results[0].percent_change_24h;
+                    trackedCoinList[i].Percent_Change_7d = results[0].percent_change_7d;
+                    trackedCoinList[i].Symbol = results[0].symbol;
                 }
                 catch (System.Net.WebException e)
                 {
                     //If there is an error connecting to the API, fill list with null data to avoid index out of bounds later
-                    coinModelList[i].Price = 0.0F;
+                    trackedCoinList[i].Price = 0.0F;
                 }
             }
         }
 
         /// <summary>
-        /// Updates values in valueArrayList for each coin. Also calculates total investement data.
+        /// Updates values in trackedCoinList for each coin. Also calculates total investement data.
         /// </summary>
         private void UpdateValues()
         {
@@ -170,34 +173,38 @@ namespace CryptoTracker
             totalValue = 0.0F;
             totalInvestment = 0.0F;
 
-            for (int i = 0; i < coinModelList.Count; i++)
+            for (int i = 0; i < trackedCoinList.Count; i++)
             {              
-                if (coinModelList[i].Price != 0.0)
+                if (trackedCoinList[i].Price != 0.0)
                 {
-                    coinModelList[i].Value = coinModelList[i].Quantity * coinModelList[i].Price;
-                    coinModelList[i].Profit = coinModelList[i].Value - coinModelList[i].NetCost;
-                    coinModelList[i].ProfitPercent = (coinModelList[i].Profit / coinModelList[i].Value) * 100;
+                    trackedCoinList[i].Value = trackedCoinList[i].Quantity * trackedCoinList[i].Price;
+                    trackedCoinList[i].Profit = trackedCoinList[i].Value - trackedCoinList[i].NetCost;
+                    trackedCoinList[i].ProfitPercent = (trackedCoinList[i].Profit / trackedCoinList[i].Value) * 100;
 
-                    totalInvestment += coinModelList[i].NetCost;
-                    totalValue += coinModelList[i].Value.Value;
-                    totalProfit += coinModelList[i].Profit.Value;
+                    totalInvestment += trackedCoinList[i].NetCost;
+                    totalValue += trackedCoinList[i].Value.Value;
+                    totalProfit += trackedCoinList[i].Profit.Value;
                 }
                 else
                 {
-                    coinModelList[i].Value = null;
-                    coinModelList[i].Profit = null;
-                    coinModelList[i].ProfitPercent = null;
+                    trackedCoinList[i].Value = null;
+                    trackedCoinList[i].Profit = null;
+                    trackedCoinList[i].ProfitPercent = null;
                 }
             }
         }
 
+        /// <summary>
+        /// Reads data from a datatable and updates total netcost and quantity based on trades imported
+        /// </summary>
+        /// <param name="table"></param>
         public void UpdatePriceDataFromTrades(DataTable table)
         {
             //Update quantity and net cost for each coin currently being tracked
             for (int i = 0; i < table.Rows.Count; i++)
             {
-                int buyindex = coinModelList.FindIndex(a => a.Symbol == table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[0]);
-                int tradeindex = coinModelList.FindIndex(a => a.Symbol == table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[1]);
+                int buyindex = trackedCoinList.FindIndex(a => a.Symbol == table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[TRADE_COIN]);
+                int tradeindex = trackedCoinList.FindIndex(a => a.Symbol == table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[TRADE_BASE]);
 
                 if (buyindex > -1)
                 {
@@ -205,27 +212,27 @@ namespace CryptoTracker
                     if (table.Rows[i][(int)DataTableRows.Type].ToString() == BUY)
                     {
                         //Update coin being traded for
-                        coinModelList[buyindex].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
-                        coinModelList[buyindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                        trackedCoinList[buyindex].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
+                        trackedCoinList[buyindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
 
                         if (tradeindex > -1)
                         {
                             //Update coin being traded with
-                            coinModelList[tradeindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
-                            coinModelList[tradeindex].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderCost]);
+                            trackedCoinList[tradeindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                            trackedCoinList[tradeindex].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderCost]);
                         }
                     }
                     else //TODO - Need to account for USD sells
                     {
                         //Update coin being traded for
-                        coinModelList[buyindex].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
-                        coinModelList[buyindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                        trackedCoinList[buyindex].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
+                        trackedCoinList[buyindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
 
                         if (tradeindex > -1)
                         {
                             //Update coin being traded with
-                            coinModelList[tradeindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
-                            coinModelList[tradeindex].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderCost]);
+                            trackedCoinList[tradeindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                            trackedCoinList[tradeindex].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderCost]);
                         }
                     }
                 }
@@ -233,13 +240,12 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// Add newly added coin to coin model list
+        /// Add newly added coin to tracked coin list
         /// </summary>
         /// <param name="addCoin">CoinModel class holding coin related data</param>
         public void AddNewCoin(CoinModel addCoin)
         {
-            //Call price manager add new coin before adding new control coin to correctly bind data
-            coinModelList.Add(addCoin);
+            trackedCoinList.Add(addCoin);
         }
     }
 }
