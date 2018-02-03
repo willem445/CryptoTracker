@@ -725,7 +725,6 @@ namespace CryptoTracker
 
                 DataTable temp = new DataTable();
 
-                metroProgressSpinner1.EnsureVisible = true;
                 importButton.Enabled = false;
 
                 var progress = new Progress<int>(progressPercent => pBar.Value = progressPercent);
@@ -747,8 +746,6 @@ namespace CryptoTracker
 
                 dataGridView2.Refresh();
 
-
-                metroProgressSpinner1.EnsureVisible = false;
                 importButton.Enabled = true;
 
                 //Enable save button if an import was successfull

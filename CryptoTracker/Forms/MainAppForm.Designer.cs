@@ -64,7 +64,6 @@
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.pieChart1 = new LiveCharts.WinForms.PieChart();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
-            this.metroProgressSpinner1 = new MetroFramework.Controls.MetroProgressSpinner();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.importSelect_CB = new MetroFramework.Controls.MetroComboBox();
             this.saveImportButton = new MetroFramework.Controls.MetroButton();
@@ -408,7 +407,6 @@
             // metroTabPage3
             // 
             this.metroTabPage3.Controls.Add(this.pBar);
-            this.metroTabPage3.Controls.Add(this.metroProgressSpinner1);
             this.metroTabPage3.Controls.Add(this.dataGridView2);
             this.metroTabPage3.Controls.Add(this.importSelect_CB);
             this.metroTabPage3.Controls.Add(this.saveImportButton);
@@ -423,16 +421,6 @@
             this.metroTabPage3.TabIndex = 2;
             this.metroTabPage3.Text = "Trades";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
-            // 
-            // metroProgressSpinner1
-            // 
-            this.metroProgressSpinner1.EnsureVisible = false;
-            this.metroProgressSpinner1.Location = new System.Drawing.Point(580, 27);
-            this.metroProgressSpinner1.Maximum = 100;
-            this.metroProgressSpinner1.Name = "metroProgressSpinner1";
-            this.metroProgressSpinner1.Size = new System.Drawing.Size(27, 25);
-            this.metroProgressSpinner1.Style = MetroFramework.MetroColorStyle.Red;
-            this.metroProgressSpinner1.TabIndex = 10;
             // 
             // dataGridView2
             // 
@@ -527,9 +515,11 @@
             // 
             // pBar
             // 
-            this.pBar.Location = new System.Drawing.Point(591, 402);
+            this.pBar.FontSize = MetroFramework.MetroProgressBarSize.Small;
+            this.pBar.HideProgressText = false;
+            this.pBar.Location = new System.Drawing.Point(3, 402);
             this.pBar.Name = "pBar";
-            this.pBar.Size = new System.Drawing.Size(186, 23);
+            this.pBar.Size = new System.Drawing.Size(774, 23);
             this.pBar.TabIndex = 15;
             // 
             // MainAppForm
@@ -610,7 +600,6 @@
         private MetroFramework.Controls.MetroLabel metroLabel5;
         private MetroFramework.Controls.MetroComboBox importSelect_CB;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private MetroFramework.Controls.MetroProgressSpinner metroProgressSpinner1;
         private MetroFramework.Controls.MetroLabel fiatLabel;
         private MetroFramework.Controls.MetroLabel metroLabel8;
         private MetroFramework.Controls.MetroLabel statusLabel;
