@@ -728,8 +728,10 @@ namespace CryptoTracker
                 metroProgressSpinner1.EnsureVisible = true;
                 importButton.Enabled = false;
 
+                var progress = new Progress<int>(progressPercent => pBar.Value = progressPercent);
+
                 //Start new thread and wait until complete
-                temp = await Task.Factory.StartNew(() => ImportDataThread(exchange, file));
+                temp = await Task.Run(() => ImportDataThread(exchange, file, progress));
 
                 if (dataGridView2.RowCount > 0)
                 {
@@ -824,11 +826,11 @@ namespace CryptoTracker
         }
 
         //Threads********************************************************************************
-        public DataTable ImportDataThread(string exchange, string fileName)
+        public DataTable ImportDataThread(string exchange, string fileName, IProgress<int> progress)
         {
 
                 GeneralImport import = new GeneralImport();
-                DataTable test = import.ImportFromExchange(exchange, fileName);
+                DataTable test = import.ImportFromExchange(exchange, fileName, progress);
 
 #if DEBUG
             Console.WriteLine("Done");
