@@ -43,6 +43,7 @@
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.statusLabel = new MetroFramework.Controls.MetroLabel();
             this.fiatLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
             this.totalValueLabel = new MetroFramework.Controls.MetroLabel();
@@ -75,7 +76,6 @@
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
-            this.statusLabel = new MetroFramework.Controls.MetroLabel();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -125,7 +125,7 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -133,12 +133,12 @@
             // 
             this.toolStripMenuItem1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(113, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // optionsToolStripMenuItem
@@ -153,14 +153,14 @@
             // addBuyToolStripMenuItem
             // 
             this.addBuyToolStripMenuItem.Name = "addBuyToolStripMenuItem";
-            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.addBuyToolStripMenuItem.Text = "Add Coin";
             this.addBuyToolStripMenuItem.Click += new System.EventHandler(this.addBuyToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.editToolStripMenuItem.Text = "Edit Coin";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
@@ -218,6 +218,16 @@
             this.metroTabPage1.TabIndex = 0;
             this.metroTabPage1.Text = "Price Tracking";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.FontSize = MetroFramework.MetroLabelSize.Small;
+            this.statusLabel.Location = new System.Drawing.Point(713, 402);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(37, 15);
+            this.statusLabel.TabIndex = 14;
+            this.statusLabel.Text = "status";
             // 
             // fiatLabel
             // 
@@ -512,16 +522,6 @@
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.AutoSize = true;
-            this.statusLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.statusLabel.Location = new System.Drawing.Point(713, 402);
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(37, 15);
-            this.statusLabel.TabIndex = 14;
-            this.statusLabel.Text = "status";
             // 
             // MainAppForm
             // 

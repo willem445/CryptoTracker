@@ -33,14 +33,14 @@
             this.addTradeDate_TB = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
+            this.exchangeLabel = new MetroFramework.Controls.MetroLabel();
             this.exchange_CB = new MetroFramework.Controls.MetroComboBox();
-            this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
+            this.tradePairLabel = new MetroFramework.Controls.MetroLabel();
+            this.typeLabel = new MetroFramework.Controls.MetroLabel();
             this.type_CB = new MetroFramework.Controls.MetroComboBox();
-            this.metroLabel9 = new MetroFramework.Controls.MetroLabel();
+            this.priceLabel = new MetroFramework.Controls.MetroLabel();
             this.importQuantity_TB = new MetroFramework.Controls.MetroTextBox();
-            this.Quantity = new MetroFramework.Controls.MetroLabel();
+            this.quantityLabel = new MetroFramework.Controls.MetroLabel();
             this.importPrice_TB = new MetroFramework.Controls.MetroTextBox();
             this.addTradeOkayButton = new MetroFramework.Controls.MetroButton();
             this.addTradeCancelButton = new MetroFramework.Controls.MetroButton();
@@ -50,6 +50,7 @@
             // addTradeCalender
             // 
             this.addTradeCalender.Location = new System.Drawing.Point(29, 69);
+            this.addTradeCalender.MaxSelectionCount = 1;
             this.addTradeCalender.Name = "addTradeCalender";
             this.addTradeCalender.TabIndex = 1;
             this.addTradeCalender.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.addTradeCalender_DateSelected);
@@ -87,14 +88,14 @@
             this.dateTimePicker1.Size = new System.Drawing.Size(79, 20);
             this.dateTimePicker1.TabIndex = 5;
             // 
-            // metroLabel3
+            // exchangeLabel
             // 
-            this.metroLabel3.AutoSize = true;
-            this.metroLabel3.Location = new System.Drawing.Point(268, 155);
-            this.metroLabel3.Name = "metroLabel3";
-            this.metroLabel3.Size = new System.Drawing.Size(67, 19);
-            this.metroLabel3.TabIndex = 6;
-            this.metroLabel3.Text = "Exchange:";
+            this.exchangeLabel.AutoSize = true;
+            this.exchangeLabel.Location = new System.Drawing.Point(268, 155);
+            this.exchangeLabel.Name = "exchangeLabel";
+            this.exchangeLabel.Size = new System.Drawing.Size(67, 19);
+            this.exchangeLabel.TabIndex = 6;
+            this.exchangeLabel.Text = "Exchange:";
             // 
             // exchange_CB
             // 
@@ -106,23 +107,23 @@
             this.exchange_CB.Size = new System.Drawing.Size(79, 25);
             this.exchange_CB.TabIndex = 7;
             // 
-            // metroLabel4
+            // tradePairLabel
             // 
-            this.metroLabel4.AutoSize = true;
-            this.metroLabel4.Location = new System.Drawing.Point(268, 201);
-            this.metroLabel4.Name = "metroLabel4";
-            this.metroLabel4.Size = new System.Drawing.Size(73, 19);
-            this.metroLabel4.TabIndex = 8;
-            this.metroLabel4.Text = "Trade Pair:";
+            this.tradePairLabel.AutoSize = true;
+            this.tradePairLabel.Location = new System.Drawing.Point(268, 201);
+            this.tradePairLabel.Name = "tradePairLabel";
+            this.tradePairLabel.Size = new System.Drawing.Size(73, 19);
+            this.tradePairLabel.TabIndex = 8;
+            this.tradePairLabel.Text = "Trade Pair:";
             // 
-            // metroLabel5
+            // typeLabel
             // 
-            this.metroLabel5.AutoSize = true;
-            this.metroLabel5.Location = new System.Drawing.Point(457, 73);
-            this.metroLabel5.Name = "metroLabel5";
-            this.metroLabel5.Size = new System.Drawing.Size(40, 19);
-            this.metroLabel5.TabIndex = 10;
-            this.metroLabel5.Text = "Type:";
+            this.typeLabel.AutoSize = true;
+            this.typeLabel.Location = new System.Drawing.Point(457, 73);
+            this.typeLabel.Name = "typeLabel";
+            this.typeLabel.Size = new System.Drawing.Size(40, 19);
+            this.typeLabel.TabIndex = 10;
+            this.typeLabel.Text = "Type:";
             // 
             // type_CB
             // 
@@ -134,30 +135,31 @@
             this.type_CB.Size = new System.Drawing.Size(79, 25);
             this.type_CB.TabIndex = 11;
             // 
-            // metroLabel9
+            // priceLabel
             // 
-            this.metroLabel9.AutoSize = true;
-            this.metroLabel9.Location = new System.Drawing.Point(456, 159);
-            this.metroLabel9.Name = "metroLabel9";
-            this.metroLabel9.Size = new System.Drawing.Size(41, 19);
-            this.metroLabel9.TabIndex = 14;
-            this.metroLabel9.Text = "Price:";
+            this.priceLabel.AutoSize = true;
+            this.priceLabel.Location = new System.Drawing.Point(456, 159);
+            this.priceLabel.Name = "priceLabel";
+            this.priceLabel.Size = new System.Drawing.Size(41, 19);
+            this.priceLabel.TabIndex = 14;
+            this.priceLabel.Text = "Price:";
             // 
             // importQuantity_TB
             // 
+            this.importQuantity_TB.ForeColor = System.Drawing.SystemColors.ControlText;
             this.importQuantity_TB.Location = new System.Drawing.Point(529, 114);
             this.importQuantity_TB.Name = "importQuantity_TB";
             this.importQuantity_TB.Size = new System.Drawing.Size(79, 23);
             this.importQuantity_TB.TabIndex = 13;
             // 
-            // Quantity
+            // quantityLabel
             // 
-            this.Quantity.AutoSize = true;
-            this.Quantity.Location = new System.Drawing.Point(456, 114);
-            this.Quantity.Name = "Quantity";
-            this.Quantity.Size = new System.Drawing.Size(61, 19);
-            this.Quantity.TabIndex = 12;
-            this.Quantity.Text = "Quantity:";
+            this.quantityLabel.AutoSize = true;
+            this.quantityLabel.Location = new System.Drawing.Point(456, 114);
+            this.quantityLabel.Name = "quantityLabel";
+            this.quantityLabel.Size = new System.Drawing.Size(61, 19);
+            this.quantityLabel.TabIndex = 12;
+            this.quantityLabel.Text = "Quantity:";
             // 
             // importPrice_TB
             // 
@@ -204,14 +206,14 @@
             this.Controls.Add(this.addTradeCancelButton);
             this.Controls.Add(this.addTradeOkayButton);
             this.Controls.Add(this.importPrice_TB);
-            this.Controls.Add(this.metroLabel9);
+            this.Controls.Add(this.priceLabel);
             this.Controls.Add(this.importQuantity_TB);
-            this.Controls.Add(this.Quantity);
+            this.Controls.Add(this.quantityLabel);
             this.Controls.Add(this.type_CB);
-            this.Controls.Add(this.metroLabel5);
-            this.Controls.Add(this.metroLabel4);
+            this.Controls.Add(this.typeLabel);
+            this.Controls.Add(this.tradePairLabel);
             this.Controls.Add(this.exchange_CB);
-            this.Controls.Add(this.metroLabel3);
+            this.Controls.Add(this.exchangeLabel);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.metroLabel2);
             this.Controls.Add(this.addTradeDate_TB);
@@ -234,14 +236,14 @@
         private MetroFramework.Controls.MetroTextBox addTradeDate_TB;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private MetroFramework.Controls.MetroLabel metroLabel3;
+        private MetroFramework.Controls.MetroLabel exchangeLabel;
         private MetroFramework.Controls.MetroComboBox exchange_CB;
-        private MetroFramework.Controls.MetroLabel metroLabel4;
-        private MetroFramework.Controls.MetroLabel metroLabel5;
+        private MetroFramework.Controls.MetroLabel tradePairLabel;
+        private MetroFramework.Controls.MetroLabel typeLabel;
         private MetroFramework.Controls.MetroComboBox type_CB;
-        private MetroFramework.Controls.MetroLabel metroLabel9;
+        private MetroFramework.Controls.MetroLabel priceLabel;
         private MetroFramework.Controls.MetroTextBox importQuantity_TB;
-        private MetroFramework.Controls.MetroLabel Quantity;
+        private MetroFramework.Controls.MetroLabel quantityLabel;
         private MetroFramework.Controls.MetroTextBox importPrice_TB;
         private MetroFramework.Controls.MetroButton addTradeOkayButton;
         private MetroFramework.Controls.MetroButton addTradeCancelButton;

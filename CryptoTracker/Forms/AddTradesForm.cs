@@ -33,6 +33,20 @@ namespace CryptoTracker
             allCoinNames = allCoins;
             tradeIndex = selectCoinIndex;
 
+            //Tooltip
+            ToolTip tool = new ToolTip();
+            tool.AutoPopDelay = 5000;
+            tool.InitialDelay = 1000;
+            tool.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            tool.ShowAlways = true;
+
+            tool.SetToolTip(this.exchangeLabel, "Select the exchange where the trade took place.");
+            tool.SetToolTip(this.typeLabel, "Select the trade type.");
+            tool.SetToolTip(this.tradePairLabel, "Select the base trade currency. Select USD if trading for fiat.");
+            tool.SetToolTip(this.quantityLabel, "Select the quantity of the coin being bought or sold. (ie. for XLM/ETH - 500 XLM)");
+            tool.SetToolTip(this.priceLabel, "Select the price at which the trade occured. (ie for XLM/ETH - 0.000568 ETH");
+
             //TODO - Add fiat currencies
             CoinModel.CoinNameStruct usd = new CoinModel.CoinNameStruct();
             usd.Symbol = "USD";
@@ -46,6 +60,7 @@ namespace CryptoTracker
 
             addTradeCalender.MaxSelectionCount = 1;
             addTradeDate_TB.Text = addTradeCalender.SelectionStart.ToShortDateString();
+            addTradeCalender.MaxDate = DateTime.Now;
 
             exchange_CB.Items.Add("Binance");
             exchange_CB.Items.Add("Coinbase");
@@ -89,7 +104,16 @@ namespace CryptoTracker
             bool error = false;
             GeneralImport import = new GeneralImport();
 
+
             DateTime date = addTradeCalender.SelectionStart.Date + dateTimePicker1.Value.TimeOfDay;
+
+            //Datetime validation
+            if (date > DateTime.Now)
+            {
+                MessageBoxForm messageBox = new MessageBoxForm("Can't select a future date.");
+                messageBox.ShowDialog();
+                error = true;
+            }
 
             //Combobox data validation
             if (exchange_CB.SelectedIndex < 0)
