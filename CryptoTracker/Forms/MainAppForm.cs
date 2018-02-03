@@ -129,7 +129,7 @@ namespace CryptoTracker
             AddNewLine();
 
             //Configure import trades tab
-            foreach (var item in priceManager.TrackedCoinList)
+            foreach (var item in priceManager.AllCoinNames)
             {
                 selectCoin_CB.Items.Add(item.Name);
             }
@@ -662,21 +662,24 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void addButton_Click(object sender, EventArgs e)
         {
-            AddTradeForm importTrade = new AddTradeForm(priceManager.AllCoinNames);
-
-            if (importTrade.ShowDialog() == DialogResult.OK)
+            if (selectCoin_CB.SelectedIndex > -1)
             {
-                if (importTrade.AddTradeTable != null)
+                AddTradeForm importTrade = new AddTradeForm(priceManager.AllCoinNames, selectCoin_CB.SelectedIndex);
+
+                if (importTrade.ShowDialog() == DialogResult.OK)
                 {
-                    //TODO - Fix data conflicting types here
+                    if (importTrade.AddTradeTable != null)
+                    {
+                        //TODO - Fix data conflicting types here
 
-                    //Add data from add trade window to data grid view
-                    tableBindToDataGridView.Merge(importTrade.AddTradeTable, true, MissingSchemaAction.Ignore);
-                    unsavedTradesDataTable.Merge(importTrade.AddTradeTable);
+                        //Add data from add trade window to data grid view
+                        tableBindToDataGridView.Merge(importTrade.AddTradeTable, true, MissingSchemaAction.Ignore);
+                        unsavedTradesDataTable.Merge(importTrade.AddTradeTable);
 
-                    //Enable save button if an import was successfull
-                    saveImportButton.Enabled = true;
-                    saveImportButton.Visible = true;
+                        //Enable save button if an import was successfull
+                        saveImportButton.Enabled = true;
+                        saveImportButton.Visible = true;
+                    }
                 }
             }
         }

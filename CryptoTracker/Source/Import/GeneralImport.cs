@@ -1,5 +1,6 @@
 ﻿using ExcelDataReader;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -91,15 +92,8 @@ namespace CryptoTracker
             //Connect to API
             var cli = new System.Net.WebClient();
             string prices = cli.DownloadString(input);
-            dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
-
-            //TODO - TradesTabIntegration - Add other trade pair and default cases
-            switch (currency)
-            {
-                case "ETH":
-                    price = (float)Convert.ToDouble(results.ETH.USD);
-                    break;
-            }
+            dynamic results = (JObject)JsonConvert.DeserializeObject<dynamic>(prices);
+            price = (float)Convert.ToDouble((JValue)results[currency]["USD"]);
 
             return price;
         }

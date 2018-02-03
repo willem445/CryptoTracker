@@ -10,15 +10,13 @@ using System.Windows.Forms;
 
 namespace CryptoTracker
 {
-    //TODOHP - Updating single trade causes weird errors when tracking, need to fix
-
     //TODO - Add tooltips to each field to aid in data entry
-    //TODO - Remove total cost field, can be calculated with price and quantity
     //TODO - Highlight incorrect data if data validation fails
     public partial class AddTradeForm : MetroFramework.Forms.MetroForm
     {
         private DataTable table = new DataTable();
         private List<CoinModel.CoinNameStruct> allCoinNames = new List<CoinModel.CoinNameStruct>();
+        private int tradeIndex;
 
         public DataTable AddTradeTable
         {
@@ -28,15 +26,18 @@ namespace CryptoTracker
             }
         }
 
-        public AddTradeForm(List<CoinModel.CoinNameStruct> allCoins)
+        public AddTradeForm(List<CoinModel.CoinNameStruct> allCoins, int selectCoinIndex)
         {
             InitializeComponent();
 
             allCoinNames = allCoins;
+            tradeIndex = selectCoinIndex;
 
             //TODO - Add fiat currencies
             CoinModel.CoinNameStruct usd = new CoinModel.CoinNameStruct();
             usd.Symbol = "USD";
+            usd.Name = "USD";
+            usd.Id = "usd";
             allCoinNames.Add(usd);
 
             this.dateTimePicker1.CustomFormat = "hh:mm tt";
@@ -54,8 +55,10 @@ namespace CryptoTracker
             type_CB.Items.Add("SELL");
             type_CB.SelectedIndex = 0;
 
-            tradePair_TB.Text = "BTC/USD";
-            tradePair_TB.Clear();
+            foreach(var item in allCoins)
+            {
+                tradeBase_CB.Items.Add(item.Name);
+            }
 
             table = new DataTable();
             table.Columns.Add("Date", typeof(DateTime));
@@ -95,30 +98,9 @@ namespace CryptoTracker
             }
 
             //Trade pair data validation
-            if (tradePair_TB.Text.Contains("/"))
+            if (tradeBase_CB.SelectedIndex < 0)
             {
-                try
-                {
-                    if (!allCoinNames.Any(x => x.Symbol == tradePair_TB.Text.Split('/')[0]) || !allCoinNames.Any(x => x.Symbol == tradePair_TB.Text.Split('/')[1]))
-                    {
-                        Console.WriteLine(tradePair_TB.Text.Split('/')[0]);
-                        Console.WriteLine(tradePair_TB.Text.Split('/')[1]);
-
-                        MessageBoxForm messageBox = new MessageBoxForm("Trade pair not supported.");
-                        messageBox.ShowDialog();
-                        error = true;
-                    }
-                }
-                catch
-                {
-                    MessageBoxForm messageBox = new MessageBoxForm("Trade pair invalid format.");
-                    messageBox.ShowDialog();
-                    error = true;
-                }
-            }
-            else
-            {
-                MessageBoxForm messageBox = new MessageBoxForm("Trade pair invalid format.");
+                MessageBoxForm messageBox = new MessageBoxForm("Select trade pair.");
                 messageBox.ShowDialog();
                 error = true;
             }
@@ -149,25 +131,16 @@ namespace CryptoTracker
                 error = true;
             }
 
-            //Total cost data validation
-            importTotalCost_TB.Text = importTotalCost_TB.Text.StripDollarSign();
-            if (!importTotalCost_TB.Text.IsNumeric() || importTotalCost_TB.Text == "")
-            {
-                MessageBoxForm messageBox = new MessageBoxForm("Enter valid total cost.");
-                messageBox.ShowDialog();
-                error = true;
-            }
-
             if (!error)
             {
                 table.Rows.Add(date,
                                exchange_CB.Text, 
-                               tradePair_TB.Text, 
+                               allCoinNames[tradeIndex].Symbol + "/" + allCoinNames[tradeBase_CB.SelectedIndex].Symbol, 
                                type_CB.Text, 
                                (float)Convert.ToDouble(importQuantity_TB.Text),
-                               (float)Convert.ToDouble(importPrice_TB.Text), 
-                               (float)Convert.ToDouble(importTotalCost_TB.Text), 
-                               import.GetHistoricalUsdValue(date, tradePair_TB.Text.Split('/')[1]) * (float)Convert.ToDouble(importTotalCost_TB.Text));
+                               (float)Convert.ToDouble(importPrice_TB.Text),
+                               (float)Convert.ToDouble(importQuantity_TB.Text) * (float)Convert.ToDouble(importPrice_TB.Text), 
+                               import.GetHistoricalUsdValue(date, allCoinNames[tradeBase_CB.SelectedIndex].Symbol) * ((float)Convert.ToDouble(importQuantity_TB.Text) * (float)Convert.ToDouble(importPrice_TB.Text)));
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
