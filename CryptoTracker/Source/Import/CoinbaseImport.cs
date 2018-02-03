@@ -43,7 +43,7 @@ namespace CryptoTracker
                                     "Coinbase",
                                     excelData.Rows[i][(int)CoinbaseColumns.TRADE_CURRENCY].ToString() + "/" + excelData.Rows[i][(int)CoinbaseColumns.BASE_CURRENCY].ToString(),
                                     excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString().Split(' ')[0] == "Bought" ? "BUY" : "SELL",
-                                    (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT]),
+                                    Math.Abs((float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT])),
                                     GetHistoricalUsdValue(dateValue, excelData.Rows[i][(int)CoinbaseColumns.TRADE_CURRENCY].ToString()),
                                     (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL]),
                                     (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL])

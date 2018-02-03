@@ -38,6 +38,7 @@ namespace CryptoTracker
         /// <returns></returns>
         public DataTable ImportBinanceTradeData(string filePath)
         {
+            //TODO - Change IOTA to MIOTA
             var excelData = ExcelToDataSet(filePath).Tables[0];
             
             for (int i = 0; i < excelData.Rows.Count; i++)
