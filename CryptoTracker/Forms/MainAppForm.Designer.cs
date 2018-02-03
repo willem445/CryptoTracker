@@ -43,9 +43,6 @@
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
-            this.statusLabel = new MetroFramework.Controls.MetroLabel();
-            this.fiatLabel = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
             this.totalValueLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.totalInvestedLabel = new MetroFramework.Controls.MetroLabel();
@@ -193,17 +190,15 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 2;
+            this.metroTabControl1.SelectedIndex = 0;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroTabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.metroTabControl1_Selecting);
             this.metroTabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.metroTabControl1_Selected);
             // 
             // metroTabPage1
             // 
-            this.metroTabPage1.Controls.Add(this.statusLabel);
-            this.metroTabPage1.Controls.Add(this.fiatLabel);
-            this.metroTabPage1.Controls.Add(this.metroLabel8);
             this.metroTabPage1.Controls.Add(this.totalValueLabel);
             this.metroTabPage1.Controls.Add(this.metroLabel2);
             this.metroTabPage1.Controls.Add(this.totalInvestedLabel);
@@ -218,36 +213,6 @@
             this.metroTabPage1.TabIndex = 0;
             this.metroTabPage1.Text = "Price Tracking";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.AutoSize = true;
-            this.statusLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.statusLabel.Location = new System.Drawing.Point(713, 402);
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(37, 15);
-            this.statusLabel.TabIndex = 14;
-            this.statusLabel.Text = "status";
-            // 
-            // fiatLabel
-            // 
-            this.fiatLabel.AutoSize = true;
-            this.fiatLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.fiatLabel.Location = new System.Drawing.Point(465, 394);
-            this.fiatLabel.Name = "fiatLabel";
-            this.fiatLabel.Size = new System.Drawing.Size(46, 15);
-            this.fiatLabel.TabIndex = 12;
-            this.fiatLabel.Text = "$200.00";
-            // 
-            // metroLabel8
-            // 
-            this.metroLabel8.AutoSize = true;
-            this.metroLabel8.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.metroLabel8.Location = new System.Drawing.Point(380, 394);
-            this.metroLabel8.Name = "metroLabel8";
-            this.metroLabel8.Size = new System.Drawing.Size(69, 15);
-            this.metroLabel8.TabIndex = 13;
-            this.metroLabel8.Text = "Fiat Balance:";
             // 
             // totalValueLabel
             // 
@@ -600,9 +565,6 @@
         private MetroFramework.Controls.MetroLabel metroLabel5;
         private MetroFramework.Controls.MetroComboBox importSelect_CB;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private MetroFramework.Controls.MetroLabel fiatLabel;
-        private MetroFramework.Controls.MetroLabel metroLabel8;
-        private MetroFramework.Controls.MetroLabel statusLabel;
         private MetroFramework.Controls.MetroProgressBar pBar;
     }
 }

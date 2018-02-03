@@ -111,9 +111,6 @@ namespace CryptoTracker
             source.DataSource = tableBindToDataGridView;
             dataGridView2.DataSource = source;
 
-            //Update status label
-            statusLabel.Text = "";
-
             //Configure the autoupdate timer
             updatePrices = new System.Timers.Timer();
             updatePrices.Interval = 30000; //30 seconds
@@ -191,7 +188,7 @@ namespace CryptoTracker
             totalProfitLabel.Invoke(new Action(() => totalProfitLabel.Text = priceManager.TotalProfit.FloatToMonetary()));
             totalInvestedLabel.Invoke(new Action(() => totalInvestedLabel.Text = priceManager.TotalInvestment.FloatToMonetary()));
             totalValueLabel.Invoke(new Action(() => totalValueLabel.Text = priceManager.TotalValue.FloatToMonetary()));
-            fiatLabel.Invoke(new Action(() => fiatLabel.Text = priceManager.TotalFiatCost.FloatToMonetary()));
+            //fiatLabel.Invoke(new Action(() => fiatLabel.Text = priceManager.TotalFiatCost.FloatToMonetary()));
         }
 
         /// <summary>
@@ -232,7 +229,8 @@ namespace CryptoTracker
             newFlowPanel.Controls.Add(invested);
             newFlowPanel.Controls.Add(quantity);
 
-            flowLayoutPanel1.Controls.Add(newFlowPanel);
+            //flowLayoutPanel1.Controls.Add(newFlowPanel);
+            flowLayoutPanel1.Invoke(new Action(() => flowLayoutPanel1.Controls.Add(newFlowPanel)));
         }
 
         /// <summary>
@@ -295,7 +293,7 @@ namespace CryptoTracker
             newFlowPanel.Controls.Add(coinProfitPercent);
 
             //Add new flow panel to base flow panel
-            flowLayoutPanel1.Controls.Add(newFlowPanel);
+            flowLayoutPanel1.Invoke(new Action(() => flowLayoutPanel1.Controls.Add(newFlowPanel)));
 
             //Update Lists
             priceLabelList.Add(coinPrice);
@@ -373,11 +371,13 @@ namespace CryptoTracker
                 tile.Click += Tile_Click;
                 tile.Name = addCoin.APILink;
 
-                infoFlowPanel.Controls.Add(tile);
+                infoFlowPanel.Invoke(new Action(() => infoFlowPanel.Controls.Add(tile)));
             }
             catch
             {
-
+#if DEBUG
+                Console.WriteLine("Error adding tile to form");
+#endif
             }
 
             //Update counts
@@ -406,9 +406,9 @@ namespace CryptoTracker
             //Handle refresh button pressed
             if (e.KeyCode == Keys.F5)
             {
-                statusLabel.Text = "Refreshing";
+                //statusLabel.Text = "Refreshing";
                 UpdatePriceAndUI();
-                statusLabel.Text = "";
+                //statusLabel.Text = "";
 
                 #if DEBUG
                 Console.WriteLine("Refreshed");
@@ -726,6 +726,8 @@ namespace CryptoTracker
                 DataTable temp = new DataTable();
 
                 importButton.Enabled = false;
+                saveImportButton.Enabled = false;
+                addButton.Enabled = false;
 
                 var progress = new Progress<int>(progressPercent => pBar.Value = progressPercent);
 
@@ -747,6 +749,7 @@ namespace CryptoTracker
                 dataGridView2.Refresh();
 
                 importButton.Enabled = true;
+                addButton.Enabled = true;
 
                 //Enable save button if an import was successfull
                 saveImportButton.Enabled = true;
@@ -759,10 +762,13 @@ namespace CryptoTracker
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void saveImportButton_Click(object sender, EventArgs e)
+        private async void saveImportButton_Click(object sender, EventArgs e)
         {
             FileIO file = new FileIO();
-            
+            saveImportButton.Enabled = false;
+            addButton.Enabled = false;
+            importButton.Enabled = false;
+
             //Create list of coins currently being tracked to compare to trades being added 
             List<string> trackedCoins = new List<string>();
             foreach (var item in priceManager.TrackedCoinList)
@@ -770,59 +776,110 @@ namespace CryptoTracker
                 trackedCoins.Add(item.Symbol);
             }
 
-            //Check to see if coin is currently being tracked, if not, ask user if they want to 
+            //Find list of coins that are not being tracked
+            List<string> unTrackedCoins = new List<string>();
             for (int i = 0; i < unsavedTradesDataTable.Rows.Count; i++)
             {
-                if (!trackedCoins.Contains(unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0]))
+                string coin = unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0];
+                if (!trackedCoins.Contains(coin))
                 {
-                    MessageBoxForm message = new MessageBoxForm(unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0] + " is not currently being tracked. Would you like to track it?");
-
-                    if (message.ShowDialog() == DialogResult.OK)
+                    if (!unTrackedCoins.Contains(coin))
                     {
-                        CoinModel addCoin = new CoinModel();
-
-                        int index = 0;
-                        foreach (var item in priceManager.AllCoinNames)
-                        {
-                            if (unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0] == item.Symbol)
-                            {
-                                break;
-                            }
-                            index++;
-                        }
-
-                        //TODO - If a coin is not in the list (ie IOTA in binance report, MIOTA in CMC) we get index out of bounds error
-                        addCoin.Quantity = 0;
-                        addCoin.NetCost = 0;
-                        addCoin.Name = priceManager.AllCoinNames[index].Name;
-                        addCoin.APILink = "https://api.coinmarketcap.com/v1/ticker/" + priceManager.AllCoinNames[index].Id;
-
-                        //Add new value array to price manager
-                        priceManager.AddNewCoin(addCoin);
-
-                        AddNewCoinToFlowControl(addCoin);
-
-                        priceManager.UpdatePriceData();
-
-                        trackedCoins.Add(addCoin.Symbol);
-
+                        unTrackedCoins.Add(coin);
                     }
                 }
             }
 
-            priceManager.UpdatePriceDataFromTrades(unsavedTradesDataTable);
+            if (unTrackedCoins.Count != 0)
+            {
+                //Ask user which coins to track
+                TrackNewCoinsForm trackCoins = new TrackNewCoinsForm(unTrackedCoins);
+                if (trackCoins.ShowDialog() == DialogResult.OK)
+                {
+                    int j = 0;
+                    foreach (TabPage tab in metroTabControl1.TabPages)
+                    {
+                        if (j != 2)
+                            tab.Enabled = false;
+                        j++;
+                    }
 
+                    var progress = new Progress<int>(progressPercent => pBar.Value = progressPercent);
+
+                    //Add new coins to tracking in update thread
+                    await Task.Run(() => TrackNewCoinThread(trackCoins.TrackNewCoin, progress));               
+                }
+            }
+
+            int k = 0;
+            foreach (TabPage tab in metroTabControl1.TabPages)
+            {
+                if (k != 2)
+                    tab.Enabled = true;
+                k++;
+            }
+
+            //Update data when done with thread
+            priceManager.UpdatePriceDataFromTrades(unsavedTradesDataTable);
             UpdatePriceAndUI();
 
             //Clear unsaved data table once data has been saved to file
             unsavedTradesDataTable.Clear();
+            unTrackedCoins.Clear();
 
             //Save data to file
             file.SavePriceTrackingToFile(priceManager.TrackedCoinList);
             file.DataGridViewToXML(dataGridView2);
+
+            importButton.Enabled = true;
+            saveImportButton.Enabled = true;
+            addButton.Enabled = true;
+
+            updatePrices.Start();
         }
 
         //Threads********************************************************************************
+        public void TrackNewCoinThread(List<string> coinsToTrack, IProgress<int> progress)
+        {
+            updatePrices.Stop();
+ 
+            int i = 0;
+            foreach (string coin in coinsToTrack)
+            {
+                CoinModel addCoin = new CoinModel();
+
+                int index = 0;
+                foreach (var item in priceManager.AllCoinNames)
+                {
+                    if (coin == item.Symbol)
+                    {
+                        break;
+                    }
+                    index++;
+                }
+
+                //TODO - If a coin is not in the list (ie IOTA in binance report, MIOTA in CMC) we get index out of bounds error
+                addCoin.Quantity = 0;
+                addCoin.NetCost = 0;
+                addCoin.Name = priceManager.AllCoinNames[index].Name;
+                addCoin.APILink = "https://api.coinmarketcap.com/v1/ticker/" + priceManager.AllCoinNames[index].Id;
+
+                //Add new value array to price manager
+                priceManager.AddNewCoin(addCoin);
+
+                AddNewCoinToFlowControl(addCoin);
+
+                priceManager.UpdatePriceData();
+
+                progress.Report((int)(((float)i / coinsToTrack.Count) * 100.0F));
+                i++;
+            }
+            progress.Report(100);
+#if DEBUG
+            Console.WriteLine("Track New Coins Done");
+#endif
+        }
+
         public DataTable ImportDataThread(string exchange, string fileName, IProgress<int> progress)
         {
 
@@ -830,13 +887,19 @@ namespace CryptoTracker
                 DataTable test = import.ImportFromExchange(exchange, fileName, progress);
 
 #if DEBUG
-            Console.WriteLine("Done");
+            Console.WriteLine("Import Done");
 #endif
 
             return test;
 
         }
 
-
+        private void metroTabControl1_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            if (!e.TabPage.Enabled)
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }
