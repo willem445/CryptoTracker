@@ -46,7 +46,6 @@ namespace CryptoTracker
 
                 if (DateTime.TryParseExact(excelData.Rows[i][(int)BinanceColumns.DATE].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue))
                 {
-                    //TODO - TradesTabIntegration - Possible exception here if can't find base trade
                     TradePair tradePair = new TradePair();
 
                     foreach (var item in binanceTradeBases)

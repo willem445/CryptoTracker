@@ -85,7 +85,7 @@ namespace CryptoTracker
         /// <returns></returns>
         public float GetHistoricalUsdValue(DateTime date, string currency)
         {
-            //TODO - TradesTabIntegration - return null float if trying to access api for non existent coin
+            //TODO - return null float if trying to access api for non existent coin
             string input = "https://min-api.cryptocompare.com/data/pricehistorical?fsym=" + currency + "&tsyms=USD&ts=" + date.DateTimeToUNIX().ToString();
             float price = 0.0F;
 

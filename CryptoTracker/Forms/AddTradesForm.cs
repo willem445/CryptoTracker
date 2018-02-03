@@ -83,7 +83,6 @@ namespace CryptoTracker
 
         private void addTradeOkayButton_Click(object sender, EventArgs e)
         {
-            //TODO - TradesTabIntegration - Verify data is valid before returning ok
             bool error = false;
             GeneralImport import = new GeneralImport();
 

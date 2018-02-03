@@ -41,9 +41,6 @@ namespace CryptoTracker
 
                     parsedDataList.Add(newCoin);
                 }
-
-                //priceManager.UpdatePriceData();
-
             }
 
             return parsedDataList;
@@ -105,7 +102,7 @@ namespace CryptoTracker
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
 
-            if (File.Exists(Path.Combine(path, "TradeData.xml"))) //TODO - TradesTabIntegration - Change to file exists, fails when file does not exists but path does
+            if (File.Exists(Path.Combine(path, "TradeData.xml"))) 
             {
                 temp.ReadXml(Path.Combine(path, "TradeData.xml"));
                 temp.Tables[0].Rows[temp.Tables[0].Rows.Count-1].Delete();

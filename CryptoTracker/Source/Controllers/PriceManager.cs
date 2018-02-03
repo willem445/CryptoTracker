@@ -28,7 +28,7 @@ namespace CryptoTracker
             OrderQuantity,
             TradePrice,
             OrderCost,
-            NetCost
+            NetCostUSD
         }
 
         //Fields********************************************************************************
@@ -39,6 +39,7 @@ namespace CryptoTracker
         private float totalProfit = 0.0F;
         private float totalValue = 0.0F;
         private float totalInvestment = 0.0F;
+        private float totalFiatCost = 0.0F; //Total of USD bought and sold
 
         //Properties****************************************************************************
         public float TotalProfit
@@ -60,6 +61,13 @@ namespace CryptoTracker
             get
             {
                 return totalInvestment;
+            }
+        }
+        public float TotalFiatCost
+        {
+            get
+            {
+                return totalFiatCost;
             }
         }
         public List<CoinModel.CoinNameStruct> AllCoinNames
@@ -210,35 +218,47 @@ namespace CryptoTracker
 
                 if (buyindex > -1)
                 {
-                    //TODO - Need to add/sub trade pair value as well
                     if (table.Rows[i][(int)DataTableRows.Type].ToString() == BUY)
                     {
                         //Update coin being traded for
                         trackedCoinList[buyindex].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
-                        trackedCoinList[buyindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                        trackedCoinList[buyindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCostUSD]);
 
                         if (tradeindex > -1)
                         {
                             //Update coin being traded with
-                            trackedCoinList[tradeindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                            trackedCoinList[tradeindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCostUSD]);
                             trackedCoinList[tradeindex].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderCost]);
                         }
+
+                        //Update FIAT USD total
+                        if (table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[TRADE_BASE] == "USD")
+                        {
+                            totalFiatCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCostUSD]);
+                        }
                     }
-                    else //TODO - Need to account for USD sells
+                    else 
                     {
                         //Update coin being traded for
                         trackedCoinList[buyindex].Quantity -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderQuantity]);
-                        trackedCoinList[buyindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                        trackedCoinList[buyindex].NetCost -= (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCostUSD]);
 
                         if (tradeindex > -1)
                         {
                             //Update coin being traded with
-                            trackedCoinList[tradeindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCost]);
+                            trackedCoinList[tradeindex].NetCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCostUSD]);
                             trackedCoinList[tradeindex].Quantity += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.OrderCost]);
+                        }
+
+                        //Update FIAT USD total
+                        if (table.Rows[i][(int)DataTableRows.TradePair].ToString().Split('/')[TRADE_BASE] == "USD")
+                        {
+                            totalFiatCost += (float)Convert.ToDouble(table.Rows[i][(int)DataTableRows.NetCostUSD]);
                         }
                     }
                 }
             }
+            Console.WriteLine(TotalFiatCost);
         }
 
         /// <summary>
