@@ -830,7 +830,9 @@ namespace CryptoTracker
                 GeneralImport import = new GeneralImport();
                 DataTable test = import.ImportFromExchange(exchange, fileName);
 
-                Console.WriteLine("Done");
+#if DEBUG
+            Console.WriteLine("Done");
+#endif
 
             return test;
 

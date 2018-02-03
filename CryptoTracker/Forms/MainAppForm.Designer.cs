@@ -125,7 +125,7 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -133,12 +133,12 @@
             // 
             this.toolStripMenuItem1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(113, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // optionsToolStripMenuItem
@@ -153,14 +153,14 @@
             // addBuyToolStripMenuItem
             // 
             this.addBuyToolStripMenuItem.Name = "addBuyToolStripMenuItem";
-            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addBuyToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.addBuyToolStripMenuItem.Text = "Add Coin";
             this.addBuyToolStripMenuItem.Click += new System.EventHandler(this.addBuyToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.editToolStripMenuItem.Text = "Edit Coin";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
@@ -233,7 +233,7 @@
             // 
             this.fiatLabel.AutoSize = true;
             this.fiatLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.fiatLabel.Location = new System.Drawing.Point(462, 394);
+            this.fiatLabel.Location = new System.Drawing.Point(465, 394);
             this.fiatLabel.Name = "fiatLabel";
             this.fiatLabel.Size = new System.Drawing.Size(46, 15);
             this.fiatLabel.TabIndex = 12;
@@ -243,7 +243,7 @@
             // 
             this.metroLabel8.AutoSize = true;
             this.metroLabel8.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.metroLabel8.Location = new System.Drawing.Point(377, 394);
+            this.metroLabel8.Location = new System.Drawing.Point(380, 394);
             this.metroLabel8.Name = "metroLabel8";
             this.metroLabel8.Size = new System.Drawing.Size(69, 15);
             this.metroLabel8.TabIndex = 13;
@@ -253,7 +253,7 @@
             // 
             this.totalValueLabel.AutoSize = true;
             this.totalValueLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.totalValueLabel.Location = new System.Drawing.Point(299, 394);
+            this.totalValueLabel.Location = new System.Drawing.Point(302, 394);
             this.totalValueLabel.Name = "totalValueLabel";
             this.totalValueLabel.Size = new System.Drawing.Size(46, 15);
             this.totalValueLabel.TabIndex = 6;
@@ -263,7 +263,7 @@
             // 
             this.metroLabel2.AutoSize = true;
             this.metroLabel2.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.metroLabel2.Location = new System.Drawing.Point(256, 394);
+            this.metroLabel2.Location = new System.Drawing.Point(259, 394);
             this.metroLabel2.Name = "metroLabel2";
             this.metroLabel2.Size = new System.Drawing.Size(37, 15);
             this.metroLabel2.TabIndex = 7;
@@ -273,7 +273,7 @@
             // 
             this.totalInvestedLabel.AutoSize = true;
             this.totalInvestedLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.totalInvestedLabel.Location = new System.Drawing.Point(182, 394);
+            this.totalInvestedLabel.Location = new System.Drawing.Point(185, 394);
             this.totalInvestedLabel.Name = "totalInvestedLabel";
             this.totalInvestedLabel.Size = new System.Drawing.Size(46, 15);
             this.totalInvestedLabel.TabIndex = 8;
@@ -283,7 +283,7 @@
             // 
             this.metroLabel4.AutoSize = true;
             this.metroLabel4.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.metroLabel4.Location = new System.Drawing.Point(124, 394);
+            this.metroLabel4.Location = new System.Drawing.Point(127, 394);
             this.metroLabel4.Name = "metroLabel4";
             this.metroLabel4.Size = new System.Drawing.Size(52, 15);
             this.metroLabel4.TabIndex = 9;
@@ -293,7 +293,7 @@
             // 
             this.totalProfitLabel.AutoSize = true;
             this.totalProfitLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.totalProfitLabel.Location = new System.Drawing.Point(46, 394);
+            this.totalProfitLabel.Location = new System.Drawing.Point(49, 394);
             this.totalProfitLabel.Name = "totalProfitLabel";
             this.totalProfitLabel.Size = new System.Drawing.Size(46, 15);
             this.totalProfitLabel.TabIndex = 10;
@@ -303,7 +303,7 @@
             // 
             this.metroLabel6.AutoSize = true;
             this.metroLabel6.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.metroLabel6.Location = new System.Drawing.Point(3, 394);
+            this.metroLabel6.Location = new System.Drawing.Point(6, 394);
             this.metroLabel6.Name = "metroLabel6";
             this.metroLabel6.Size = new System.Drawing.Size(37, 15);
             this.metroLabel6.TabIndex = 11;

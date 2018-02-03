@@ -258,7 +258,9 @@ namespace CryptoTracker
                     }
                 }
             }
+            #if DEBUG
             Console.WriteLine(TotalFiatCost);
+            #endif
         }
 
         /// <summary>
