@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DEBUG
+
+using System;
 using System.Windows.Forms;
 using System.Timers;
 using Newtonsoft.Json;
@@ -14,6 +16,8 @@ using System.Data;
 using ExcelDataReader;
 using System.Threading;
 using System.Threading.Tasks;
+
+
 
 //Crypto Images
 //https://github.com/cjdowner/cryptocurrency-icons
@@ -103,10 +107,12 @@ namespace CryptoTracker
             {
                 tableBindToDataGridView.Merge(temp);
             }
-
             BindingSource source = new BindingSource();
             source.DataSource = tableBindToDataGridView;
             dataGridView2.DataSource = source;
+
+            //Update status label
+            statusLabel.Text = "";
 
             //Configure the autoupdate timer
             updatePrices = new System.Timers.Timer();
@@ -165,6 +171,7 @@ namespace CryptoTracker
                 textBoxArrayList[i][3].Invoke(new Action(() => textBoxArrayList[i][3].Text = item.ProfitToString));
                 textBoxArrayList[i][4].Invoke(new Action(() => textBoxArrayList[i][4].Text = item.ProfitPercentToString));
 
+                //Update text color for profit/loss
                 if (item.Profit.Value < 0)
                 {
                     textBoxArrayList[i][3].Invoke(new Action(() => textBoxArrayList[i][3].ForeColor = Color.Red));
@@ -181,6 +188,7 @@ namespace CryptoTracker
             totalProfitLabel.Invoke(new Action(() => totalProfitLabel.Text = priceManager.TotalProfit.FloatToMonetary()));
             totalInvestedLabel.Invoke(new Action(() => totalInvestedLabel.Text = priceManager.TotalInvestment.FloatToMonetary()));
             totalValueLabel.Invoke(new Action(() => totalValueLabel.Text = priceManager.TotalValue.FloatToMonetary()));
+            fiatLabel.Invoke(new Action(() => fiatLabel.Text = priceManager.TotalFiatCost.FloatToMonetary()));
         }
 
         /// <summary>
@@ -386,14 +394,23 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// Manually update price tracking and UI
+        /// Mainform button pressed handler
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void refreshButton_Click(object sender, MouseEventArgs e)
+        private void MainAppForm_KeyUp(object sender, KeyEventArgs e)
         {
-            //TODO - Replace ugly button with F5 key press handler
-            UpdatePriceAndUI();
+            //Handle refresh button pressed
+            if (e.KeyCode == Keys.F5)
+            {
+                statusLabel.Text = "Refreshing";
+                UpdatePriceAndUI();
+                statusLabel.Text = "";
+
+                #if DEBUG
+                Console.WriteLine("Refreshed");
+                #endif
+            }
         }
 
         /// <summary>
@@ -815,5 +832,7 @@ namespace CryptoTracker
             return test;
 
         }
+
+
     }
 }

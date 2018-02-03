@@ -59,6 +59,9 @@ namespace CryptoTracker
             {
                 tradeBase_CB.Items.Add(item.Name);
             }
+            tradeBase_CB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            tradeBase_CB.AutoCompleteSource = AutoCompleteSource.ListItems;
+            tradeBase_CB.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
 
             table = new DataTable();
             table.Columns.Add("Date", typeof(DateTime));

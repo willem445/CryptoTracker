@@ -43,13 +43,14 @@
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.fiatLabel = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
             this.totalValueLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.totalInvestedLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.totalProfitLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
-            this.refreshButton = new MetroFramework.Controls.MetroButton();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -74,6 +75,7 @@
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
+            this.statusLabel = new MetroFramework.Controls.MetroLabel();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -186,12 +188,12 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
+            this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 2;
+            this.metroTabControl1.SelectedIndex = 0;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -199,13 +201,15 @@
             // 
             // metroTabPage1
             // 
+            this.metroTabPage1.Controls.Add(this.statusLabel);
+            this.metroTabPage1.Controls.Add(this.fiatLabel);
+            this.metroTabPage1.Controls.Add(this.metroLabel8);
             this.metroTabPage1.Controls.Add(this.totalValueLabel);
             this.metroTabPage1.Controls.Add(this.metroLabel2);
             this.metroTabPage1.Controls.Add(this.totalInvestedLabel);
             this.metroTabPage1.Controls.Add(this.metroLabel4);
             this.metroTabPage1.Controls.Add(this.totalProfitLabel);
             this.metroTabPage1.Controls.Add(this.metroLabel6);
-            this.metroTabPage1.Controls.Add(this.refreshButton);
             this.metroTabPage1.Controls.Add(this.flowLayoutPanel1);
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 35);
@@ -215,11 +219,31 @@
             this.metroTabPage1.Text = "Price Tracking";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
             // 
+            // fiatLabel
+            // 
+            this.fiatLabel.AutoSize = true;
+            this.fiatLabel.FontSize = MetroFramework.MetroLabelSize.Small;
+            this.fiatLabel.Location = new System.Drawing.Point(462, 394);
+            this.fiatLabel.Name = "fiatLabel";
+            this.fiatLabel.Size = new System.Drawing.Size(46, 15);
+            this.fiatLabel.TabIndex = 12;
+            this.fiatLabel.Text = "$200.00";
+            // 
+            // metroLabel8
+            // 
+            this.metroLabel8.AutoSize = true;
+            this.metroLabel8.FontSize = MetroFramework.MetroLabelSize.Small;
+            this.metroLabel8.Location = new System.Drawing.Point(377, 394);
+            this.metroLabel8.Name = "metroLabel8";
+            this.metroLabel8.Size = new System.Drawing.Size(69, 15);
+            this.metroLabel8.TabIndex = 13;
+            this.metroLabel8.Text = "Fiat Balance:";
+            // 
             // totalValueLabel
             // 
             this.totalValueLabel.AutoSize = true;
             this.totalValueLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.totalValueLabel.Location = new System.Drawing.Point(410, 392);
+            this.totalValueLabel.Location = new System.Drawing.Point(299, 394);
             this.totalValueLabel.Name = "totalValueLabel";
             this.totalValueLabel.Size = new System.Drawing.Size(46, 15);
             this.totalValueLabel.TabIndex = 6;
@@ -229,7 +253,7 @@
             // 
             this.metroLabel2.AutoSize = true;
             this.metroLabel2.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.metroLabel2.Location = new System.Drawing.Point(367, 392);
+            this.metroLabel2.Location = new System.Drawing.Point(256, 394);
             this.metroLabel2.Name = "metroLabel2";
             this.metroLabel2.Size = new System.Drawing.Size(37, 15);
             this.metroLabel2.TabIndex = 7;
@@ -239,7 +263,7 @@
             // 
             this.totalInvestedLabel.AutoSize = true;
             this.totalInvestedLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.totalInvestedLabel.Location = new System.Drawing.Point(293, 392);
+            this.totalInvestedLabel.Location = new System.Drawing.Point(182, 394);
             this.totalInvestedLabel.Name = "totalInvestedLabel";
             this.totalInvestedLabel.Size = new System.Drawing.Size(46, 15);
             this.totalInvestedLabel.TabIndex = 8;
@@ -249,7 +273,7 @@
             // 
             this.metroLabel4.AutoSize = true;
             this.metroLabel4.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.metroLabel4.Location = new System.Drawing.Point(235, 392);
+            this.metroLabel4.Location = new System.Drawing.Point(124, 394);
             this.metroLabel4.Name = "metroLabel4";
             this.metroLabel4.Size = new System.Drawing.Size(52, 15);
             this.metroLabel4.TabIndex = 9;
@@ -259,7 +283,7 @@
             // 
             this.totalProfitLabel.AutoSize = true;
             this.totalProfitLabel.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.totalProfitLabel.Location = new System.Drawing.Point(157, 392);
+            this.totalProfitLabel.Location = new System.Drawing.Point(46, 394);
             this.totalProfitLabel.Name = "totalProfitLabel";
             this.totalProfitLabel.Size = new System.Drawing.Size(46, 15);
             this.totalProfitLabel.TabIndex = 10;
@@ -269,20 +293,11 @@
             // 
             this.metroLabel6.AutoSize = true;
             this.metroLabel6.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.metroLabel6.Location = new System.Drawing.Point(114, 392);
+            this.metroLabel6.Location = new System.Drawing.Point(3, 394);
             this.metroLabel6.Name = "metroLabel6";
             this.metroLabel6.Size = new System.Drawing.Size(37, 15);
             this.metroLabel6.TabIndex = 11;
             this.metroLabel6.Text = "Profit:";
-            // 
-            // refreshButton
-            // 
-            this.refreshButton.Location = new System.Drawing.Point(13, 388);
-            this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(77, 19);
-            this.refreshButton.TabIndex = 10;
-            this.refreshButton.Text = "Refresh";
-            this.refreshButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.refreshButton_Click);
             // 
             // metroTabPage2
             // 
@@ -498,6 +513,16 @@
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
             // 
+            // statusLabel
+            // 
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.FontSize = MetroFramework.MetroLabelSize.Small;
+            this.statusLabel.Location = new System.Drawing.Point(713, 402);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(37, 15);
+            this.statusLabel.TabIndex = 14;
+            this.statusLabel.Text = "status";
+            // 
             // MainAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -507,12 +532,14 @@
             this.ClientSize = new System.Drawing.Size(827, 551);
             this.Controls.Add(this.metroTabControl1);
             this.Controls.Add(this.menuStrip1);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainAppForm";
             this.Resizable = false;
             this.Style = MetroFramework.MetroColorStyle.Red;
             this.Text = "Crypto Tracker";
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainAppForm_KeyUp);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.metroTabControl1.ResumeLayout(false);
@@ -550,7 +577,6 @@
         private MetroFramework.Controls.MetroLabel totalInvestedLabel;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         private MetroFramework.Controls.MetroLabel totalValueLabel;
-        private MetroFramework.Controls.MetroButton refreshButton;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private MetroFramework.Controls.MetroComboBox selectCoin_CB;
@@ -576,6 +602,9 @@
         private MetroFramework.Controls.MetroComboBox importSelect_CB;
         private System.Windows.Forms.DataGridView dataGridView2;
         private MetroFramework.Controls.MetroProgressSpinner metroProgressSpinner1;
+        private MetroFramework.Controls.MetroLabel fiatLabel;
+        private MetroFramework.Controls.MetroLabel metroLabel8;
+        private MetroFramework.Controls.MetroLabel statusLabel;
     }
 }
 
