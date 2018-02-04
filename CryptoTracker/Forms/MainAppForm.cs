@@ -36,7 +36,7 @@ namespace CryptoTracker
         /// <summary>
         /// Enumeration for each row in textbox array
         /// </summary>
-        public enum RowNames
+        public enum TextBoxRowNames
         {
             Quantity,
             TotalInvested,
@@ -64,18 +64,13 @@ namespace CryptoTracker
         {
             InitializeComponent();
 
-            //TODO - Call from thread to avoid hangups when starting, show loading menu until fully started, currently getting thread access error when attempting, need to invoke all controls access
-            //Init();
+            metroTabControl1.SelectedIndex = 0;
+
+            //Start thread that initializes data and form on startup
             InitThread();
         }
 
         //Methods*******************************************************************************
-
-        public async void InitThread()
-        {
-            var progress = new Progress<int>(progressPercent => loadBar.Value = progressPercent);
-            await Task.Run(() => Init(progress));
-        }
 
         //General Methods
         /// <summary>
@@ -412,6 +407,8 @@ namespace CryptoTracker
         }
 
         //UI Event Handlers
+
+        //Price Tracking Tab*******************************************************
         /// <summary>
         /// Updates price tracking data and UI every 30 seconds
         /// </summary>
@@ -466,37 +463,9 @@ namespace CryptoTracker
             //throw new NotImplementedException();
         }
 
+        //Menu Strip****************************************************************
         /// <summary>
-        /// Parse and build url to navigate to coin page on coinmarketcap
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Tile_Click(object sender, EventArgs e)
-        {
-            //Need to build link to https://coinmarketcap.com/currencies/coin/ and navigate to website
-
-            //The api url was saved as name, parse the coin name from the url since the coin name in url
-            //can differ from the official name
-            string name = ((MetroFramework.Controls.MetroTile)sender).Name.ToString().Split('/')[5];
-
-            //Check if the parsed name matches the official name, some protection if the parsing fails
-            if (name.Contains(((MetroFramework.Controls.MetroTile)sender).Text.ToLower()))
-            {
-                try
-                {
-                    //Open the url in web browser for the user
-                    ProcessStartInfo sInfo = new ProcessStartInfo("https://coinmarketcap.com/currencies/" + name + "/");
-                    Process.Start(sInfo);
-                }
-                catch
-                {
-                    MessageBoxForm errorMessage = new MessageBoxForm("Error connecting to coin market cap.");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Call save function to save data to file
+        /// Call save function to save tracked coins data to file, only need to save if price tracking tab was updated
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -567,7 +536,50 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Open the donate form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DonateForm donate = new DonateForm();
+            donate.ShowDialog();
+            donate.Dispose();
+        }
+
+        //Coin Info Tab************************************************************
+        /// <summary>
+        /// Parse and build url to navigate to coin page on coinmarketcap
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Tile_Click(object sender, EventArgs e)
+        {
+            //Need to build link to https://coinmarketcap.com/currencies/coin/ and navigate to website
+
+            //The api url was saved as name, parse the coin name from the url since the coin name in url
+            //can differ from the official name
+            string name = ((MetroFramework.Controls.MetroTile)sender).Name.ToString().Split('/')[5];
+
+            //Check if the parsed name matches the official name, some protection if the parsing fails
+            if (name.Contains(((MetroFramework.Controls.MetroTile)sender).Text.ToLower()))
+            {
+                try
+                {
+                    //Open the url in web browser for the user
+                    ProcessStartInfo sInfo = new ProcessStartInfo("https://coinmarketcap.com/currencies/" + name + "/");
+                    Process.Start(sInfo);
+                }
+                catch
+                {
+                    MessageBoxForm errorMessage = new MessageBoxForm("Error connecting to coin market cap.");
+                }
+            }
+        }
+
+        //Portfolio Tab*************************************************************
+        /// <summary>
+        /// Load portfolio data
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -580,7 +592,7 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Loads and formats data for each coin being tracked into pie chart and list view
         /// </summary>
         private void PortfolioSelected()
         {
@@ -702,6 +714,22 @@ namespace CryptoTracker
 
         }
 
+        /// <summary>
+        /// Cancel tab switch if the tabs are not enabled
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void metroTabControl1_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            if (!e.TabPage.Enabled)
+            {
+                e.Cancel = true;
+            }
+        }
+
+
+
+        //Trades Tab***************************************************************************
         /// <summary>
         /// Manually add a trade to the table
         /// </summary>
@@ -889,6 +917,11 @@ namespace CryptoTracker
         }
 
         //Threads********************************************************************************
+        /// <summary>
+        /// Thread for updating new coins to track, updates form UI and price manager data
+        /// </summary>
+        /// <param name="coinsToTrack"></param>
+        /// <param name="progress"></param>
         public void TrackNewCoinThread(List<string> coinsToTrack, IProgress<int> progress)
         {
             updatePrices.Stop();
@@ -930,6 +963,13 @@ namespace CryptoTracker
 #endif
         }
 
+        /// <summary>
+        /// Thread for importing excel spreadsheet into trades table
+        /// </summary>
+        /// <param name="exchange"></param>
+        /// <param name="fileName"></param>
+        /// <param name="progress"></param>
+        /// <returns></returns>
         public DataTable ImportDataThread(string exchange, string fileName, IProgress<int> progress)
         {
 
@@ -944,24 +984,13 @@ namespace CryptoTracker
 
         }
 
-        private void metroTabControl1_Selecting(object sender, TabControlCancelEventArgs e)
-        {
-            if (!e.TabPage.Enabled)
-            {
-                e.Cancel = true;
-            }
-        }
-
         /// <summary>
-        /// Open the donate form
+        /// Thread for initializing the form and data on startup, avoids perceived hangup when loading
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
+        public async void InitThread()
         {
-            DonateForm donate = new DonateForm();
-            donate.ShowDialog();
-            donate.Dispose();
+            var progress = new Progress<int>(progressPercent => loadBar.Value = progressPercent);
+            await Task.Run(() => Init(progress));
         }
     }
 }

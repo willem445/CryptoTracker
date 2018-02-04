@@ -86,6 +86,10 @@ namespace CryptoTracker
         }
 
         //Constructor***************************************************************************
+        /// <summary>
+        /// Create new price manager with progress reporting (start from thread)
+        /// </summary>
+        /// <param name="progress"></param>
         public PriceManager(IProgress<int> progress)
         {
             Thread getCoinNames = new Thread(new ThreadStart(GetAllCoinNames));
@@ -103,6 +107,22 @@ namespace CryptoTracker
             UpdatePriceData();
 
             progress.Report(60);
+        }
+
+        /// <summary>
+        /// Create new price manager 
+        /// </summary>
+        public PriceManager()
+        {
+            Thread getCoinNames = new Thread(new ThreadStart(GetAllCoinNames));
+            getCoinNames.Start();
+
+            //Parse data in documents folder
+            FileIO file = new FileIO();
+            trackedCoinList = file.ParseSavedData();
+
+            //Update prices based on parsed data
+            UpdatePriceData();
         }
 
         //Methods*******************************************************************************
