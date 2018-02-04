@@ -112,7 +112,7 @@ namespace CryptoTracker
             else if (exchange == "Kucoin")
             {
                 KucoinImport importKuCoin = new KucoinImport();
-                table = importKuCoin.ImportKucoinTradeData(fileName, progress);
+                table = importKuCoin.ImportKucoinTradeData(fileName);
             }
             else
             {

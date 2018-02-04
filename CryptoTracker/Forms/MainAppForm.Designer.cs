@@ -194,7 +194,7 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 1;
+            this.metroTabControl1.SelectedIndex = 0;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroTabControl1.TabIndex = 5;
@@ -227,9 +227,9 @@
             this.totalValueLabel.FontSize = MetroFramework.MetroLabelSize.Small;
             this.totalValueLabel.Location = new System.Drawing.Point(302, 394);
             this.totalValueLabel.Name = "totalValueLabel";
-            this.totalValueLabel.Size = new System.Drawing.Size(46, 15);
+            this.totalValueLabel.Size = new System.Drawing.Size(34, 15);
             this.totalValueLabel.TabIndex = 6;
-            this.totalValueLabel.Text = "$200.00";
+            this.totalValueLabel.Text = "$0.00";
             // 
             // metroLabel2
             // 
@@ -247,9 +247,9 @@
             this.totalInvestedLabel.FontSize = MetroFramework.MetroLabelSize.Small;
             this.totalInvestedLabel.Location = new System.Drawing.Point(185, 394);
             this.totalInvestedLabel.Name = "totalInvestedLabel";
-            this.totalInvestedLabel.Size = new System.Drawing.Size(46, 15);
+            this.totalInvestedLabel.Size = new System.Drawing.Size(34, 15);
             this.totalInvestedLabel.TabIndex = 8;
-            this.totalInvestedLabel.Text = "$200.00";
+            this.totalInvestedLabel.Text = "$0.00";
             // 
             // metroLabel4
             // 
@@ -267,9 +267,9 @@
             this.totalProfitLabel.FontSize = MetroFramework.MetroLabelSize.Small;
             this.totalProfitLabel.Location = new System.Drawing.Point(49, 394);
             this.totalProfitLabel.Name = "totalProfitLabel";
-            this.totalProfitLabel.Size = new System.Drawing.Size(46, 15);
+            this.totalProfitLabel.Size = new System.Drawing.Size(34, 15);
             this.totalProfitLabel.TabIndex = 10;
-            this.totalProfitLabel.Text = "$200.00";
+            this.totalProfitLabel.Text = "$0.00";
             // 
             // metroLabel6
             // 
