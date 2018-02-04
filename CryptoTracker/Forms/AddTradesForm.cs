@@ -104,8 +104,15 @@ namespace CryptoTracker
             bool error = false;
             GeneralImport import = new GeneralImport();
 
-
             DateTime date = addTradeCalender.SelectionStart.Date + dateTimePicker1.Value.TimeOfDay;
+            string exchange = "";
+            string tradeBase = "";
+            string trade = "";
+            string type = "";
+            float quantity = 0.0F;
+            float tradePrice = 0.0F;
+            float orderCost = 0.0F;
+            float netCost = 0.0F;
 
             //Datetime validation
             if (date > DateTime.Now)
@@ -122,6 +129,10 @@ namespace CryptoTracker
                 messageBox.ShowDialog();
                 error = true;
             }
+            else
+            {
+                exchange = exchange_CB.Text;
+            }
 
             //Trade pair data validation
             if (tradeBase_CB.SelectedIndex < 0)
@@ -130,6 +141,11 @@ namespace CryptoTracker
                 messageBox.ShowDialog();
                 error = true;
             }
+            else
+            {
+                tradeBase = allCoinNames[tradeBase_CB.SelectedIndex].Symbol;
+               trade = allCoinNames[tradeIndex].Symbol;
+            }
 
             //Type data validation
             if (type_CB.SelectedIndex < 0)
@@ -137,6 +153,10 @@ namespace CryptoTracker
                 MessageBoxForm messageBox = new MessageBoxForm("Select a trade type.");
                 messageBox.ShowDialog();
                 error = true;
+            }
+            else
+            {
+                type = type_CB.Text;
             }
 
             //Quantity data validation
@@ -147,6 +167,10 @@ namespace CryptoTracker
                 messageBox.ShowDialog();
                 error = true;
             }
+            else
+            {
+                quantity = (float)Convert.ToDouble(importQuantity_TB.Text);
+            }
 
             //Price data validation
             importPrice_TB.Text = importPrice_TB.Text.StripDollarSign();
@@ -156,20 +180,42 @@ namespace CryptoTracker
                 messageBox.ShowDialog();
                 error = true;
             }
+            else
+            {
+                tradePrice = (float)Convert.ToDouble(importPrice_TB.Text);
+                orderCost = tradePrice * quantity;
+                netCost = import.GetHistoricalUsdValue(date, tradeBase) * (quantity * tradePrice);
+            }
 
             if (!error)
             {
-                table.Rows.Add(date,
-                               exchange_CB.Text, 
-                               allCoinNames[tradeIndex].Symbol + "/" + allCoinNames[tradeBase_CB.SelectedIndex].Symbol, 
-                               type_CB.Text, 
-                               (float)Convert.ToDouble(importQuantity_TB.Text),
-                               (float)Convert.ToDouble(importPrice_TB.Text),
-                               (float)Convert.ToDouble(importQuantity_TB.Text) * (float)Convert.ToDouble(importPrice_TB.Text), 
-                               import.GetHistoricalUsdValue(date, allCoinNames[tradeBase_CB.SelectedIndex].Symbol) * ((float)Convert.ToDouble(importQuantity_TB.Text) * (float)Convert.ToDouble(importPrice_TB.Text)));
+                //Confirm trade
+                ConfirmAddTradeForm confirmTrade = new ConfirmAddTradeForm
+                (
+                    date, 
+                    quantity + " " + trade, 
+                    tradePrice + " " + tradeBase + " (" + (netCost/quantity).FloatToMonetary() + ")", 
+                    orderCost.ToString() + " " + tradeBase, 
+                    netCost.FloatToMonetary()
+                );
+                
+                if (confirmTrade.ShowDialog() == DialogResult.OK)
+                {
+                    table.Rows.Add
+                    (
+                        date,
+                        exchange,
+                        trade + "/" + tradeBase,
+                        type,
+                        quantity,
+                        tradePrice,
+                        orderCost,
+                        netCost
+                    );
 
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
             }
         }
     }

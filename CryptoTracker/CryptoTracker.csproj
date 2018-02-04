@@ -89,6 +89,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfirmAddTradeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfirmAddTradeForm.Designer.cs">
+      <DependentUpon>ConfirmAddTradeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MessageBoxForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,6 +147,9 @@
     <Compile Include="Forms\TrackNewCoinsForm.Designer.cs">
       <DependentUpon>TrackNewCoinsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ConfirmAddTradeForm.resx">
+      <DependentUpon>ConfirmAddTradeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\EditCoinForm.resx">
       <DependentUpon>EditCoinForm.cs</DependentUpon>
     </EmbeddedResource>
