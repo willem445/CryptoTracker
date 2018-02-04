@@ -74,6 +74,8 @@
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
+            this.loadBar = new MetroFramework.Controls.MetroProgressBar();
+            this.startUpStatusLabel = new MetroFramework.Controls.MetroLabel();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -192,8 +194,9 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 2;
+            this.metroTabControl1.SelectedIndex = 1;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
+            this.metroTabControl1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
             this.metroTabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.metroTabControl1_Selecting);
@@ -201,6 +204,8 @@
             // 
             // metroTabPage1
             // 
+            this.metroTabPage1.Controls.Add(this.startUpStatusLabel);
+            this.metroTabPage1.Controls.Add(this.loadBar);
             this.metroTabPage1.Controls.Add(this.totalValueLabel);
             this.metroTabPage1.Controls.Add(this.metroLabel2);
             this.metroTabPage1.Controls.Add(this.totalInvestedLabel);
@@ -344,7 +349,7 @@
             // 
             // filterTextBox
             // 
-            this.filterTextBox.Location = new System.Drawing.Point(655, 8);
+            this.filterTextBox.Location = new System.Drawing.Point(655, 9);
             this.filterTextBox.Name = "filterTextBox";
             this.filterTextBox.Size = new System.Drawing.Size(44, 23);
             this.filterTextBox.TabIndex = 7;
@@ -501,6 +506,22 @@
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
             // 
+            // loadBar
+            // 
+            this.loadBar.Location = new System.Drawing.Point(633, 395);
+            this.loadBar.Name = "loadBar";
+            this.loadBar.Size = new System.Drawing.Size(159, 23);
+            this.loadBar.TabIndex = 12;
+            // 
+            // startUpStatusLabel
+            // 
+            this.startUpStatusLabel.AutoSize = true;
+            this.startUpStatusLabel.Location = new System.Drawing.Point(482, 397);
+            this.startUpStatusLabel.Name = "startUpStatusLabel";
+            this.startUpStatusLabel.Size = new System.Drawing.Size(143, 19);
+            this.startUpStatusLabel.TabIndex = 13;
+            this.startUpStatusLabel.Text = "Reading saved trades...";
+            // 
             // MainAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -581,6 +602,8 @@
         private System.Windows.Forms.DataGridView dataGridView2;
         private MetroFramework.Controls.MetroProgressBar pBar;
         private MetroFramework.Controls.MetroButton undoTradesButton;
+        private MetroFramework.Controls.MetroLabel startUpStatusLabel;
+        private MetroFramework.Controls.MetroProgressBar loadBar;
     }
 }
 

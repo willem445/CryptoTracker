@@ -66,20 +66,32 @@ namespace CryptoTracker
 
             //TODO - Call from thread to avoid hangups when starting, show loading menu until fully started, currently getting thread access error when attempting, need to invoke all controls access
             //Init();
-            Thread init = new Thread(new ThreadStart(Init));
-            init.Start();
+            InitThread();
         }
 
         //Methods*******************************************************************************
+
+        public async void InitThread()
+        {
+            var progress = new Progress<int>(progressPercent => loadBar.Value = progressPercent);
+            await Task.Run(() => Init(progress));
+        }
 
         //General Methods
         /// <summary>
         /// Initializes form and data
         /// </summary>
-        private void Init()
+        private void Init(IProgress<int> progress)
         {
-            priceManager = new PriceManager();
-            ApplicationFormInitialize();
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Text = "Updating prices..."));
+            priceManager = new PriceManager(progress);
+            ApplicationFormInitialize(progress);
+            progress.Report(100);
+
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Visible = false));
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Enabled = false));
+            loadBar.Invoke(new Action(() => loadBar.Enabled = false));
+            loadBar.Invoke(new Action(() => loadBar.Visible= false));
         }
 
         /// <summary>
@@ -98,8 +110,10 @@ namespace CryptoTracker
         /// <summary>
         /// Initializes all controls on the form at startup
         /// </summary>
-        private void ApplicationFormInitialize()
+        private void ApplicationFormInitialize(IProgress<int> progress)
         {
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Text = "Reading saved trades..."));
+
             //Set datasource for dataGridView trades table
             FileIO file = new FileIO();
             DataTable temp = file.XmlToDatatable();
@@ -107,6 +121,9 @@ namespace CryptoTracker
             {
                 tableBindToDataGridView.Merge(temp);
             }
+
+            progress.Report(85);
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Text = "Configuring app..."));
 
             this.Invoke((MethodInvoker)delegate {
 
@@ -157,9 +174,12 @@ namespace CryptoTracker
                 }
             });
 
-
+            progress.Report(95);
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Text = "Updating ui..."));
 
             UpdateUI();
+
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Text = "Done"));
         }
 
         /// <summary>
