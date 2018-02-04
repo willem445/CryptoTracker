@@ -12,10 +12,21 @@ namespace CryptoTracker
 {
     public partial class MessageBoxForm : MetroFramework.Forms.MetroForm
     {
-        public MessageBoxForm(string message)
+        public MessageBoxForm(string message, bool cancelButtonEnabled = true)
         {
             InitializeComponent();
-            cancelButton.DialogResult = DialogResult.Cancel;
+
+
+            if (cancelButtonEnabled)
+            {
+                cancelButton.DialogResult = DialogResult.Cancel;
+            }
+            else
+            {
+                cancelButton.Enabled = false;
+                cancelButton.Visible = false;
+            }
+
        
             messageLabel.Text = message;
         }

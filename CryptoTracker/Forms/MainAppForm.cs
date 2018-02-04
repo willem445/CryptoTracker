@@ -723,7 +723,7 @@ namespace CryptoTracker
                 openFileDialog1.Multiselect = true;
                 openFileDialog1.Title = "Import trades from " + importSelect_CB.Text;
 
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     foreach (var item in openFileDialog1.FileNames)
                     {
@@ -741,27 +741,34 @@ namespace CryptoTracker
                         //Start new thread and wait until complete
                         temp = await Task.Run(() => ImportDataThread(exchange, file, progress));
 
-                        if (dataGridView2.RowCount > 0)
+                        if (temp != null)
                         {
-                            tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
-                            unsavedTradesDataTable.Merge(temp);
+                            if (dataGridView2.RowCount > 0)
+                            {
+                                tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
+                                unsavedTradesDataTable.Merge(temp);
+                            }
+                            else
+                            {
+                                tableBindToDataGridView.Merge(temp);
+                                unsavedTradesDataTable.Merge(temp);
+                            }
+
+                            //Enable save button if an import was successfull
+                            saveImportButton.Enabled = true;
+                            saveImportButton.Visible = true;
+                            dataGridView2.Refresh();
                         }
                         else
                         {
-                            tableBindToDataGridView.Merge(temp);
-                            unsavedTradesDataTable.Merge(temp);
+                            MessageBoxForm error = new MessageBoxForm("Excel document incorrect format.", false);
+                            error.ShowDialog();
+                            error.Dispose();
                         }
-
-
-                        dataGridView2.Refresh();
                     }
 
                     importButton.Enabled = true;
                     addButton.Enabled = true;
-
-                    //Enable save button if an import was successfull
-                    saveImportButton.Enabled = true;
-                    saveImportButton.Visible = true;
                 }
             }
         }
@@ -848,7 +855,8 @@ namespace CryptoTracker
             file.DataGridViewToXML(dataGridView2);
 
             importButton.Enabled = true;
-            saveImportButton.Enabled = true;
+            saveImportButton.Enabled = false;
+            saveImportButton.Visible = false;
             addButton.Enabled = true;
 
             updatePrices.Start();

@@ -110,6 +110,31 @@ namespace CryptoTracker
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exchange"></param>
+        /// <param name="colNames"></param>
+        /// <param name="excelData"></param>
+        /// <param name="headerRow"></param>
+        /// <returns></returns>
+        public bool ValidateDataFormat(string[] colNames, DataTable excelData, int headerRow = 0)
+        {
+            bool dataValid = true;
+
+            //Validate correct excel format before attempting to import
+            for (int j = 0; j < excelData.Columns.Count; j++)
+            {
+                if (excelData.Rows[headerRow][j].ToString() != colNames[j])
+                {
+                    dataValid = false;
+                    break;
+                }
+            }
+
+            return dataValid;
+        }
+
+        /// <summary>
         /// Gets the historical price of a coin based on timestamp
         /// </summary>
         /// <param name="date"></param>
