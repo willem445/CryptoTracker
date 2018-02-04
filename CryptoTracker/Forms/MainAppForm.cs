@@ -925,5 +925,17 @@ namespace CryptoTracker
                 e.Cancel = true;
             }
         }
+
+        /// <summary>
+        /// Open the donate form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DonateForm donate = new DonateForm();
+            donate.ShowDialog();
+            donate.Dispose();
+        }
     }
 }
