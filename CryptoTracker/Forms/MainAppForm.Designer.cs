@@ -61,6 +61,8 @@
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.pieChart1 = new LiveCharts.WinForms.PieChart();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.undoTradesButton = new MetroFramework.Controls.MetroButton();
+            this.pBar = new MetroFramework.Controls.MetroProgressBar();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.importSelect_CB = new MetroFramework.Controls.MetroComboBox();
             this.saveImportButton = new MetroFramework.Controls.MetroButton();
@@ -72,8 +74,6 @@
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
-            this.pBar = new MetroFramework.Controls.MetroProgressBar();
-            this.undoTradesButton = new MetroFramework.Controls.MetroButton();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -106,7 +106,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(20, 60);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(807, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(787, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -174,13 +174,13 @@
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // donateToolStripMenuItem
             // 
             this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
-            this.donateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.donateToolStripMenuItem.Text = "Donate";
             this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
             // 
@@ -192,7 +192,7 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 0;
+            this.metroTabControl1.SelectedIndex = 2;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -390,8 +390,28 @@
             this.metroTabPage3.Text = "Trades";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
             // 
+            // undoTradesButton
+            // 
+            this.undoTradesButton.Enabled = false;
+            this.undoTradesButton.Location = new System.Drawing.Point(375, 27);
+            this.undoTradesButton.Name = "undoTradesButton";
+            this.undoTradesButton.Size = new System.Drawing.Size(75, 25);
+            this.undoTradesButton.TabIndex = 16;
+            this.undoTradesButton.Text = "Undo";
+            this.undoTradesButton.Visible = false;
+            // 
+            // pBar
+            // 
+            this.pBar.FontSize = MetroFramework.MetroProgressBarSize.Small;
+            this.pBar.HideProgressText = false;
+            this.pBar.Location = new System.Drawing.Point(3, 402);
+            this.pBar.Name = "pBar";
+            this.pBar.Size = new System.Drawing.Size(774, 23);
+            this.pBar.TabIndex = 15;
+            // 
             // dataGridView2
             // 
+            this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Location = new System.Drawing.Point(3, 58);
@@ -480,25 +500,6 @@
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
-            // 
-            // pBar
-            // 
-            this.pBar.FontSize = MetroFramework.MetroProgressBarSize.Small;
-            this.pBar.HideProgressText = false;
-            this.pBar.Location = new System.Drawing.Point(3, 402);
-            this.pBar.Name = "pBar";
-            this.pBar.Size = new System.Drawing.Size(774, 23);
-            this.pBar.TabIndex = 15;
-            // 
-            // undoTradesButton
-            // 
-            this.undoTradesButton.Enabled = false;
-            this.undoTradesButton.Location = new System.Drawing.Point(375, 27);
-            this.undoTradesButton.Name = "undoTradesButton";
-            this.undoTradesButton.Size = new System.Drawing.Size(75, 25);
-            this.undoTradesButton.TabIndex = 16;
-            this.undoTradesButton.Text = "Undo";
-            this.undoTradesButton.Visible = false;
             // 
             // MainAppForm
             // 

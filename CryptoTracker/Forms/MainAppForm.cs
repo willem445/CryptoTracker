@@ -65,9 +65,9 @@ namespace CryptoTracker
             InitializeComponent();
 
             //TODO - Call from thread to avoid hangups when starting, show loading menu until fully started, currently getting thread access error when attempting, need to invoke all controls access
-            Init();
-            //Thread init = new Thread(new ThreadStart(Init));
-            //init.Start();
+            //Init();
+            Thread init = new Thread(new ThreadStart(Init));
+            init.Start();
         }
 
         //Methods*******************************************************************************
@@ -107,51 +107,57 @@ namespace CryptoTracker
             {
                 tableBindToDataGridView.Merge(temp);
             }
-            BindingSource source = new BindingSource();
-            source.DataSource = tableBindToDataGridView;
-            dataGridView2.DataSource = source;
 
-            //Configure the autoupdate timer
-            updatePrices = new System.Timers.Timer();
-            updatePrices.Interval = 30000; //30 seconds
-            updatePrices.Elapsed += new ElapsedEventHandler(UpdatePrices);
-            updatePrices.Start();
+            this.Invoke((MethodInvoker)delegate {
 
-            //Configure the tooltip
-            toolTip.AutoPopDelay = 15000;
-            toolTip.InitialDelay = 1000;
-            toolTip.ReshowDelay = 500;
-            toolTip.ShowAlways = true;
-            toolTip.Popup += ToolTip_Popup;
+                BindingSource source = new BindingSource();
+                source.DataSource = tableBindToDataGridView;
+                dataGridView2.DataSource = source;
 
-            //Configure portfolio filter
-            filter_CB.Items.Add("Greater Than");
-            filter_CB.Items.Add("Less Than");
+                //Configure the autoupdate timer
+                updatePrices = new System.Timers.Timer();
+                updatePrices.Interval = 30000; //30 seconds
+                updatePrices.Elapsed += new ElapsedEventHandler(UpdatePrices);
+                updatePrices.Start();
 
-            //Initialize the new line labels
-            AddNewLine();
+                //Configure the tooltip
+                toolTip.AutoPopDelay = 15000;
+                toolTip.InitialDelay = 1000;
+                toolTip.ReshowDelay = 500;
+                toolTip.ShowAlways = true;
+                toolTip.Popup += ToolTip_Popup;
 
-            //Configure import trades tab
-            foreach (var item in priceManager.AllCoinNames)
-            {
-                selectCoin_CB.Items.Add(item.Name);
-            }
-            selectCoin_CB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            selectCoin_CB.AutoCompleteSource = AutoCompleteSource.ListItems;
-            selectCoin_CB.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                //Configure portfolio filter
+                filter_CB.Items.Add("Greater Than");
+                filter_CB.Items.Add("Less Than");
 
-            saveImportButton.Enabled = false;
-            saveImportButton.Visible = false;
+                //Initialize the new line labels
+                AddNewLine();
 
-            importSelect_CB.Items.Add("Binance");
-            importSelect_CB.Items.Add("Coinbase");
-            importSelect_CB.Items.Add("Kucoin");
+                //Configure import trades tab
+                foreach (var item in priceManager.AllCoinNames)
+                {
+                    selectCoin_CB.Items.Add(item.Name);
+                }
+                selectCoin_CB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+                selectCoin_CB.AutoCompleteSource = AutoCompleteSource.ListItems;
+                selectCoin_CB.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
 
-            //Add controls for each parsed coin to form
-            foreach (var item in priceManager.TrackedCoinList)
-            {
-                AddNewCoinToFlowControl(item);
-            }
+                saveImportButton.Enabled = false;
+                saveImportButton.Visible = false;
+
+                importSelect_CB.Items.Add("Binance");
+                importSelect_CB.Items.Add("Coinbase");
+                importSelect_CB.Items.Add("Kucoin");
+
+                //Add controls for each parsed coin to form
+                foreach (var item in priceManager.TrackedCoinList)
+                {
+                    AddNewCoinToFlowControl(item);
+                }
+            });
+
+
 
             UpdateUI();
         }
