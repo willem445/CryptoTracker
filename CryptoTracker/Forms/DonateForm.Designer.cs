@@ -88,7 +88,7 @@
             // 
             this.stellarLink.Location = new System.Drawing.Point(69, 165);
             this.stellarLink.Name = "stellarLink";
-            this.stellarLink.Size = new System.Drawing.Size(502, 23);
+            this.stellarLink.Size = new System.Drawing.Size(478, 23);
             this.stellarLink.TabIndex = 8;
             this.stellarLink.Text = "GAD5K3AQB6MOGG47MB5ZOBY5YMFMHFSWMNBLMWWKESNWS67REWUVZHZJ";
             this.stellarLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
