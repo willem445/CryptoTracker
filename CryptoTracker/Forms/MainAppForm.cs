@@ -44,6 +44,13 @@ namespace CryptoTracker
             Profit,
             ProfitPercent
         }
+        public enum TabControlNames
+        {
+            PRICETRACKING,
+            PORTFOLIO,
+            TRADES,
+            COININFO
+        }
 
         //Fields********************************************************************************
         ToolTip toolTip = new ToolTip();
@@ -65,6 +72,15 @@ namespace CryptoTracker
             InitializeComponent();
 
             metroTabControl1.SelectedIndex = 0;
+
+            //Disable portfolio tab until data loaded
+            int j = 0;
+            foreach (TabPage tab in metroTabControl1.TabPages)
+            {
+                if (j == (int)MainAppForm.TabControlNames.PORTFOLIO)
+                    tab.Enabled = false;
+                j++;
+            }
 
             //Start thread that initializes data and form on startup
             InitThread();
@@ -166,6 +182,16 @@ namespace CryptoTracker
                 foreach (var item in priceManager.TrackedCoinList)
                 {
                     AddNewCoinToFlowControl(item);
+                }
+
+                //Reenable portfolio tab after loaded
+                int j = 0;
+                foreach (TabPage tab in metroTabControl1.TabPages)
+                {
+                    if (j != (int)MainAppForm.TabControlNames.PORTFOLIO)
+                        tab.Enabled = false;
+                    tab.Invoke(new Action(() => tab.Enabled = true));
+                    j++;
                 }
             });
 
@@ -596,76 +622,88 @@ namespace CryptoTracker
         /// </summary>
         private void PortfolioSelected()
         {
-            //Func<ChartPoint, string> labelPoint = chartPoint =>
-            //    string.Format("({0:P})", chartPoint.Participation);
+            Func<ChartPoint, string> labelPoint = chartPoint =>
+                string.Format("({0:P})", chartPoint.Participation);
 
-            //pieChart1.Series.Clear();
-            //listView1.Items.Clear();
+            pieChart1.Series.Clear();
+            listView1.Items.Clear();
 
-            //for (int i = 0; i < priceManager.TrackedCoinList.Count; i++)
-            //{
-            //    double percent = (double)priceManager.TrackedCoinList[i].Value / priceManager.TotalInvestment;
+            for (int i = 0; i < priceManager.TrackedCoinList.Count; i++)
+            {
+                double percent = (double)priceManager.TrackedCoinList[i].Value / priceManager.TotalInvestment;
 
-            //    if (filterTextBox.Text == "" || filter_CB.SelectedIndex == -1)
-            //    {
-            //        pieChart1.Series.Add(new PieSeries
-            //        {
-            //            Title = coinNamesList[i],
-            //            Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
-            //            DataLabels = true,
-            //            LabelPoint = labelPoint,
-            //            //LabelPosition = PieLabelPosition.OutsideSlice,
-            //        });
+                if (filterTextBox.Text == "" || filter_CB.SelectedIndex == -1)
+                {
+                    pieChart1.Series.Add(new PieSeries
+                    {
+                        Title = priceManager.TrackedCoinList[i].Name,
+                        Values = new ChartValues<double> { percent },
+                        DataLabels = true,
+                        LabelPoint = labelPoint,
+                        //LabelPosition = PieLabelPosition.OutsideSlice,
+                    });
 
-            //        string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
-            //            "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+                    string[] values =
+                    {
+                        priceManager.TrackedCoinList[i].QuantityToString,
+                        priceManager.TrackedCoinList[i].Value.Value.FloatToMonetary(),
+                        ((float)(percent*100)).FloatToPercent()
+                    };
 
-            //        listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
-            //    }
-            //    else if (filter_CB.SelectedIndex == 1)
-            //    {
-            //        if (percent * 100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
-            //        {
-            //            pieChart1.Series.Add(new PieSeries
-            //            {
-            //                Title = coinNamesList[i],
-            //                Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
-            //                DataLabels = true,
-            //                LabelPoint = labelPoint,
-            //                //LabelPosition = PieLabelPosition.OutsideSlice,
-            //            });
+                    listView1.Items.Add(priceManager.TrackedCoinList[i].Name).SubItems.AddRange(values);
+                }
+                else if (filter_CB.SelectedIndex == 1)
+                {
+                    if (percent * 100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
+                    {
+                        pieChart1.Series.Add(new PieSeries
+                        {
+                            Title = priceManager.TrackedCoinList[i].Name,
+                            Values = new ChartValues<double> { percent },
+                            DataLabels = true,
+                            LabelPoint = labelPoint,
+                            //LabelPosition = PieLabelPosition.OutsideSlice,
+                        });
 
-            //            string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
-            //            "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+                        string[] values =
+                        {
+                        priceManager.TrackedCoinList[i].QuantityToString,
+                        priceManager.TrackedCoinList[i].Value.Value.FloatToMonetary(),
+                        ((float)(percent*100)).FloatToPercent()
+                    };
 
-            //            listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
-            //        }
-            //    }
-            //    else if (filter_CB.SelectedIndex == 0)
-            //    {
-            //        if (percent * 100 > Convert.ToDouble(filterTextBox.Text))
-            //        {
-            //            pieChart1.Series.Add(new PieSeries
-            //            {
-            //                Title = coinNamesList[i],
-            //                Values = new ChartValues<double> { (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue },
-            //                DataLabels = true,
-            //                LabelPoint = labelPoint,
-            //                //LabelPosition = PieLabelPosition.OutsideSlice,
-            //            });
+                        listView1.Items.Add(priceManager.TrackedCoinList[i].Name).SubItems.AddRange(values);
+                    }
+                }
+                else if (filter_CB.SelectedIndex == 0)
+                {
+                    if (percent * 100 > Convert.ToDouble(filterTextBox.Text))
+                    {
+                        pieChart1.Series.Add(new PieSeries
+                        {
+                            Title = priceManager.TrackedCoinList[i].Name,
+                            Values = new ChartValues<double> { percent },
+                            DataLabels = true,
+                            LabelPoint = labelPoint,
+                            //LabelPosition = PieLabelPosition.OutsideSlice,
+                        });
 
-            //            string[] values = {priceManager.valueArrayList[i][(int)PriceManager.rowNames.Quantity].ToString(),
-            //            "$" + priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value].Value.ToString("0.00"), (percent*100).ToString("0.00") + "%" };
+                        string[] values =
+                        {
+                        priceManager.TrackedCoinList[i].QuantityToString,
+                        priceManager.TrackedCoinList[i].Value.Value.FloatToMonetary(),
+                        ((float)(percent*100)).FloatToPercent()
+                    };
 
-            //            listView1.Items.Add(coinNamesList[i]).SubItems.AddRange(values);
-            //        }
-            //    }
-            //}
+                        listView1.Items.Add(priceManager.TrackedCoinList[i].Name).SubItems.AddRange(values);
+                    }
+                }
+            }
 
-            //pieChart1.LegendLocation = LegendLocation.Right;
-            //pieChart1.HoverPushOut = 10;
-            //pieChart1.ForeColor = Color.Black;
-            //pieChart1.DataTooltip = null;
+            pieChart1.LegendLocation = LegendLocation.Right;
+            pieChart1.HoverPushOut = 10;
+            pieChart1.ForeColor = Color.Black;
+            pieChart1.DataTooltip = null;
         }
 
         /// <summary>
