@@ -602,9 +602,9 @@ namespace CryptoTracker
             //pieChart1.Series.Clear();
             //listView1.Items.Clear();
 
-            //for (int i = 0; i < coinCount; i++)
+            //for (int i = 0; i < priceManager.TrackedCoinList.Count; i++)
             //{
-            //    double percent = (double)priceManager.valueArrayList[i][(int)PriceManager.rowNames.Value] / (double)priceManager.totalValue;
+            //    double percent = (double)priceManager.TrackedCoinList[i].Value / priceManager.TotalInvestment;
 
             //    if (filterTextBox.Text == "" || filter_CB.SelectedIndex == -1)
             //    {
@@ -624,7 +624,7 @@ namespace CryptoTracker
             //    }
             //    else if (filter_CB.SelectedIndex == 1)
             //    {
-            //        if (percent*100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
+            //        if (percent * 100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
             //        {
             //            pieChart1.Series.Add(new PieSeries
             //            {

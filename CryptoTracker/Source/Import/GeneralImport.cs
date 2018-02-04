@@ -80,6 +80,10 @@ namespace CryptoTracker
                 KucoinImport importKuCoin = new KucoinImport();
                 table = importKuCoin.ImportKucoinTradeData(fileName, progress);
             }
+            else
+            {
+                table = null;
+            }
 
             return table;
         }
@@ -105,6 +109,15 @@ namespace CryptoTracker
                 CoinbaseImport importCoinbase = new CoinbaseImport();
                 table = importCoinbase.ImportCoinbaseTradeData(fileName);
             }
+            else if (exchange == "Kucoin")
+            {
+                KucoinImport importKuCoin = new KucoinImport();
+                table = importKuCoin.ImportKucoinTradeData(fileName, progress);
+            }
+            else
+            {
+                table = null;
+            }
 
             return table;
         }
@@ -117,7 +130,7 @@ namespace CryptoTracker
         /// <param name="excelData"></param>
         /// <param name="headerRow"></param>
         /// <returns></returns>
-        public bool ValidateDataFormat(string[] colNames, DataTable excelData, int headerRow = 0)
+        protected bool ValidateDataFormat(string[] colNames, DataTable excelData, int headerRow = 0)
         {
             bool dataValid = true;
 
@@ -140,17 +153,17 @@ namespace CryptoTracker
         /// <param name="date"></param>
         /// <param name="currency"></param>
         /// <returns></returns>
-        public float GetHistoricalUsdValue(DateTime date, string currency)
+        public float GetHistoricalUsdValue(DateTime date, string currencySymbol)
         {
             //TODO - return null float if trying to access api for non existent coin
-            string input = "https://min-api.cryptocompare.com/data/pricehistorical?fsym=" + currency + "&tsyms=USD&ts=" + date.DateTimeToUNIX().ToString();
+            string input = "https://min-api.cryptocompare.com/data/pricehistorical?fsym=" + currencySymbol + "&tsyms=USD&ts=" + date.DateTimeToUNIX().ToString();
             float price = 0.0F;
 
             //Connect to API
             var cli = new System.Net.WebClient();
             string prices = cli.DownloadString(input);
             dynamic results = (JObject)JsonConvert.DeserializeObject<dynamic>(prices);
-            price = (float)Convert.ToDouble((JValue)results[currency]["USD"]);
+            price = (float)Convert.ToDouble((JValue)results[currencySymbol]["USD"]);
 
             return price;
         }
