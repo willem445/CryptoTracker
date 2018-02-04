@@ -75,6 +75,11 @@ namespace CryptoTracker
                 CoinbaseImport importCoinbase = new CoinbaseImport();
                 table = importCoinbase.ImportCoinbaseTradeData(fileName, progress);
             }
+            else if (exchange == "Kucoin")
+            {
+                KucoinImport importKuCoin = new KucoinImport();
+                table = importKuCoin.ImportKucoinTradeData(fileName, progress);
+            }
 
             return table;
         }

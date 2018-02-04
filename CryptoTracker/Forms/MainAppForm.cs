@@ -145,6 +145,7 @@ namespace CryptoTracker
 
             importSelect_CB.Items.Add("Binance");
             importSelect_CB.Items.Add("Coinbase");
+            importSelect_CB.Items.Add("Kucoin");
 
             //Add controls for each parsed coin to form
             foreach (var item in priceManager.TrackedCoinList)
@@ -711,49 +712,57 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private async void importButton_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            if (importSelect_CB.SelectedIndex >= 0)
+            {
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.InitialDirectory = @"C:\Users\Willem\Desktop";
-            openFileDialog1.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
+                openFileDialog1.InitialDirectory = @"C:\Users\Willem\Desktop";
+                openFileDialog1.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm";
+                openFileDialog1.FilterIndex = 2;
+                openFileDialog1.RestoreDirectory = true;
+                openFileDialog1.Multiselect = true;
+                openFileDialog1.Title = "Import trades from " + importSelect_CB.Text;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                string file = openFileDialog1.FileName;
-                string exchange = importSelect_CB.Text;
-
-                DataTable temp = new DataTable();
-
-                importButton.Enabled = false;
-                saveImportButton.Enabled = false;
-                addButton.Enabled = false;
-
-                var progress = new Progress<int>(progressPercent => pBar.Value = progressPercent);
-
-                //Start new thread and wait until complete
-                temp = await Task.Run(() => ImportDataThread(exchange, file, progress));
-
-                if (dataGridView2.RowCount > 0)
                 {
-                    tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
-                    unsavedTradesDataTable.Merge(temp);
+                    foreach (var item in openFileDialog1.FileNames)
+                    {
+                        string file = item;
+                        string exchange = importSelect_CB.Text;
+
+                        DataTable temp = new DataTable();
+
+                        importButton.Enabled = false;
+                        saveImportButton.Enabled = false;
+                        addButton.Enabled = false;
+
+                        var progress = new Progress<int>(progressPercent => pBar.Value = progressPercent);
+
+                        //Start new thread and wait until complete
+                        temp = await Task.Run(() => ImportDataThread(exchange, file, progress));
+
+                        if (dataGridView2.RowCount > 0)
+                        {
+                            tableBindToDataGridView.Merge(temp, true, MissingSchemaAction.Ignore);
+                            unsavedTradesDataTable.Merge(temp);
+                        }
+                        else
+                        {
+                            tableBindToDataGridView.Merge(temp);
+                            unsavedTradesDataTable.Merge(temp);
+                        }
+
+
+                        dataGridView2.Refresh();
+                    }
+
+                    importButton.Enabled = true;
+                    addButton.Enabled = true;
+
+                    //Enable save button if an import was successfull
+                    saveImportButton.Enabled = true;
+                    saveImportButton.Visible = true;
                 }
-                else
-                {
-                    tableBindToDataGridView.Merge(temp);
-                    unsavedTradesDataTable.Merge(temp);
-                }
-
-
-                dataGridView2.Refresh();
-
-                importButton.Enabled = true;
-                addButton.Enabled = true;
-
-                //Enable save button if an import was successfull
-                saveImportButton.Enabled = true;
-                saveImportButton.Visible = true;
             }
         }
 
@@ -780,12 +789,19 @@ namespace CryptoTracker
             List<string> unTrackedCoins = new List<string>();
             for (int i = 0; i < unsavedTradesDataTable.Rows.Count; i++)
             {
+                //TODO - Refactor how this peice of code functions
                 string coin = unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[0];
-                if (!trackedCoins.Contains(coin))
+                string coinBase = unsavedTradesDataTable.Rows[i][2].ToString().Split('/')[1];
+                if (!trackedCoins.Contains(coin) || (!trackedCoins.Contains(coinBase) && coinBase != "USD"))
                 {
                     if (!unTrackedCoins.Contains(coin))
                     {
                         unTrackedCoins.Add(coin);
+                    }
+
+                    if (!unTrackedCoins.Contains(coinBase) && coinBase != "USD" && !trackedCoins.Contains(coinBase))
+                    {
+                        unTrackedCoins.Add(coinBase);
                     }
                 }
             }

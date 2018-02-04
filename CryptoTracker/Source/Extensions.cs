@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,16 @@ namespace CryptoTracker
         public static string FloatToPercent(this float s)
         {
             return s.ToString("#,##0.#") + "%";
+        }
+
+        /// <summary>
+        /// Parses a float value from an input string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static float ParseFloatFromString(this string s)
+        {
+            return float.Parse(s, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
