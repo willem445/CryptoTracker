@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CryptoTracker
 {
-    class BinanceImport : GeneralImport
+    public class BinanceImport : GeneralImport
     {
         //Enumerations***********************************************************************************
         enum BinanceColumns
