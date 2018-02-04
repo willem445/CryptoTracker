@@ -358,8 +358,8 @@ namespace CryptoTracker
                 if (File.Exists(path))
                 {
                     //Sample pixel color
-                    int x4 = 16;
-                    int y = 16;
+                    int x4 = 14;
+                    int y = 14;
 
                     Bitmap b = new Bitmap(path);
                     Color x = b.GetPixel(x4, y);
