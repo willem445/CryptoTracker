@@ -43,6 +43,8 @@
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.startUpStatusLabel = new MetroFramework.Controls.MetroLabel();
+            this.loadBar = new MetroFramework.Controls.MetroProgressBar();
             this.totalValueLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.totalInvestedLabel = new MetroFramework.Controls.MetroLabel();
@@ -57,7 +59,6 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.filter_CB = new MetroFramework.Controls.MetroComboBox();
-            this.filterTextBox = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.pieChart1 = new LiveCharts.WinForms.PieChart();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
@@ -74,8 +75,8 @@
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
-            this.loadBar = new MetroFramework.Controls.MetroProgressBar();
-            this.startUpStatusLabel = new MetroFramework.Controls.MetroLabel();
+            this.metroScrollBar1 = new MetroFramework.Controls.MetroScrollBar();
+            this.filterPercentLabel = new MetroFramework.Controls.MetroLabel();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -194,7 +195,7 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 0;
+            this.metroTabControl1.SelectedIndex = 1;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroTabControl1.TabIndex = 5;
@@ -220,6 +221,22 @@
             this.metroTabPage1.TabIndex = 0;
             this.metroTabPage1.Text = "Price Tracking";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
+            // 
+            // startUpStatusLabel
+            // 
+            this.startUpStatusLabel.AutoSize = true;
+            this.startUpStatusLabel.Location = new System.Drawing.Point(482, 397);
+            this.startUpStatusLabel.Name = "startUpStatusLabel";
+            this.startUpStatusLabel.Size = new System.Drawing.Size(143, 19);
+            this.startUpStatusLabel.TabIndex = 13;
+            this.startUpStatusLabel.Text = "Reading saved trades...";
+            // 
+            // loadBar
+            // 
+            this.loadBar.Location = new System.Drawing.Point(633, 395);
+            this.loadBar.Name = "loadBar";
+            this.loadBar.Size = new System.Drawing.Size(159, 23);
+            this.loadBar.TabIndex = 12;
             // 
             // totalValueLabel
             // 
@@ -283,10 +300,11 @@
             // 
             // metroTabPage2
             // 
+            this.metroTabPage2.Controls.Add(this.filterPercentLabel);
+            this.metroTabPage2.Controls.Add(this.metroScrollBar1);
             this.metroTabPage2.Controls.Add(this.metroLabel3);
             this.metroTabPage2.Controls.Add(this.listView1);
             this.metroTabPage2.Controls.Add(this.filter_CB);
-            this.metroTabPage2.Controls.Add(this.filterTextBox);
             this.metroTabPage2.Controls.Add(this.metroLabel1);
             this.metroTabPage2.Controls.Add(this.pieChart1);
             this.metroTabPage2.HorizontalScrollbarBarColor = true;
@@ -300,7 +318,7 @@
             // metroLabel3
             // 
             this.metroLabel3.AutoSize = true;
-            this.metroLabel3.Location = new System.Drawing.Point(700, 10);
+            this.metroLabel3.Location = new System.Drawing.Point(701, 11);
             this.metroLabel3.Name = "metroLabel3";
             this.metroLabel3.Size = new System.Drawing.Size(20, 19);
             this.metroLabel3.TabIndex = 10;
@@ -313,9 +331,9 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.listView1.Location = new System.Drawing.Point(486, 39);
+            this.listView1.Location = new System.Drawing.Point(503, 39);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(291, 367);
+            this.listView1.Size = new System.Drawing.Size(274, 367);
             this.listView1.TabIndex = 9;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -341,25 +359,17 @@
             this.filter_CB.FontSize = MetroFramework.MetroLinkSize.Small;
             this.filter_CB.FormattingEnabled = true;
             this.filter_CB.ItemHeight = 19;
-            this.filter_CB.Location = new System.Drawing.Point(556, 8);
+            this.filter_CB.Location = new System.Drawing.Point(573, 8);
             this.filter_CB.Name = "filter_CB";
             this.filter_CB.Size = new System.Drawing.Size(93, 25);
             this.filter_CB.TabIndex = 8;
             this.filter_CB.SelectedIndexChanged += new System.EventHandler(this.filter_CB_SelectedIndexChanged);
             // 
-            // filterTextBox
-            // 
-            this.filterTextBox.Location = new System.Drawing.Point(655, 9);
-            this.filterTextBox.Name = "filterTextBox";
-            this.filterTextBox.Size = new System.Drawing.Size(44, 23);
-            this.filterTextBox.TabIndex = 7;
-            this.filterTextBox.TextChanged += new System.EventHandler(this.filterTextBox_TextChanged);
-            // 
             // metroLabel1
             // 
             this.metroLabel1.AutoSize = true;
             this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel1.Location = new System.Drawing.Point(486, 12);
+            this.metroLabel1.Location = new System.Drawing.Point(503, 12);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(47, 19);
             this.metroLabel1.TabIndex = 5;
@@ -367,8 +377,8 @@
             // 
             // pieChart1
             // 
-            this.pieChart1.BackColor = System.Drawing.Color.White;
-            this.pieChart1.ForeColor = System.Drawing.Color.Black;
+            this.pieChart1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.pieChart1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.pieChart1.Location = new System.Drawing.Point(3, 12);
             this.pieChart1.Name = "pieChart1";
             this.pieChart1.Size = new System.Drawing.Size(477, 394);
@@ -506,21 +516,25 @@
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
             // 
-            // loadBar
+            // metroScrollBar1
             // 
-            this.loadBar.Location = new System.Drawing.Point(633, 395);
-            this.loadBar.Name = "loadBar";
-            this.loadBar.Size = new System.Drawing.Size(159, 23);
-            this.loadBar.TabIndex = 12;
+            this.metroScrollBar1.Location = new System.Drawing.Point(486, 12);
+            this.metroScrollBar1.MouseWheelBarPartitions = 99;
+            this.metroScrollBar1.Name = "metroScrollBar1";
+            this.metroScrollBar1.Orientation = MetroFramework.Controls.MetroScrollOrientation.Vertical;
+            this.metroScrollBar1.Size = new System.Drawing.Size(10, 394);
+            this.metroScrollBar1.TabIndex = 6;
+            this.metroScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.metroScrollBar1_Scroll);
             // 
-            // startUpStatusLabel
+            // filterPercentLabel
             // 
-            this.startUpStatusLabel.AutoSize = true;
-            this.startUpStatusLabel.Location = new System.Drawing.Point(482, 397);
-            this.startUpStatusLabel.Name = "startUpStatusLabel";
-            this.startUpStatusLabel.Size = new System.Drawing.Size(143, 19);
-            this.startUpStatusLabel.TabIndex = 13;
-            this.startUpStatusLabel.Text = "Reading saved trades...";
+            this.filterPercentLabel.AutoSize = true;
+            this.filterPercentLabel.Location = new System.Drawing.Point(675, 11);
+            this.filterPercentLabel.Name = "filterPercentLabel";
+            this.filterPercentLabel.Size = new System.Drawing.Size(30, 19);
+            this.filterPercentLabel.TabIndex = 11;
+            this.filterPercentLabel.Text = "100";
+            this.filterPercentLabel.TextChanged += new System.EventHandler(this.filterPercentLabel_TextChanged);
             // 
             // MainAppForm
             // 
@@ -588,7 +602,6 @@
         private LiveCharts.WinForms.PieChart pieChart1;
         private MetroFramework.Controls.MetroLabel metroLabel1;
         private MetroFramework.Controls.MetroComboBox filter_CB;
-        private MetroFramework.Controls.MetroTextBox filterTextBox;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
@@ -604,6 +617,8 @@
         private MetroFramework.Controls.MetroButton undoTradesButton;
         private MetroFramework.Controls.MetroLabel startUpStatusLabel;
         private MetroFramework.Controls.MetroProgressBar loadBar;
+        private MetroFramework.Controls.MetroScrollBar metroScrollBar1;
+        private MetroFramework.Controls.MetroLabel filterPercentLabel;
     }
 }
 

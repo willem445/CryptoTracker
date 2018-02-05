@@ -158,6 +158,7 @@ namespace CryptoTracker
                 //Configure portfolio filter
                 filter_CB.Items.Add("Greater Than");
                 filter_CB.Items.Add("Less Than");
+                filter_CB.SelectedIndex = 1;
 
                 //Initialize the new line labels
                 AddNewLine();
@@ -632,7 +633,7 @@ namespace CryptoTracker
             {
                 double percent = (double)priceManager.TrackedCoinList[i].Value / priceManager.TotalInvestment;
 
-                if (filterTextBox.Text == "" || filter_CB.SelectedIndex == -1)
+                if (filterPercentLabel.Text == "" || filter_CB.SelectedIndex == -1)
                 {
                     pieChart1.Series.Add(new PieSeries
                     {
@@ -654,7 +655,7 @@ namespace CryptoTracker
                 }
                 else if (filter_CB.SelectedIndex == 1)
                 {
-                    if (percent * 100 < Convert.ToDouble(filterTextBox.Text)) //TODO - If entering two periods, get error
+                    if (percent * 100 < Convert.ToDouble(filterPercentLabel.Text)) //TODO - If entering two periods, get error
                     {
                         pieChart1.Series.Add(new PieSeries
                         {
@@ -677,7 +678,7 @@ namespace CryptoTracker
                 }
                 else if (filter_CB.SelectedIndex == 0)
                 {
-                    if (percent * 100 > Convert.ToDouble(filterTextBox.Text))
+                    if (percent * 100 > Convert.ToDouble(filterPercentLabel.Text))
                     {
                         pieChart1.Series.Add(new PieSeries
                         {
@@ -711,9 +712,9 @@ namespace CryptoTracker
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void filterTextBox_TextChanged(object sender, EventArgs e)
+        private void filterPercentLabel_TextChanged(object sender, EventArgs e)
         {
-            if (filterTextBox.Text.IsNumeric() && filterTextBox.Text != "." && filterTextBox.Text != "" && filter_CB.SelectedIndex != -1)
+            if (filterPercentLabel.Text.IsNumeric() && filterPercentLabel.Text != "." && filterPercentLabel.Text != "" && filter_CB.SelectedIndex != -1)
             {
                 PortfolioSelected();
             }
@@ -726,7 +727,7 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void filter_CB_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (filterTextBox.Text.IsNumeric() && filterTextBox.Text != "." && filterTextBox.Text != "" && filter_CB.SelectedIndex != -1)
+            if (filterPercentLabel.Text.IsNumeric() && filterPercentLabel.Text != "." && filterPercentLabel.Text != "" && filter_CB.SelectedIndex != -1)
             {
                 PortfolioSelected();
             }
@@ -749,7 +750,27 @@ namespace CryptoTracker
                     lvw.BackColor = Color.LightGreen;
                 }
             }
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void metroScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+            int value = (100 - metroScrollBar1.Value);
+
+            if (filter_CB.SelectedIndex == 1 && value > 0)
+            {
+                filterPercentLabel.Text = (100 - metroScrollBar1.Value).ToString();
+            }
+            else
+            {
+                filterPercentLabel.Text = "1";
+            }
+ 
+            Console.WriteLine(metroScrollBar1.Value);
         }
 
         /// <summary>
@@ -1030,5 +1051,9 @@ namespace CryptoTracker
             var progress = new Progress<int>(progressPercent => loadBar.Value = progressPercent);
             await Task.Run(() => Init(progress));
         }
+
+
+
+
     }
 }
