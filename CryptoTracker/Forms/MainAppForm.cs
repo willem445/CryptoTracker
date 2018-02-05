@@ -71,6 +71,18 @@ namespace CryptoTracker
         {
             InitializeComponent();
 
+            //Start thread that initializes data and form on startup
+            Init();
+        }
+
+        //Methods*******************************************************************************
+
+        //General Methods
+        /// <summary>
+        /// Initializes form and data
+        /// </summary>
+        public async void Init()
+        {
             metroTabControl1.SelectedIndex = 0;
 
             //Disable portfolio tab until data loaded
@@ -82,27 +94,8 @@ namespace CryptoTracker
                 j++;
             }
 
-            //Start thread that initializes data and form on startup
-            InitThread();
-        }
-
-        //Methods*******************************************************************************
-
-        //General Methods
-        /// <summary>
-        /// Initializes form and data
-        /// </summary>
-        private void Init(IProgress<int> progress)
-        {
-            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Text = "Updating prices..."));
-            priceManager = new PriceManager(progress);
-            ApplicationFormInitialize(progress);
-            progress.Report(100);
-
-            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Visible = false));
-            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Enabled = false));
-            loadBar.Invoke(new Action(() => loadBar.Enabled = false));
-            loadBar.Invoke(new Action(() => loadBar.Visible= false));
+            var progress = new Progress<int>(progressPercent => loadBar.Value = progressPercent);
+            await Task.Run(() => InitThread(progress));
         }
 
         /// <summary>
@@ -708,7 +701,7 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Updates the pie chart when filter parameters change
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -721,7 +714,7 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Updates the pie chart when filter parameters change
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -734,7 +727,7 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Highlights the corresponding row in list view
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="chartPoint"></param>
@@ -753,7 +746,7 @@ namespace CryptoTracker
         }
 
         /// <summary>
-        /// 
+        /// Scroll bar to adjust the filter percentage
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -761,7 +754,7 @@ namespace CryptoTracker
         {
             int value = (100 - metroScrollBar1.Value);
 
-            if (filter_CB.SelectedIndex == 1 && value > 0)
+            if (filter_CB.SelectedIndex == 1 && value > 0 || filter_CB.SelectedIndex == 0)
             {
                 filterPercentLabel.Text = (100 - metroScrollBar1.Value).ToString();
             }
@@ -785,8 +778,6 @@ namespace CryptoTracker
                 e.Cancel = true;
             }
         }
-
-
 
         //Trades Tab***************************************************************************
         /// <summary>
@@ -1046,14 +1037,18 @@ namespace CryptoTracker
         /// <summary>
         /// Thread for initializing the form and data on startup, avoids perceived hangup when loading
         /// </summary>
-        public async void InitThread()
+        private void InitThread(IProgress<int> progress)
         {
-            var progress = new Progress<int>(progressPercent => loadBar.Value = progressPercent);
-            await Task.Run(() => Init(progress));
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Text = "Updating prices..."));
+            priceManager = new PriceManager(progress);
+            ApplicationFormInitialize(progress);
+            progress.Report(100);
+
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Visible = false));
+            startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Enabled = false));
+            loadBar.Invoke(new Action(() => loadBar.Enabled = false));
+            loadBar.Invoke(new Action(() => loadBar.Visible = false));
         }
-
-
-
 
     }
 }

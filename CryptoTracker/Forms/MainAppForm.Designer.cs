@@ -195,9 +195,8 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 1;
+            this.metroTabControl1.SelectedIndex = 3;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
-            this.metroTabControl1.Style = MetroFramework.MetroColorStyle.Red;
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
             this.metroTabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.metroTabControl1_Selecting);
@@ -318,7 +317,7 @@
             // metroLabel3
             // 
             this.metroLabel3.AutoSize = true;
-            this.metroLabel3.Location = new System.Drawing.Point(701, 11);
+            this.metroLabel3.Location = new System.Drawing.Point(687, 11);
             this.metroLabel3.Name = "metroLabel3";
             this.metroLabel3.Size = new System.Drawing.Size(20, 19);
             this.metroLabel3.TabIndex = 10;
@@ -359,7 +358,7 @@
             this.filter_CB.FontSize = MetroFramework.MetroLinkSize.Small;
             this.filter_CB.FormattingEnabled = true;
             this.filter_CB.ItemHeight = 19;
-            this.filter_CB.Location = new System.Drawing.Point(573, 8);
+            this.filter_CB.Location = new System.Drawing.Point(556, 8);
             this.filter_CB.Name = "filter_CB";
             this.filter_CB.Size = new System.Drawing.Size(93, 25);
             this.filter_CB.TabIndex = 8;
@@ -369,7 +368,7 @@
             // 
             this.metroLabel1.AutoSize = true;
             this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel1.Location = new System.Drawing.Point(503, 12);
+            this.metroLabel1.Location = new System.Drawing.Point(503, 11);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(47, 19);
             this.metroLabel1.TabIndex = 5;
@@ -514,7 +513,6 @@
             // 
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
-            this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
             // 
             // metroScrollBar1
             // 
@@ -529,7 +527,7 @@
             // filterPercentLabel
             // 
             this.filterPercentLabel.AutoSize = true;
-            this.filterPercentLabel.Location = new System.Drawing.Point(675, 11);
+            this.filterPercentLabel.Location = new System.Drawing.Point(661, 11);
             this.filterPercentLabel.Name = "filterPercentLabel";
             this.filterPercentLabel.Size = new System.Drawing.Size(30, 19);
             this.filterPercentLabel.TabIndex = 11;
@@ -550,7 +548,6 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainAppForm";
             this.Resizable = false;
-            this.Style = MetroFramework.MetroColorStyle.Red;
             this.Text = "CryptoTracker";
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainAppForm_KeyUp);
             this.menuStrip1.ResumeLayout(false);
