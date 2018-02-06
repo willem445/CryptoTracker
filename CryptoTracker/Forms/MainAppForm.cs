@@ -934,7 +934,8 @@ namespace CryptoTracker
                     var progress = new Progress<int>(progressPercent => pBar.Value = progressPercent);
 
                     //Add new coins to tracking in update thread
-                    await Task.Run(() => TrackNewCoinThread(trackCoins.TrackNewCoin, progress));               
+                    await Task.Run(() => TrackNewCoinThread(trackCoins.TrackNewCoin, progress));
+                    priceManager.UpdatePriceData();
                 }
             }
 
@@ -1001,8 +1002,6 @@ namespace CryptoTracker
                 priceManager.AddNewCoin(addCoin);
 
                 AddNewCoinToFlowControl(addCoin);
-
-                priceManager.UpdatePriceData();
 
                 progress.Report((int)(((float)i / coinsToTrack.Count) * 100.0F));
                 i++;
