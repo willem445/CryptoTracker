@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoTracker", "CryptoTracker\CryptoTracker.csproj", "{D0FCEE33-8AAD-4F07-9789-40E13976B6CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoTrackerTests", "CryptoTrackerTests\CryptoTrackerTests.csproj", "{F20CAAAD-3468-426B-9BF5-872E0DF86E7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D0FCEE33-8AAD-4F07-9789-40E13976B6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0FCEE33-8AAD-4F07-9789-40E13976B6CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0FCEE33-8AAD-4F07-9789-40E13976B6CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F20CAAAD-3468-426B-9BF5-872E0DF86E7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F20CAAAD-3468-426B-9BF5-872E0DF86E7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F20CAAAD-3468-426B-9BF5-872E0DF86E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F20CAAAD-3468-426B-9BF5-872E0DF86E7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
