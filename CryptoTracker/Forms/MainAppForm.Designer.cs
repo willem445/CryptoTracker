@@ -51,7 +51,11 @@
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.totalProfitLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
+            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
+            this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.filterPercentLabel = new MetroFramework.Controls.MetroLabel();
+            this.metroScrollBar1 = new MetroFramework.Controls.MetroScrollBar();
             this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -71,19 +75,15 @@
             this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
             this.importButton = new MetroFramework.Controls.MetroButton();
             this.selectCoin_CB = new MetroFramework.Controls.MetroComboBox();
-            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
-            this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
-            this.metroScrollBar1 = new MetroFramework.Controls.MetroScrollBar();
-            this.filterPercentLabel = new MetroFramework.Controls.MetroLabel();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
+            this.metroTabPage4.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            this.metroTabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -195,7 +195,7 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 3;
+            this.metroTabControl1.SelectedIndex = 0;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -224,7 +224,7 @@
             // startUpStatusLabel
             // 
             this.startUpStatusLabel.AutoSize = true;
-            this.startUpStatusLabel.Location = new System.Drawing.Point(482, 397);
+            this.startUpStatusLabel.Location = new System.Drawing.Point(478, 397);
             this.startUpStatusLabel.Name = "startUpStatusLabel";
             this.startUpStatusLabel.Size = new System.Drawing.Size(143, 19);
             this.startUpStatusLabel.TabIndex = 13;
@@ -297,6 +297,26 @@
             this.metroLabel6.TabIndex = 11;
             this.metroLabel6.Text = "Profit:";
             // 
+            // metroTabPage4
+            // 
+            this.metroTabPage4.Controls.Add(this.infoFlowPanel);
+            this.metroTabPage4.HorizontalScrollbarBarColor = true;
+            this.metroTabPage4.Location = new System.Drawing.Point(4, 35);
+            this.metroTabPage4.Name = "metroTabPage4";
+            this.metroTabPage4.Size = new System.Drawing.Size(796, 421);
+            this.metroTabPage4.TabIndex = 3;
+            this.metroTabPage4.Text = "Coin Info";
+            this.metroTabPage4.VerticalScrollbarBarColor = true;
+            // 
+            // infoFlowPanel
+            // 
+            this.infoFlowPanel.AutoScroll = true;
+            this.infoFlowPanel.BackColor = System.Drawing.Color.White;
+            this.infoFlowPanel.Location = new System.Drawing.Point(3, 3);
+            this.infoFlowPanel.Name = "infoFlowPanel";
+            this.infoFlowPanel.Size = new System.Drawing.Size(777, 415);
+            this.infoFlowPanel.TabIndex = 2;
+            // 
             // metroTabPage2
             // 
             this.metroTabPage2.Controls.Add(this.filterPercentLabel);
@@ -313,6 +333,26 @@
             this.metroTabPage2.TabIndex = 1;
             this.metroTabPage2.Text = "Portfolio";
             this.metroTabPage2.VerticalScrollbarBarColor = true;
+            // 
+            // filterPercentLabel
+            // 
+            this.filterPercentLabel.AutoSize = true;
+            this.filterPercentLabel.Location = new System.Drawing.Point(661, 11);
+            this.filterPercentLabel.Name = "filterPercentLabel";
+            this.filterPercentLabel.Size = new System.Drawing.Size(30, 19);
+            this.filterPercentLabel.TabIndex = 11;
+            this.filterPercentLabel.Text = "100";
+            this.filterPercentLabel.TextChanged += new System.EventHandler(this.filterPercentLabel_TextChanged);
+            // 
+            // metroScrollBar1
+            // 
+            this.metroScrollBar1.Location = new System.Drawing.Point(486, 12);
+            this.metroScrollBar1.MouseWheelBarPartitions = 99;
+            this.metroScrollBar1.Name = "metroScrollBar1";
+            this.metroScrollBar1.Orientation = MetroFramework.Controls.MetroScrollOrientation.Vertical;
+            this.metroScrollBar1.Size = new System.Drawing.Size(10, 394);
+            this.metroScrollBar1.TabIndex = 6;
+            this.metroScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.metroScrollBar1_Scroll);
             // 
             // metroLabel3
             // 
@@ -489,50 +529,10 @@
             this.selectCoin_CB.Size = new System.Drawing.Size(121, 25);
             this.selectCoin_CB.TabIndex = 3;
             // 
-            // metroTabPage4
-            // 
-            this.metroTabPage4.Controls.Add(this.infoFlowPanel);
-            this.metroTabPage4.HorizontalScrollbarBarColor = true;
-            this.metroTabPage4.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage4.Name = "metroTabPage4";
-            this.metroTabPage4.Size = new System.Drawing.Size(796, 421);
-            this.metroTabPage4.TabIndex = 3;
-            this.metroTabPage4.Text = "Coin Info";
-            this.metroTabPage4.VerticalScrollbarBarColor = true;
-            // 
-            // infoFlowPanel
-            // 
-            this.infoFlowPanel.AutoScroll = true;
-            this.infoFlowPanel.BackColor = System.Drawing.Color.White;
-            this.infoFlowPanel.Location = new System.Drawing.Point(3, 3);
-            this.infoFlowPanel.Name = "infoFlowPanel";
-            this.infoFlowPanel.Size = new System.Drawing.Size(777, 415);
-            this.infoFlowPanel.TabIndex = 2;
-            // 
             // metroStyleManager1
             // 
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
-            // 
-            // metroScrollBar1
-            // 
-            this.metroScrollBar1.Location = new System.Drawing.Point(486, 12);
-            this.metroScrollBar1.MouseWheelBarPartitions = 99;
-            this.metroScrollBar1.Name = "metroScrollBar1";
-            this.metroScrollBar1.Orientation = MetroFramework.Controls.MetroScrollOrientation.Vertical;
-            this.metroScrollBar1.Size = new System.Drawing.Size(10, 394);
-            this.metroScrollBar1.TabIndex = 6;
-            this.metroScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.metroScrollBar1_Scroll);
-            // 
-            // filterPercentLabel
-            // 
-            this.filterPercentLabel.AutoSize = true;
-            this.filterPercentLabel.Location = new System.Drawing.Point(661, 11);
-            this.filterPercentLabel.Name = "filterPercentLabel";
-            this.filterPercentLabel.Size = new System.Drawing.Size(30, 19);
-            this.filterPercentLabel.TabIndex = 11;
-            this.filterPercentLabel.Text = "100";
-            this.filterPercentLabel.TextChanged += new System.EventHandler(this.filterPercentLabel_TextChanged);
             // 
             // MainAppForm
             // 
@@ -555,12 +555,12 @@
             this.metroTabControl1.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
+            this.metroTabPage4.ResumeLayout(false);
             this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage2.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            this.metroTabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
