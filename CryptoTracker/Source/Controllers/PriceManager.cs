@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace CryptoTracker
 {
-    class PriceManager
+    public class PriceManager
     {
         //Constants****************************************************************************
         private const string ALL_COIN_LIMIT = "0"; 

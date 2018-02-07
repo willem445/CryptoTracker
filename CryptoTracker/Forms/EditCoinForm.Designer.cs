@@ -117,6 +117,7 @@
             this.selectCoin_CB.Name = "selectCoin_CB";
             this.selectCoin_CB.Size = new System.Drawing.Size(111, 25);
             this.selectCoin_CB.TabIndex = 17;
+            this.selectCoin_CB.SelectedIndexChanged += new System.EventHandler(this.selectCoin_CB_SelectedIndexChanged);
             // 
             // EditCoinForm
             // 

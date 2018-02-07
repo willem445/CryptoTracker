@@ -25,12 +25,15 @@ namespace CryptoTracker
 
         //Fields********************************************************************************
         private CoinModel coin;
+        private List<CoinModel> coinList;
 
         //Constructor***************************************************************************
         public EditCoinForm(List<CoinModel> coinList)
         {
             InitializeComponent();
             this.Text = "Edit Coin";
+
+            this.coinList = coinList;
 
             coin = new CoinModel();
 
@@ -112,6 +115,12 @@ namespace CryptoTracker
         private void cancel_Button_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void selectCoin_CB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            netCost_TB.Text = coinList[selectCoin_CB.SelectedIndex].NetCostToString;
+            quantity_TB.Text = coinList[selectCoin_CB.SelectedIndex].QuantityToString;
         }
     }
 }
