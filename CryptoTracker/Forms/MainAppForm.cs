@@ -96,6 +96,12 @@ namespace CryptoTracker
 
             var progress = new Progress<int>(progressPercent => loadBar.Value = progressPercent);
             await Task.Run(() => InitThread(progress));
+
+            if (tableBindToDataGridView.Rows.Count < 1)
+            {
+                GettingStartedForm gettingStarted = new GettingStartedForm();
+                gettingStarted.ShowDialog();
+            }
         }
 
         /// <summary>
