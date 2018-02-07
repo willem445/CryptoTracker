@@ -378,7 +378,7 @@ namespace CryptoTracker
                 //Update path to correct image
                 string result = results[0].symbol;
                 result = result.ToLower();
-                string path = @"../../Resources\" + result + "@2x.png";
+                string path = @"../../Resources\CoinIcons\" + result + "@2x.png";
 
                 //If there is an image for the coin, update tile color and add image to tile
                 if (File.Exists(path))
@@ -403,7 +403,7 @@ namespace CryptoTracker
                     Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
                     tile.BackColor = ControlPaint.Light(randomColor);
 
-                    tile.TileImage = Image.FromFile(@"../../Resources\default_tile.png");
+                    tile.TileImage = Image.FromFile(@"../../Resources\CoinIcons\default_tile.png");
                     tile.UseTileImage = true;
                     tile.TileImageAlign = ContentAlignment.MiddleCenter;
                 }
