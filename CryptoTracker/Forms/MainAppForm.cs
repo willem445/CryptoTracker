@@ -1061,5 +1061,9 @@ namespace CryptoTracker
             loadBar.Invoke(new Action(() => loadBar.Visible = false));
         }
 
+        private void metroButton2_Click(object sender, EventArgs e)
+        {
+            //test button
+        }
     }
 }

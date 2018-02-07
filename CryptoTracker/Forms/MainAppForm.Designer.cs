@@ -51,8 +51,6 @@
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.totalProfitLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
-            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
-            this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
             this.filterPercentLabel = new MetroFramework.Controls.MetroLabel();
             this.metroScrollBar1 = new MetroFramework.Controls.MetroScrollBar();
@@ -75,16 +73,24 @@
             this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
             this.importButton = new MetroFramework.Controls.MetroButton();
             this.selectCoin_CB = new MetroFramework.Controls.MetroComboBox();
+            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
+            this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
+            this.priceMonitorTab = new MetroFramework.Controls.MetroTabPage();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
+            this.metroButton2 = new MetroFramework.Controls.MetroButton();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
-            this.metroTabPage4.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            this.metroTabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
+            this.priceMonitorTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -193,9 +199,10 @@
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage4);
+            this.metroTabControl1.Controls.Add(this.priceMonitorTab);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 0;
+            this.metroTabControl1.SelectedIndex = 4;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -296,26 +303,6 @@
             this.metroLabel6.Size = new System.Drawing.Size(37, 15);
             this.metroLabel6.TabIndex = 11;
             this.metroLabel6.Text = "Profit:";
-            // 
-            // metroTabPage4
-            // 
-            this.metroTabPage4.Controls.Add(this.infoFlowPanel);
-            this.metroTabPage4.HorizontalScrollbarBarColor = true;
-            this.metroTabPage4.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage4.Name = "metroTabPage4";
-            this.metroTabPage4.Size = new System.Drawing.Size(796, 421);
-            this.metroTabPage4.TabIndex = 3;
-            this.metroTabPage4.Text = "Coin Info";
-            this.metroTabPage4.VerticalScrollbarBarColor = true;
-            // 
-            // infoFlowPanel
-            // 
-            this.infoFlowPanel.AutoScroll = true;
-            this.infoFlowPanel.BackColor = System.Drawing.Color.White;
-            this.infoFlowPanel.Location = new System.Drawing.Point(3, 3);
-            this.infoFlowPanel.Name = "infoFlowPanel";
-            this.infoFlowPanel.Size = new System.Drawing.Size(777, 415);
-            this.infoFlowPanel.TabIndex = 2;
             // 
             // metroTabPage2
             // 
@@ -529,10 +516,78 @@
             this.selectCoin_CB.Size = new System.Drawing.Size(121, 25);
             this.selectCoin_CB.TabIndex = 3;
             // 
+            // metroTabPage4
+            // 
+            this.metroTabPage4.Controls.Add(this.infoFlowPanel);
+            this.metroTabPage4.HorizontalScrollbarBarColor = true;
+            this.metroTabPage4.Location = new System.Drawing.Point(4, 35);
+            this.metroTabPage4.Name = "metroTabPage4";
+            this.metroTabPage4.Size = new System.Drawing.Size(796, 421);
+            this.metroTabPage4.TabIndex = 3;
+            this.metroTabPage4.Text = "Coin Info";
+            this.metroTabPage4.VerticalScrollbarBarColor = true;
+            // 
+            // infoFlowPanel
+            // 
+            this.infoFlowPanel.AutoScroll = true;
+            this.infoFlowPanel.BackColor = System.Drawing.Color.White;
+            this.infoFlowPanel.Location = new System.Drawing.Point(3, 3);
+            this.infoFlowPanel.Name = "infoFlowPanel";
+            this.infoFlowPanel.Size = new System.Drawing.Size(777, 415);
+            this.infoFlowPanel.TabIndex = 2;
+            // 
             // metroStyleManager1
             // 
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
+            // 
+            // priceMonitorTab
+            // 
+            this.priceMonitorTab.Controls.Add(this.metroButton2);
+            this.priceMonitorTab.Controls.Add(this.metroButton1);
+            this.priceMonitorTab.Controls.Add(this.cartesianChart1);
+            this.priceMonitorTab.Controls.Add(this.flowLayoutPanel2);
+            this.priceMonitorTab.HorizontalScrollbarBarColor = true;
+            this.priceMonitorTab.Location = new System.Drawing.Point(4, 35);
+            this.priceMonitorTab.Name = "priceMonitorTab";
+            this.priceMonitorTab.Size = new System.Drawing.Size(796, 421);
+            this.priceMonitorTab.TabIndex = 4;
+            this.priceMonitorTab.Text = "Price Monitor";
+            this.priceMonitorTab.VerticalScrollbarBarColor = true;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.BackColor = System.Drawing.Color.White;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 37);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(289, 352);
+            this.flowLayoutPanel2.TabIndex = 2;
+            // 
+            // cartesianChart1
+            // 
+            this.cartesianChart1.BackColor = System.Drawing.Color.White;
+            this.cartesianChart1.Location = new System.Drawing.Point(298, 37);
+            this.cartesianChart1.Name = "cartesianChart1";
+            this.cartesianChart1.Size = new System.Drawing.Size(479, 369);
+            this.cartesianChart1.TabIndex = 3;
+            this.cartesianChart1.Text = "cartesianChart1";
+            // 
+            // metroButton1
+            // 
+            this.metroButton1.Location = new System.Drawing.Point(3, 395);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(101, 23);
+            this.metroButton1.TabIndex = 4;
+            this.metroButton1.Text = "Track New Coin";
+            // 
+            // metroButton2
+            // 
+            this.metroButton2.Location = new System.Drawing.Point(158, 395);
+            this.metroButton2.Name = "metroButton2";
+            this.metroButton2.Size = new System.Drawing.Size(75, 23);
+            this.metroButton2.TabIndex = 5;
+            this.metroButton2.Text = "test";
+            this.metroButton2.Click += new System.EventHandler(this.metroButton2_Click);
             // 
             // MainAppForm
             // 
@@ -555,13 +610,14 @@
             this.metroTabControl1.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
-            this.metroTabPage4.ResumeLayout(false);
             this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage2.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            this.metroTabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
+            this.priceMonitorTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -616,6 +672,11 @@
         private MetroFramework.Controls.MetroProgressBar loadBar;
         private MetroFramework.Controls.MetroScrollBar metroScrollBar1;
         private MetroFramework.Controls.MetroLabel filterPercentLabel;
+        private MetroFramework.Controls.MetroTabPage priceMonitorTab;
+        private LiveCharts.WinForms.CartesianChart cartesianChart1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private MetroFramework.Controls.MetroButton metroButton1;
+        private MetroFramework.Controls.MetroButton metroButton2;
     }
 }
 
