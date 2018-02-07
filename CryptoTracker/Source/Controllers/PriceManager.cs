@@ -186,7 +186,7 @@ namespace CryptoTracker
                     trackedCoinList[i].Rank = results[0].rank;
                     trackedCoinList[i].MarketCap = results[0].market_cap_usd;
                     trackedCoinList[i].Percent_Change_1h = results[0].percent_change_1h;
-                    trackedCoinList[i].Percent_Change_24hr = results[0].percent_change_24h;
+                    trackedCoinList[i].Percent_Change_24h = results[0].percent_change_24h;
                     trackedCoinList[i].Percent_Change_7d = results[0].percent_change_7d;
                     trackedCoinList[i].Symbol = results[0].symbol;
                 }

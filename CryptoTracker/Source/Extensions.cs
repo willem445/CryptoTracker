@@ -75,6 +75,16 @@ namespace CryptoTracker
             return s.ToString("#,##0.#");
         }
 
+        public static string InsertCommasIntoDigitMonetary(this string s)
+        {
+            return "$" + Convert.ToDouble(s).ToString("#,##0");
+        }
+
+        public static string InsertCommasIntoDigit(this string s)
+        {
+            return string.Format("{0:n0}", s);
+        }
+
         /// <summary>
         /// Converts a datetime value to it's UNIX equivalent
         /// </summary>

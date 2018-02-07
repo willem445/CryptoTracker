@@ -308,9 +308,7 @@ namespace CryptoTracker
             MetroFramework.Controls.MetroLabel coinPrice = new MetroFramework.Controls.MetroLabel();
             coinPrice.Name = addCoin.Name + "Label";
 
-
             toolTip.SetToolTip(coinPrice, "Test");
-
 
             MetroFramework.Controls.MetroTextBox coinQuantity = new MetroFramework.Controls.MetroTextBox();
             coinQuantity.Name = addCoin.Name + "Quantity_TB";
@@ -473,17 +471,25 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void ToolTip_Popup(object sender, PopupEventArgs e)
         {
-            //TODO- Tooltip not workign correctly
+            //Disable event to prevent recursion stack overflow error
+            toolTip.Popup -= ToolTip_Popup;
+
             string text = "";
             foreach(var item in priceManager.TrackedCoinList)
             {
                 if (e.AssociatedControl.Name.Contains(item.Name))
                 {
-                    text = item.MarketCap;
+                    text = 
+                        "Rank: " + item.Rank + Environment.NewLine +
+                        "Marketcap " + item.MarketCap.InsertCommasIntoDigitMonetary() + Environment.NewLine + 
+                        "1h Change: " + item.Percent_Change_1h + "%" + Environment.NewLine +
+                        "24h Change: " + item.Percent_Change_24h + "%" + Environment.NewLine +
+                        "7d Change: " + item.Percent_Change_7d + "%" + Environment.NewLine;
+                    break;
                 }
             }
-
-            //toolTip.SetToolTip(, text);
+            toolTip.SetToolTip(e.AssociatedControl, text);
+            toolTip.Popup += ToolTip_Popup;
 
             //e.AssociatedControl.Name
             //throw new NotImplementedException();

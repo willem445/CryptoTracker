@@ -141,7 +141,7 @@ namespace CryptoTracker
             }
         }
 
-        public string Percent_Change_24hr
+        public string Percent_Change_24h
         {
             get
             {
@@ -150,7 +150,7 @@ namespace CryptoTracker
             set
             {
                 percent_changed_24h = value;
-                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Percent_Change_24hr)));
+                InvokePropertyChanged(new PropertyChangedEventArgs(nameof(Percent_Change_24h)));
             }
         }
 
