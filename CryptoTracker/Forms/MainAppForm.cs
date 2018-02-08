@@ -16,6 +16,7 @@ using System.Data;
 using ExcelDataReader;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text;
 
 
 
@@ -44,6 +45,7 @@ namespace CryptoTracker
             Profit,
             ProfitPercent
         }
+
         public enum TabControlNames
         {
             PRICETRACKING,
@@ -977,6 +979,26 @@ namespace CryptoTracker
             addButton.Enabled = true;
 
             updatePrices.Start();
+        }
+
+        /// <summary>
+        /// Export trades to file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void exportButton_Click(object sender, EventArgs e)
+        {
+            FileIO file = new FileIO();
+            ExportTradesForm export = new ExportTradesForm();
+            if (export.ShowDialog() == DialogResult.OK)
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    file.ExportDataToBitCoinTaxCSV(tableBindToDataGridView, saveFileDialog1.FileName, export.Year);
+                }
+            }
         }
 
         //Threads********************************************************************************

@@ -89,6 +89,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExportTradesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportTradesForm.Designer.cs">
+      <DependentUpon>ExportTradesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DonateForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +165,9 @@
     <Compile Include="Forms\TrackNewCoinsForm.Designer.cs">
       <DependentUpon>TrackNewCoinsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ExportTradesForm.resx">
+      <DependentUpon>ExportTradesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DonateForm.resx">
       <DependentUpon>DonateForm.cs</DependentUpon>
     </EmbeddedResource>

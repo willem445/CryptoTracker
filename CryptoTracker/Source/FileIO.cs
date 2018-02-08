@@ -11,6 +11,18 @@ namespace CryptoTracker
 {
     class FileIO
     {
+        public enum DataGridViewColumns
+        {
+            DATE,
+            EXCHANGE,
+            TRADEPAIR,
+            TYPE,
+            ORDERQUANTITY,
+            TRADEPRICE,
+            ORDERCOST,
+            NETCOST
+        }
+
         /// <summary>
         /// Parses data from text file and returns a list of coin models
         /// </summary>
@@ -126,6 +138,46 @@ namespace CryptoTracker
             DataSet dS = new DataSet();
             dS.Tables.Add(dT);
             dS.WriteXml(File.OpenWrite(Path.Combine(path, "TradeData.xml")));
+        }
+
+        /// <summary>
+        /// Exports trades to a CSV format supported by bitcoin.tax
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="filePath"></param>
+        /// <param name="year"></param>
+        public void ExportDataToBitCoinTaxCSV(DataTable table, string filePath, int year)
+        {
+            string headers = "Date,Action,Source,Symbol,Volume,Price,Currency,Fee,FeeCurrency";
+            var csv = new StringBuilder();
+            csv.AppendLine(headers);
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                if (Convert.ToDateTime(table.Rows[i][(int)DataGridViewColumns.DATE]).Year == year)
+                {
+                    string date = Convert.ToDateTime(table.Rows[i][(int)DataGridViewColumns.DATE]).ToString("yyyy-MM-dd HH:mm:ss");
+                    string action = table.Rows[i][(int)DataGridViewColumns.TYPE].ToString();
+                    string source = table.Rows[i][(int)DataGridViewColumns.EXCHANGE].ToString();
+                    string symbol = table.Rows[i][(int)DataGridViewColumns.TRADEPAIR].ToString().Split('/')[0];
+                    string volume = table.Rows[i][(int)DataGridViewColumns.ORDERQUANTITY].ToString();
+
+                    if (symbol == "MIOTA")
+                    {
+                        symbol = "IOTA";
+                    }
+                    string price = Convert.ToDouble(table.Rows[i][(int)DataGridViewColumns.TRADEPRICE]).ToString();
+                    string currency = table.Rows[i][(int)DataGridViewColumns.TRADEPAIR].ToString().Split('/')[1];
+                    string fee = "0";
+                    string feeCurrency = "USD";
+
+                    var newLine = $"{date}, {action}, {source}, {symbol}, {volume}, {price}, {currency}, {fee}, {feeCurrency}";
+
+                    csv.AppendLine(newLine);
+                }
+            }
+
+            File.WriteAllText(filePath, csv.ToString());
         }
 
         /// <summary>

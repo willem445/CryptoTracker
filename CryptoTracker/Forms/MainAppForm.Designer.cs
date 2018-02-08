@@ -82,6 +82,8 @@
             this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this.metroButton2 = new MetroFramework.Controls.MetroButton();
+            this.metroButton3 = new MetroFramework.Controls.MetroButton();
+            this.exportButton = new MetroFramework.Controls.MetroButton();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -202,7 +204,7 @@
             this.metroTabControl1.Controls.Add(this.priceMonitorTab);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 4;
+            this.metroTabControl1.SelectedIndex = 2;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -414,6 +416,7 @@
             // 
             // metroTabPage3
             // 
+            this.metroTabPage3.Controls.Add(this.exportButton);
             this.metroTabPage3.Controls.Add(this.undoTradesButton);
             this.metroTabPage3.Controls.Add(this.pBar);
             this.metroTabPage3.Controls.Add(this.dataGridView2);
@@ -465,7 +468,7 @@
             this.importSelect_CB.FontSize = MetroFramework.MetroLinkSize.Small;
             this.importSelect_CB.FormattingEnabled = true;
             this.importSelect_CB.ItemHeight = 19;
-            this.importSelect_CB.Location = new System.Drawing.Point(613, 27);
+            this.importSelect_CB.Location = new System.Drawing.Point(532, 27);
             this.importSelect_CB.Name = "importSelect_CB";
             this.importSelect_CB.Size = new System.Drawing.Size(83, 25);
             this.importSelect_CB.TabIndex = 9;
@@ -499,7 +502,7 @@
             // 
             // importButton
             // 
-            this.importButton.Location = new System.Drawing.Point(702, 27);
+            this.importButton.Location = new System.Drawing.Point(621, 27);
             this.importButton.Name = "importButton";
             this.importButton.Size = new System.Drawing.Size(75, 25);
             this.importButton.TabIndex = 4;
@@ -543,6 +546,7 @@
             // 
             // priceMonitorTab
             // 
+            this.priceMonitorTab.Controls.Add(this.metroButton3);
             this.priceMonitorTab.Controls.Add(this.metroButton2);
             this.priceMonitorTab.Controls.Add(this.metroButton1);
             this.priceMonitorTab.Controls.Add(this.cartesianChart1);
@@ -582,12 +586,29 @@
             // 
             // metroButton2
             // 
-            this.metroButton2.Location = new System.Drawing.Point(158, 395);
+            this.metroButton2.Location = new System.Drawing.Point(217, 395);
             this.metroButton2.Name = "metroButton2";
             this.metroButton2.Size = new System.Drawing.Size(75, 23);
             this.metroButton2.TabIndex = 5;
             this.metroButton2.Text = "test";
             this.metroButton2.Click += new System.EventHandler(this.metroButton2_Click);
+            // 
+            // metroButton3
+            // 
+            this.metroButton3.Location = new System.Drawing.Point(110, 395);
+            this.metroButton3.Name = "metroButton3";
+            this.metroButton3.Size = new System.Drawing.Size(75, 23);
+            this.metroButton3.TabIndex = 6;
+            this.metroButton3.Text = "Alerts";
+            // 
+            // exportButton
+            // 
+            this.exportButton.Location = new System.Drawing.Point(702, 27);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(75, 25);
+            this.exportButton.TabIndex = 17;
+            this.exportButton.Text = "Export";
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
             // MainAppForm
             // 
@@ -677,6 +698,8 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private MetroFramework.Controls.MetroButton metroButton1;
         private MetroFramework.Controls.MetroButton metroButton2;
+        private MetroFramework.Controls.MetroButton metroButton3;
+        private MetroFramework.Controls.MetroButton exportButton;
     }
 }
 
