@@ -89,6 +89,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\APIs\CoinMarketCapAPI.cs" />
+    <Compile Include="Source\APIs\CryptoCompareAPI.cs" />
     <Compile Include="Forms\ExportTradesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -457,9 +459,7 @@
     <Content Include="Resources\CoinIcons\zrx%402x.png" />
     <Content Include="Resources\TradesTab.PNG" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\APIs\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
