@@ -33,8 +33,9 @@ namespace CryptoTracker
 
         //Fields********************************************************************************
         private List<CoinModel> trackedCoinList = new List<CoinModel>();
+        private List<CoinModel> priceMonitorCoinsList = new List<CoinModel>();
         private List<CoinModel.CoinNameStruct> allCoinNames = new List<CoinModel.CoinNameStruct>();
-
+        
         //Fields to hold total investement data
         private float totalProfit = 0.0F;
         private float totalValue = 0.0F;
@@ -84,6 +85,13 @@ namespace CryptoTracker
                 return trackedCoinList;
             }
         }
+        public List<CoinModel> MonitorCoinList
+        {
+            get
+            {
+                return priceMonitorCoinsList;
+            }
+        }
 
         //Constructor***************************************************************************
         /// <summary>
@@ -100,12 +108,14 @@ namespace CryptoTracker
             //Parse data in documents folder
             FileIO file = new FileIO();
             trackedCoinList = file.ParseSavedData();
+            priceMonitorCoinsList = file.ParseSavedCoinTracking();
 
             progress.Report(30);
 
             //Update prices based on parsed data
             UpdateMarketData();
             UpdatePriceData();
+            UpdateMonitorData();
             
 
             progress.Report(60);
@@ -122,9 +132,12 @@ namespace CryptoTracker
             //Parse data in documents folder
             FileIO file = new FileIO();
             trackedCoinList = file.ParseSavedData();
+            priceMonitorCoinsList = file.ParseSavedCoinTracking();
 
             //Update prices based on parsed data
+            UpdateMarketData();
             UpdatePriceData();
+            UpdateMonitorData();
         }
 
         //Methods*******************************************************************************
@@ -143,6 +156,11 @@ namespace CryptoTracker
         public void UpdateMarketData()
         {
             APIMarketUpdate();
+        }
+
+        public void UpdateMonitorData()
+        {
+            APIUpdateMonitorList();
         }
 
         /// <summary>
@@ -177,7 +195,6 @@ namespace CryptoTracker
         /// </summary>
         private void APIPriceUpdate()
         {
-            //TODOHP - Modify so that only one api request is made, not a bunch of seperate ones
             //Use this api, 20-60ms reponse time
             //https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH,DASH&tsyms=USD
 
@@ -217,9 +234,6 @@ namespace CryptoTracker
             }
         }
 
-        /// <summary>
-        /// Update market data from coinmarketcap api
-        /// </summary>
         private void APIMarketUpdate()
         {
             //Read data from API
@@ -248,6 +262,41 @@ namespace CryptoTracker
 
                     //If there is an error connecting to the API, fill list with null data to avoid index out of bounds later
                     trackedCoinList[i].Price = 0.0F;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update market data from coinmarketcap api
+        /// </summary>
+        private void APIUpdateMonitorList()
+        {
+            //Read data from API
+            for (int i = 0; i < priceMonitorCoinsList.Count; i++)
+            {
+                string input = priceMonitorCoinsList[i].APILink;
+
+                try
+                {
+                    //Connect to API
+                    var cli = new System.Net.WebClient();
+                    string prices = cli.DownloadString(input);
+                    dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
+
+                    //Update tool tip array and add array to tool tip list
+                    priceMonitorCoinsList[i].Name = results[0].name;
+                    priceMonitorCoinsList[i].Price = results[0].price_usd;
+                    priceMonitorCoinsList[i].Percent_Change_1h = results[0].percent_change_1h;
+                    priceMonitorCoinsList[i].Percent_Change_24h = results[0].percent_change_24h;
+                    priceMonitorCoinsList[i].Percent_Change_7d = results[0].percent_change_7d;
+                    priceMonitorCoinsList[i].Symbol = results[0].symbol;
+                }
+                catch (System.Net.WebException e)
+                {
+                    Console.WriteLine(e.Message);
+
+                    //If there is an error connecting to the API, fill list with null data to avoid index out of bounds later
+                    priceMonitorCoinsList[i].Price = 0.0F;
                 }
             }
         }

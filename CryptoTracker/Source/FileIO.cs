@@ -23,6 +23,38 @@ namespace CryptoTracker
             NETCOST
         }
 
+        public List<CoinModel> ParseSavedCoinTracking()
+        {
+            List<CoinModel> coins = new List<CoinModel>();
+
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
+
+            string[] lines;
+
+            if (File.Exists(Path.Combine(path, "MonitorData.txt")))
+            {
+                lines = System.IO.File.ReadAllLines(Path.Combine(path, "MonitorData.txt"));
+
+                //TODO - Crashed if text file is empty
+                foreach (string line in lines)
+                {
+                    CoinModel newCoin = new CoinModel();
+
+                    newCoin.APILink = "https://api.coinmarketcap.com/v1/ticker/" + line;
+
+                    coins.Add(newCoin);
+                }
+            }
+
+            return coins;
+        }
+
+        public void SaveCoinTracking()
+        {
+
+        }
+
         /// <summary>
         /// Parses data from text file and returns a list of coin models
         /// </summary>

@@ -17,6 +17,8 @@ using ExcelDataReader;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
+using LiveCharts.Defaults;
+using System.Windows.Media;
 
 
 
@@ -59,6 +61,7 @@ namespace CryptoTracker
         PriceManager priceManager;
         System.Timers.Timer updateCoinPriceTimer;
         System.Timers.Timer updateCoinMarketTimer;
+        System.Timers.Timer updateCoinMonitorTimer;
 
         //UI Lists and Tables
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
@@ -131,6 +134,15 @@ namespace CryptoTracker
             UpdateUI();
         }
 
+        private void UpdateMonitorAndUI()
+        {
+            //Get data from API
+            priceManager.UpdateMonitorData();
+
+            //Invoke UI update
+            UpdateUI();
+        }
+
         //UI Update Methods
         /// <summary>
         /// Initializes all controls on the form at startup
@@ -165,6 +177,11 @@ namespace CryptoTracker
                 updateCoinMarketTimer = new System.Timers.Timer();
                 updateCoinMarketTimer.Interval = 600000; //10 minutes
                 updateCoinMarketTimer.Elapsed += new ElapsedEventHandler(UpdateMarket);
+                updateCoinMarketTimer.Start();
+
+                updateCoinMarketTimer = new System.Timers.Timer();
+                updateCoinMarketTimer.Interval = 1800000; //30 minutes
+                updateCoinMarketTimer.Elapsed += new ElapsedEventHandler(UpdateMonitor);
                 updateCoinMarketTimer.Start();
 
                 //Configure the tooltip
@@ -242,11 +259,11 @@ namespace CryptoTracker
                 //Update text color for profit/loss
                 if (item.Profit.Value < 0)
                 {
-                    textBoxArrayList[i][3].Invoke(new Action(() => textBoxArrayList[i][3].ForeColor = Color.Red));
+                    textBoxArrayList[i][3].Invoke(new Action(() => textBoxArrayList[i][3].ForeColor = System.Drawing.Color.Red));
                 }
                 else
                 {
-                    textBoxArrayList[i][3].Invoke(new Action(() => textBoxArrayList[i][3].ForeColor = Color.Green));
+                    textBoxArrayList[i][3].Invoke(new Action(() => textBoxArrayList[i][3].ForeColor = System.Drawing.Color.Green));
                 }
 
                 i++;
@@ -257,6 +274,35 @@ namespace CryptoTracker
             totalInvestedLabel.Invoke(new Action(() => totalInvestedLabel.Text = priceManager.TotalInvestment.FloatToMonetary()));
             totalValueLabel.Invoke(new Action(() => totalValueLabel.Text = priceManager.TotalValue.FloatToMonetary()));
             //fiatLabel.Invoke(new Action(() => fiatLabel.Text = priceManager.TotalFiatCost.FloatToMonetary()));
+
+            //Update List View 
+            this.Invoke((MethodInvoker)delegate {
+                priceMonitorListView.Items.Clear();
+
+                int j = 0;
+                foreach (var item in priceManager.MonitorCoinList)
+                {
+                    string[] values =
+                    {
+                        priceManager.MonitorCoinList[j].PriceToString,
+                        priceManager.MonitorCoinList[j].Percent_Change_1h+"%",
+                        priceManager.MonitorCoinList[j].Percent_Change_24h+"%",
+                        priceManager.MonitorCoinList[j].Percent_Change_7d+"%"
+                    };
+
+                    priceMonitorListView.Items.Add(priceManager.MonitorCoinList[j].Name).SubItems.AddRange(values);
+
+                    //Update colors
+                    priceMonitorListView.Items[j].UseItemStyleForSubItems = false;
+                    priceMonitorListView.Items[j].SubItems[2].ForeColor = (priceManager.MonitorCoinList[j].Percent_Change_1h.PercentToFloat() > 0) ? System.Drawing.Color.Green : System.Drawing.Color.Red;
+                    priceMonitorListView.Items[j].SubItems[3].ForeColor = (priceManager.MonitorCoinList[j].Percent_Change_24h.PercentToFloat() > 0) ? System.Drawing.Color.Green : System.Drawing.Color.Red;
+                    priceMonitorListView.Items[j].SubItems[4].ForeColor = (priceManager.MonitorCoinList[j].Percent_Change_7d.PercentToFloat() > 0) ? System.Drawing.Color.Green : System.Drawing.Color.Red;
+
+                    j++;
+                }
+
+            });
+
         }
 
         /// <summary>
@@ -403,7 +449,7 @@ namespace CryptoTracker
                     int y = 14;
 
                     Bitmap b = new Bitmap(path);
-                    Color x = b.GetPixel(x4, y);
+                    System.Drawing.Color x = b.GetPixel(x4, y);
 
                     //Add image to tile 
                     tile.TileImage = Image.FromFile(path);
@@ -415,7 +461,7 @@ namespace CryptoTracker
                 {
                     tile.UseTileImage = true;
                     Random rnd = new Random();
-                    Color randomColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                    System.Drawing.Color randomColor = System.Drawing.Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
                     tile.BackColor = ControlPaint.Light(randomColor);
 
                     tile.TileImage = Image.FromFile(@"../../Resources\CoinIcons\default_tile.png");
@@ -476,6 +522,20 @@ namespace CryptoTracker
 
 #if DEBUG
             Console.WriteLine("Market Update Thread Complete");
+#endif
+        }
+
+        /// <summary>
+        /// Updates price monitor tab data every 30 minutes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void UpdateMonitor(object sender, ElapsedEventArgs e)
+        {
+            UpdateMonitorAndUI();
+
+#if DEBUG
+            Console.WriteLine("Monitor Update Thread Complete");
 #endif
         }
 
@@ -743,7 +803,7 @@ namespace CryptoTracker
 
             pieChart1.LegendLocation = LegendLocation.Right;
             pieChart1.HoverPushOut = 10;
-            pieChart1.ForeColor = Color.Black;
+            pieChart1.ForeColor = System.Drawing.Color.Black;
             pieChart1.DataTooltip = null;
         }
 
@@ -782,12 +842,12 @@ namespace CryptoTracker
         {
             foreach (ListViewItem lvw in listView1.Items)
             {
-                lvw.BackColor = Color.White;
+                lvw.BackColor = System.Drawing.Color.White;
 
                 string value = lvw.SubItems[0].Text;
                 if (lvw.SubItems[0].Text == chartPoint.SeriesView.Title)
                 {
-                    lvw.BackColor = Color.LightGreen;
+                    lvw.BackColor = System.Drawing.Color.LightGreen;
                 }
             }
         }
@@ -1143,6 +1203,54 @@ namespace CryptoTracker
 
             };
 
+            cartesianChart1.Zoom = ZoomingOptions.X;
+        }
+
+        private void trackCoinButton_Click(object sender, EventArgs e)
+        {
+            AddNewPriceMonitor addCoin = new AddNewPriceMonitor(priceManager.AllCoinNames);
+            if (addCoin.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+
+        private void priceMonitorListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = priceMonitorListView.SelectedIndex();
+#if DEBUG
+            Console.WriteLine("Index: " + index.ToString());
+#endif
+            string input = string.Format("https://min-api.cryptocompare.com/data/histohour?fsym={0}&tsym=USD&limit=200&aggregate=3&e=CCCAGG", priceManager.MonitorCoinList[index].Symbol);
+            //test button
+            //Connect to API
+            var cli = new System.Net.WebClient();
+            string prices = cli.DownloadString(input);
+            dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
+
+            var parseddata = results.Data;
+
+            List<DateTimePoint> data = new List<DateTimePoint>();
+
+            for (int i = 0; i < 200; i++)
+            {
+                DateTime time = (Convert.ToDouble((UInt64)parseddata[i].time)).UnixTimeStampToDateTime();
+                data.Add(new DateTimePoint(time, Convert.ToDouble(parseddata[i].close)));
+            }
+
+            cartesianChart1.Series = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Title = priceManager.MonitorCoinList[index].Name,
+                    Values = new ChartValues<DateTimePoint>(data),
+                    PointGeometry = null,
+                    StrokeThickness = 0,
+                    //PointForeground = System.Windows.Media.Brushes.Red
+                },
+            };
+
+            cartesianChart1.DisableAnimations = true;
             cartesianChart1.Zoom = ZoomingOptions.X;
         }
     }

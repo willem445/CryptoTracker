@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CryptoTracker
 {
@@ -75,6 +76,11 @@ namespace CryptoTracker
             return s.ToString("#,##0.#");
         }
 
+        public static float PercentToFloat(this string s)
+        {
+            return (float)Convert.ToDouble(s.TrimEnd('%'));
+        }
+
         public static string InsertCommasIntoDigitMonetary(this string s)
         {
             return "$" + Convert.ToDouble(s).ToString("#,##0");
@@ -85,6 +91,14 @@ namespace CryptoTracker
             return string.Format("{0:n0}", s);
         }
 
+        public static int SelectedIndex(this ListView listView)
+        {
+            if (listView.SelectedIndices.Count > 0)
+                return listView.SelectedIndices[0];
+            else
+                return 0;
+        }
+
         /// <summary>
         /// Converts a datetime value to it's UNIX equivalent
         /// </summary>
@@ -93,6 +107,14 @@ namespace CryptoTracker
         public static UInt64 DateTimeToUNIX(this DateTime s)
         {
             return (UInt64)s.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        }
+
+        public static DateTime UnixTimeStampToDateTime(this double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
         }
     }
 }

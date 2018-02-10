@@ -40,6 +40,9 @@ namespace CryptoTracker
             {
                 selectCoin_CB.Items.Add(item.Name);
             }
+            selectCoin_CB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            selectCoin_CB.AutoCompleteSource = AutoCompleteSource.ListItems;
+            selectCoin_CB.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
 
             coin = new CoinModel();
         }

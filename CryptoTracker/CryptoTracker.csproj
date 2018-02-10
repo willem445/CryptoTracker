@@ -89,6 +89,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\AddNewPriceMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AddNewPriceMonitor.Designer.cs">
+      <DependentUpon>AddNewPriceMonitor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\APIs\CoinMarketCapAPI.cs" />
     <Compile Include="Source\APIs\CryptoCompareAPI.cs" />
     <Compile Include="Forms\ExportTradesForm.cs">
@@ -167,6 +173,9 @@
     <Compile Include="Forms\TrackNewCoinsForm.Designer.cs">
       <DependentUpon>TrackNewCoinsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\AddNewPriceMonitor.resx">
+      <DependentUpon>AddNewPriceMonitor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExportTradesForm.resx">
       <DependentUpon>ExportTradesForm.cs</DependentUpon>
     </EmbeddedResource>
