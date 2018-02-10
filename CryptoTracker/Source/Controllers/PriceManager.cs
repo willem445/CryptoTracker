@@ -104,7 +104,9 @@ namespace CryptoTracker
             progress.Report(30);
 
             //Update prices based on parsed data
+            UpdateMarketData();
             UpdatePriceData();
+            
 
             progress.Report(60);
         }
@@ -131,8 +133,16 @@ namespace CryptoTracker
         /// </summary>
         public void UpdatePriceData()
         {
-            APIUpdate();
+            APIPriceUpdate();
             UpdateValues();
+        }
+
+        /// <summary>
+        /// Gets data from API related to the market, percent, rank, marketcap, etc
+        /// </summary>
+        public void UpdateMarketData()
+        {
+            APIMarketUpdate();
         }
 
         /// <summary>
@@ -165,7 +175,52 @@ namespace CryptoTracker
         /// <summary>
         /// Connect to coinmarketcap API and retrieve data for each coin in tracked coin list
         /// </summary>
-        private void APIUpdate()
+        private void APIPriceUpdate()
+        {
+            //TODOHP - Modify so that only one api request is made, not a bunch of seperate ones
+            //Use this api, 20-60ms reponse time
+            //https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH,DASH&tsyms=USD
+
+            string input = "";
+            for (int j = 0; j < trackedCoinList.Count; j++)
+            {
+                if (trackedCoinList[j].Symbol == "MIOTA")
+                {
+                    input += "IOTA" + ",";
+                }
+                else
+                {
+                    input += trackedCoinList[j].Symbol + ",";
+                }
+                
+            }
+            input = input.TrimEnd(',');
+            input = string.Format("https://min-api.cryptocompare.com/data/pricemulti?fsyms={0}&tsyms=USD", input);
+
+            try
+            {
+                //Connect to API
+                var cli = new System.Net.WebClient();
+                string prices = cli.DownloadString(input);
+                var results = JsonConvert.DeserializeObject<Dictionary<string, Item>>(prices);
+
+                int k = 0;
+                foreach (var item in results)
+                {
+                    trackedCoinList[k].Price = item.Value.USD;
+                    k++;
+                }
+            }
+            catch (System.Net.WebException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Update market data from coinmarketcap api
+        /// </summary>
+        private void APIMarketUpdate()
         {
             //Read data from API
             for (int i = 0; i < trackedCoinList.Count; i++)
@@ -178,9 +233,6 @@ namespace CryptoTracker
                     var cli = new System.Net.WebClient();
                     string prices = cli.DownloadString(input);
                     dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
-
-                    //Add price to temp list
-                    trackedCoinList[i].Price = (float)(Convert.ToDouble(results[0].price_usd));
 
                     //Update tool tip array and add array to tool tip list
                     trackedCoinList[i].Rank = results[0].rank;
@@ -211,7 +263,7 @@ namespace CryptoTracker
 
             for (int i = 0; i < trackedCoinList.Count; i++)
             {              
-                if (trackedCoinList[i].Price != 0.0)
+                if (trackedCoinList[i].Price != 0.0 && trackedCoinList[i].Price != null)
                 {
                     trackedCoinList[i].Value = trackedCoinList[i].Quantity * trackedCoinList[i].Price;
                     trackedCoinList[i].Profit = trackedCoinList[i].Value - trackedCoinList[i].NetCost;
@@ -297,5 +349,11 @@ namespace CryptoTracker
         {
             trackedCoinList.Add(addCoin);
         }
+    }
+
+    public class Item
+    {
+        [JsonProperty("USD")]
+        public float? USD { get; set; }
     }
 }

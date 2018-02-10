@@ -65,6 +65,7 @@
             // 
             // quantity_TB
             // 
+            this.quantity_TB.BackColor = System.Drawing.Color.White;
             this.quantity_TB.Location = new System.Drawing.Point(101, 89);
             this.quantity_TB.Name = "quantity_TB";
             this.quantity_TB.Size = new System.Drawing.Size(119, 23);

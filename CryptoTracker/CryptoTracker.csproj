@@ -89,10 +89,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExportTradesForm.cs">
+    <Compile Include="Forms\ExportTradesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExportTradesForm.Designer.cs">
+    <Compile Include="Forms\ExportTradesForm.Designer.cs">
       <DependentUpon>ExportTradesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\DonateForm.cs">
@@ -165,7 +165,7 @@
     <Compile Include="Forms\TrackNewCoinsForm.Designer.cs">
       <DependentUpon>TrackNewCoinsForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ExportTradesForm.resx">
+    <EmbeddedResource Include="Forms\ExportTradesForm.resx">
       <DependentUpon>ExportTradesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DonateForm.resx">
@@ -457,7 +457,9 @@
     <Content Include="Resources\CoinIcons\zrx%402x.png" />
     <Content Include="Resources\TradesTab.PNG" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Source\APIs\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

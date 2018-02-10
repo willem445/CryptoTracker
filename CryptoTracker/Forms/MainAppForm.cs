@@ -57,7 +57,8 @@ namespace CryptoTracker
         //Fields********************************************************************************
         ToolTip toolTip = new ToolTip();
         PriceManager priceManager;
-        System.Timers.Timer updatePrices;
+        System.Timers.Timer updateCoinPriceTimer;
+        System.Timers.Timer updateCoinMarketTimer;
 
         //UI Lists and Tables
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
@@ -118,6 +119,18 @@ namespace CryptoTracker
             UpdateUI();
         }
 
+        /// <summary>
+        /// Get marketcap information and update UI
+        /// </summary>
+        private void UpdateMarketAndUI()
+        {
+            //Get data from API
+            priceManager.UpdateMarketData();
+
+            //Invoke UI update
+            UpdateUI();
+        }
+
         //UI Update Methods
         /// <summary>
         /// Initializes all controls on the form at startup
@@ -143,11 +156,16 @@ namespace CryptoTracker
                 source.DataSource = tableBindToDataGridView;
                 dataGridView2.DataSource = source;
 
-                //Configure the autoupdate timer
-                updatePrices = new System.Timers.Timer();
-                updatePrices.Interval = 30000; //30 seconds
-                updatePrices.Elapsed += new ElapsedEventHandler(UpdatePrices);
-                updatePrices.Start();
+                //Configure the update timers
+                updateCoinPriceTimer = new System.Timers.Timer();
+                updateCoinPriceTimer.Interval = 30000; //30 seconds
+                updateCoinPriceTimer.Elapsed += new ElapsedEventHandler(UpdatePrices);
+                updateCoinPriceTimer.Start();
+
+                updateCoinMarketTimer = new System.Timers.Timer();
+                updateCoinMarketTimer.Interval = 600000; //10 minutes
+                updateCoinMarketTimer.Elapsed += new ElapsedEventHandler(UpdateMarket);
+                updateCoinMarketTimer.Start();
 
                 //Configure the tooltip
                 toolTip.AutoPopDelay = 15000;
@@ -313,23 +331,20 @@ namespace CryptoTracker
             toolTip.SetToolTip(coinPrice, "Test");
 
             MetroFramework.Controls.MetroTextBox coinQuantity = new MetroFramework.Controls.MetroTextBox();
-            coinQuantity.Name = addCoin.Name + "Quantity_TB";
-
+            coinQuantity.Name = addCoin.Name + "Quantity_TB";         
 
             MetroFramework.Controls.MetroTextBox coinInvested = new MetroFramework.Controls.MetroTextBox();
             coinInvested.Name = addCoin.Name + "Invested_TB";
 
-
             MetroFramework.Controls.MetroTextBox coinValue = new MetroFramework.Controls.MetroTextBox();
             coinValue.Name = addCoin.Name + "Value_TB";
-
 
             MetroFramework.Controls.MetroTextBox coinProfit = new MetroFramework.Controls.MetroTextBox();
             coinProfit.Name = addCoin.Name + "Profit_TB";
 
-
             MetroFramework.Controls.MetroTextBox coinProfitPercent = new MetroFramework.Controls.MetroTextBox();
             coinProfitPercent.Name = addCoin.Name + "ProfitPercent_TB";
+
 
             //Add controls to coin specifc flow panel
             newFlowPanel.Controls.Add(coinName);
@@ -444,6 +459,24 @@ namespace CryptoTracker
         {
             //TODO - Make update time value a setting
             UpdatePriceAndUI();
+
+#if DEBUG
+            Console.WriteLine("Price Update Thread Complete");
+#endif
+        }
+
+        /// <summary>
+        /// Updates market data and UI every 10 minutes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void UpdateMarket(object sender, ElapsedEventArgs e)
+        {
+            UpdateMarketAndUI();
+
+#if DEBUG
+            Console.WriteLine("Market Update Thread Complete");
+#endif
         }
 
         /// <summary>
@@ -776,8 +809,6 @@ namespace CryptoTracker
             {
                 filterPercentLabel.Text = "1";
             }
- 
-            Console.WriteLine(metroScrollBar1.Value);
         }
 
         /// <summary>
@@ -978,7 +1009,7 @@ namespace CryptoTracker
             saveImportButton.Visible = false;
             addButton.Enabled = true;
 
-            updatePrices.Start();
+            updateCoinPriceTimer.Start();
         }
 
         /// <summary>
@@ -1009,7 +1040,7 @@ namespace CryptoTracker
         /// <param name="progress"></param>
         public void TrackNewCoinThread(List<string> coinsToTrack, IProgress<int> progress)
         {
-            updatePrices.Stop();
+            updateCoinPriceTimer.Stop();
  
             int i = 0;
             foreach (string coin in coinsToTrack)
@@ -1085,7 +1116,34 @@ namespace CryptoTracker
 
         private void metroButton2_Click(object sender, EventArgs e)
         {
+            string input = "https://min-api.cryptocompare.com/data/histohour?fsym=XLM&tsym=USD&limit=200&aggregate=3&e=CCCAGG";
             //test button
+            //Connect to API
+            var cli = new System.Net.WebClient();
+            string prices = cli.DownloadString(input);
+            dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
+
+            var test = results.Data;
+
+            List<double> data = new List<double>();
+
+            for (int i = 0; i < 200; i++)
+            {
+                data.Add(Convert.ToDouble(test[i].close));
+            }
+
+            cartesianChart1.Series = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Title = "XLM",
+                    Values = new ChartValues<double>(data),
+                    PointGeometry = null
+                },
+
+            };
+
+            cartesianChart1.Zoom = ZoomingOptions.X;
         }
     }
 }
