@@ -1081,16 +1081,11 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void exportButton_Click(object sender, EventArgs e)
         {
-            FileIO file = new FileIO();
+            
             ExportTradesForm export = new ExportTradesForm();
             if (export.ShowDialog() == DialogResult.OK)
             {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    file.ExportDataToBitCoinTaxCSV(tableBindToDataGridView, saveFileDialog1.FileName, export.Year);
-                }
+                export.ExportData(tableBindToDataGridView);
             }
         }
 

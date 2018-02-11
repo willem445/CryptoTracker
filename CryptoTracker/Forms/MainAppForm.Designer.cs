@@ -58,7 +58,6 @@
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.metroButton3 = new MetroFramework.Controls.MetroButton();
             this.trackCoinButton = new MetroFramework.Controls.MetroButton();
             this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
@@ -315,7 +314,6 @@
             // 
             this.priceMonitorTab.Controls.Add(this.removeSelectedMonitorButton);
             this.priceMonitorTab.Controls.Add(this.priceMonitorListView);
-            this.priceMonitorTab.Controls.Add(this.metroButton3);
             this.priceMonitorTab.Controls.Add(this.trackCoinButton);
             this.priceMonitorTab.Controls.Add(this.cartesianChart1);
             this.priceMonitorTab.HorizontalScrollbarBarColor = true;
@@ -368,14 +366,6 @@
             // 
             this.columnHeader9.Text = "7d";
             this.columnHeader9.Width = 54;
-            // 
-            // metroButton3
-            // 
-            this.metroButton3.Location = new System.Drawing.Point(217, 395);
-            this.metroButton3.Name = "metroButton3";
-            this.metroButton3.Size = new System.Drawing.Size(75, 23);
-            this.metroButton3.TabIndex = 6;
-            this.metroButton3.Text = "Alerts";
             // 
             // trackCoinButton
             // 
@@ -737,7 +727,6 @@
         private MetroFramework.Controls.MetroTabPage priceMonitorTab;
         private LiveCharts.WinForms.CartesianChart cartesianChart1;
         private MetroFramework.Controls.MetroButton trackCoinButton;
-        private MetroFramework.Controls.MetroButton metroButton3;
         private MetroFramework.Controls.MetroButton exportButton;
         private System.Windows.Forms.ListView priceMonitorListView;
         private System.Windows.Forms.ColumnHeader columnHeader5;
