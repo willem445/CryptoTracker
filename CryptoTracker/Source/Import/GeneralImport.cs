@@ -186,6 +186,5 @@ namespace CryptoTracker
             }
             return result;
         }
-
     }
 }

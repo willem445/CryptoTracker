@@ -88,6 +88,7 @@
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
             this.removeSelectedMonitorButton = new MetroFramework.Controls.MetroButton();
+            this.chartTitleLabel = new MetroFramework.Controls.MetroLabel();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -312,6 +313,7 @@
             // 
             // priceMonitorTab
             // 
+            this.priceMonitorTab.Controls.Add(this.chartTitleLabel);
             this.priceMonitorTab.Controls.Add(this.removeSelectedMonitorButton);
             this.priceMonitorTab.Controls.Add(this.priceMonitorListView);
             this.priceMonitorTab.Controls.Add(this.trackCoinButton);
@@ -333,6 +335,7 @@
             this.columnHeader8,
             this.columnHeader9});
             this.priceMonitorListView.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.priceMonitorListView.FullRowSelect = true;
             this.priceMonitorListView.Location = new System.Drawing.Point(3, 15);
             this.priceMonitorListView.MultiSelect = false;
             this.priceMonitorListView.Name = "priceMonitorListView";
@@ -379,7 +382,7 @@
             // cartesianChart1
             // 
             this.cartesianChart1.BackColor = System.Drawing.Color.White;
-            this.cartesianChart1.Location = new System.Drawing.Point(311, 15);
+            this.cartesianChart1.Location = new System.Drawing.Point(311, 38);
             this.cartesianChart1.Name = "cartesianChart1";
             this.cartesianChart1.Size = new System.Drawing.Size(466, 374);
             this.cartesianChart1.TabIndex = 3;
@@ -641,6 +644,15 @@
             this.removeSelectedMonitorButton.Text = "Remove Selected";
             this.removeSelectedMonitorButton.Click += new System.EventHandler(this.removeSelectedMonitorButton_Click);
             // 
+            // chartTitleLabel
+            // 
+            this.chartTitleLabel.AutoSize = true;
+            this.chartTitleLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chartTitleLabel.Location = new System.Drawing.Point(311, 15);
+            this.chartTitleLabel.Name = "chartTitleLabel";
+            this.chartTitleLabel.Size = new System.Drawing.Size(0, 0);
+            this.chartTitleLabel.TabIndex = 9;
+            // 
             // MainAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -663,6 +675,7 @@
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
             this.priceMonitorTab.ResumeLayout(false);
+            this.priceMonitorTab.PerformLayout();
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
@@ -735,6 +748,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private MetroFramework.Controls.MetroButton removeSelectedMonitorButton;
+        private MetroFramework.Controls.MetroLabel chartTitleLabel;
     }
 }
 

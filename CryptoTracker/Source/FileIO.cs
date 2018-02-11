@@ -23,6 +23,11 @@ namespace CryptoTracker
             NETCOST
         }
 
+        //Coin Monitoring***************************************
+        /// <summary>
+        /// Parses data from MonitorData file and adds data to coin model list
+        /// </summary>
+        /// <returns>List of each coin to be monitored</returns>
         public List<CoinModel> ParseSavedCoinMonitoring()
         {
             List<CoinModel> coins = new List<CoinModel>();
@@ -50,6 +55,10 @@ namespace CryptoTracker
             return coins;
         }
 
+        /// <summary>
+        /// Saves data from list to file
+        /// </summary>
+        /// <param name="saveMonitorList"></param>
         public void SaveCoinMonitoring(List<CoinModel> saveMonitorList)
         {
             string path = System.IO.Path.Combine(Environment.GetFolderPath(
@@ -189,6 +198,38 @@ namespace CryptoTracker
         }
 
         /// <summary>
+        /// Converts data grid view to a data table
+        /// </summary>
+        /// <param name="dgv"></param>
+        /// <returns></returns>
+        private DataTable GetDataTableFromDGV(DataGridView dgv)
+        {
+            var dt = new DataTable();
+            foreach (DataGridViewColumn column in dgv.Columns)
+            {
+                if (column.Visible)
+                {
+                    // You could potentially name the column based on the DGV column name (beware of dupes)
+                    // or assign a type based on the data type of the data bound to this DGV column.
+                    dt.Columns.Add(column.Name);
+                }
+            }
+
+            object[] cellValues = new object[dgv.Columns.Count];
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                for (int i = 0; i < row.Cells.Count; i++)
+                {
+                    cellValues[i] = row.Cells[i].Value;
+                }
+                dt.Rows.Add(cellValues);
+            }
+
+            return dt;
+        }
+
+        //Export Methods*****************************************
+        /// <summary>
         /// Exports trades to a CSV format supported by bitcoin.tax
         /// </summary>
         /// <param name="table"></param>
@@ -228,35 +269,6 @@ namespace CryptoTracker
             File.WriteAllText(filePath, csv.ToString());
         }
 
-        /// <summary>
-        /// Converts data grid view to a data table
-        /// </summary>
-        /// <param name="dgv"></param>
-        /// <returns></returns>
-        private DataTable GetDataTableFromDGV(DataGridView dgv)
-        {
-            var dt = new DataTable();
-            foreach (DataGridViewColumn column in dgv.Columns)
-            {
-                if (column.Visible)
-                {
-                    // You could potentially name the column based on the DGV column name (beware of dupes)
-                    // or assign a type based on the data type of the data bound to this DGV column.
-                    dt.Columns.Add(column.Name);
-                }
-            }
 
-            object[] cellValues = new object[dgv.Columns.Count];
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                for (int i = 0; i < row.Cells.Count; i++)
-                {
-                    cellValues[i] = row.Cells[i].Value;
-                }
-                dt.Rows.Add(cellValues);
-            }
-
-            return dt;
-        }
     }
 }

@@ -34,17 +34,31 @@ namespace CryptoTracker
             selectFormat_CB.Items.Add("Bitcoin.Tax CSV Report");
         }
 
+        /// <summary>
+        /// Updates Year property each time index changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void year_CB_SelectedIndexChanged(object sender, EventArgs e)
         {
             Year = Convert.ToInt16(year_CB.Text);
         }
 
+        /// <summary>
+        /// Set dialog result and close the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void okayButton_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
+        /// <summary>
+        /// Handles routing to correct ExportData function in FileIO
+        /// </summary>
+        /// <param name="data"></param>
         public void ExportData(DataTable data)
         {
             FileIO file = new FileIO();
