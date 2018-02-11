@@ -600,6 +600,7 @@ namespace CryptoTracker
         {
             FileIO save = new FileIO();
             save.SavePriceTrackingToFile(priceManager.TrackedCoinList);
+            save.SaveCoinMonitoring(priceManager.MonitorCoinList);
         }
 
         /// <summary>
@@ -1040,6 +1041,7 @@ namespace CryptoTracker
 
                     //Add new coins to tracking in update thread
                     await Task.Run(() => TrackNewCoinThread(trackCoins.TrackNewCoin, progress));
+                    priceManager.UpdateMarketData();
                     priceManager.UpdatePriceData();
                 }
             }
@@ -1174,54 +1176,39 @@ namespace CryptoTracker
             loadBar.Invoke(new Action(() => loadBar.Visible = false));
         }
 
-        private void metroButton2_Click(object sender, EventArgs e)
-        {
-            string input = "https://min-api.cryptocompare.com/data/histohour?fsym=XLM&tsym=USD&limit=200&aggregate=3&e=CCCAGG";
-            //test button
-            //Connect to API
-            var cli = new System.Net.WebClient();
-            string prices = cli.DownloadString(input);
-            dynamic results = JsonConvert.DeserializeObject<dynamic>(prices);
-
-            var test = results.Data;
-
-            List<double> data = new List<double>();
-
-            for (int i = 0; i < 200; i++)
-            {
-                data.Add(Convert.ToDouble(test[i].close));
-            }
-
-            cartesianChart1.Series = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    Title = "XLM",
-                    Values = new ChartValues<double>(data),
-                    PointGeometry = null
-                },
-
-            };
-
-            cartesianChart1.Zoom = ZoomingOptions.X;
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void trackCoinButton_Click(object sender, EventArgs e)
         {
             AddNewPriceMonitor addCoin = new AddNewPriceMonitor(priceManager.AllCoinNames);
             if (addCoin.ShowDialog() == DialogResult.OK)
             {
-
+                priceManager.MonitorCoinList.Add(addCoin.AddCoinMonitor);
+                UpdateMonitorAndUI();
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void priceMonitorListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             int index = priceMonitorListView.SelectedIndex();
 #if DEBUG
             Console.WriteLine("Index: " + index.ToString());
 #endif
-            string input = string.Format("https://min-api.cryptocompare.com/data/histohour?fsym={0}&tsym=USD&limit=200&aggregate=3&e=CCCAGG", priceManager.MonitorCoinList[index].Symbol);
+            string symbol = priceManager.MonitorCoinList[index].Symbol;
+            if (symbol == "MIOTA")
+            {
+                symbol = "IOTA";
+            }
+
+            string input = string.Format("https://min-api.cryptocompare.com/data/histohour?fsym={0}&tsym=USD&limit=200&aggregate=3&e=CCCAGG", symbol);
             //test button
             //Connect to API
             var cli = new System.Net.WebClient();
@@ -1238,6 +1225,9 @@ namespace CryptoTracker
                 data.Add(new DateTimePoint(time, Convert.ToDouble(parseddata[i].close)));
             }
 
+            var converter = new System.Windows.Media.BrushConverter();
+            var brush = (System.Windows.Media.Brush)converter.ConvertFromString("#ffb3b3");
+
             cartesianChart1.Series = new SeriesCollection
             {
                 new LineSeries
@@ -1245,13 +1235,50 @@ namespace CryptoTracker
                     Title = priceManager.MonitorCoinList[index].Name,
                     Values = new ChartValues<DateTimePoint>(data),
                     PointGeometry = null,
-                    StrokeThickness = 0,
-                    //PointForeground = System.Windows.Media.Brushes.Red
+                    PointForeground = System.Windows.Media.Brushes.Red,
+                    Foreground = System.Windows.Media.Brushes.Red,
+                    Stroke = System.Windows.Media.Brushes.Red,
+                    Fill = brush
                 },
             };
 
+            cartesianChart1.AxisX.Clear();
+            cartesianChart1.AxisY.Clear();
+
+            cartesianChart1.AxisX.Add(new Axis
+            {
+                Name = "xAxis",
+                Title = "Time",
+                FontSize = 10,
+                Foreground = System.Windows.Media.Brushes.Black,
+                LabelFormatter = val => new DateTime((long)val).ToShortDateString() + " " + new DateTime((long)val).ToShortTimeString()
+            });
+
+            cartesianChart1.AxisY.Add(new Axis
+            {
+                Name = "yAxis",
+                Title = "Price",
+                FontSize = 10,
+                Foreground = System.Windows.Media.Brushes.Black,
+                LabelFormatter = val => val.ToString("C")
+            });
+
             cartesianChart1.DisableAnimations = true;
             cartesianChart1.Zoom = ZoomingOptions.X;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void removeSelectedMonitorButton_Click(object sender, EventArgs e)
+        {
+            int index = priceMonitorListView.SelectedIndex();
+            priceMonitorListView.Items.RemoveAt(index);
+            priceManager.MonitorCoinList.RemoveAt(index);
+
+            UpdateMonitorAndUI();
         }
     }
 }

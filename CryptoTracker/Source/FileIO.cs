@@ -23,7 +23,7 @@ namespace CryptoTracker
             NETCOST
         }
 
-        public List<CoinModel> ParseSavedCoinTracking()
+        public List<CoinModel> ParseSavedCoinMonitoring()
         {
             List<CoinModel> coins = new List<CoinModel>();
 
@@ -41,7 +41,7 @@ namespace CryptoTracker
                 {
                     CoinModel newCoin = new CoinModel();
 
-                    newCoin.APILink = "https://api.coinmarketcap.com/v1/ticker/" + line;
+                    newCoin.APILink = line;
 
                     coins.Add(newCoin);
                 }
@@ -50,9 +50,25 @@ namespace CryptoTracker
             return coins;
         }
 
-        public void SaveCoinTracking()
+        public void SaveCoinMonitoring(List<CoinModel> saveMonitorList)
         {
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.MyDoc‌​uments), "CrytoTracker");
 
+            if (!Directory.Exists(Path.Combine(path, "MonitorData.txt")))
+            {
+                System.IO.Directory.CreateDirectory(path);
+            }
+
+            using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(Path.Combine(path, "MonitorData.txt")))
+            {
+                for (int i = 0; i < saveMonitorList.Count; i++)
+                {
+                    //Print name, quantity, net cost, and api link to text file
+                    file.WriteLine(saveMonitorList[i].APILink);
+                }
+            }
         }
 
         /// <summary>

@@ -31,6 +31,7 @@
             this.selectCoin_CB = new MetroFramework.Controls.MetroComboBox();
             this.cancelButton = new MetroFramework.Controls.MetroButton();
             this.addButton = new MetroFramework.Controls.MetroButton();
+            this.messageLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // selectCoin_CB
@@ -38,14 +39,14 @@
             this.selectCoin_CB.FontSize = MetroFramework.MetroLinkSize.Small;
             this.selectCoin_CB.FormattingEnabled = true;
             this.selectCoin_CB.ItemHeight = 19;
-            this.selectCoin_CB.Location = new System.Drawing.Point(101, 87);
+            this.selectCoin_CB.Location = new System.Drawing.Point(26, 92);
             this.selectCoin_CB.Name = "selectCoin_CB";
-            this.selectCoin_CB.Size = new System.Drawing.Size(121, 25);
+            this.selectCoin_CB.Size = new System.Drawing.Size(223, 25);
             this.selectCoin_CB.TabIndex = 21;
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(295, 220);
+            this.cancelButton.Location = new System.Drawing.Point(92, 134);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 23;
@@ -54,19 +55,29 @@
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(376, 220);
+            this.addButton.Location = new System.Drawing.Point(173, 134);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
             this.addButton.TabIndex = 22;
             this.addButton.Text = "Add";
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
+            // messageLabel
+            // 
+            this.messageLabel.Font = new System.Drawing.Font("Segoe UI Symbol", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.messageLabel.Location = new System.Drawing.Point(23, 60);
+            this.messageLabel.Name = "messageLabel";
+            this.messageLabel.Size = new System.Drawing.Size(323, 29);
+            this.messageLabel.TabIndex = 24;
+            this.messageLabel.Text = "Select coin to add to price monitoring.";
+            // 
             // AddNewPriceMonitor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = MetroFramework.Drawing.MetroBorderStyle.FixedSingle;
-            this.ClientSize = new System.Drawing.Size(474, 266);
+            this.ClientSize = new System.Drawing.Size(272, 182);
+            this.Controls.Add(this.messageLabel);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.selectCoin_CB);
@@ -82,5 +93,6 @@
         private MetroFramework.Controls.MetroComboBox selectCoin_CB;
         private MetroFramework.Controls.MetroButton cancelButton;
         private MetroFramework.Controls.MetroButton addButton;
+        private System.Windows.Forms.Label messageLabel;
     }
 }

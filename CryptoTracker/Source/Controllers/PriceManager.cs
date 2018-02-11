@@ -108,7 +108,7 @@ namespace CryptoTracker
             //Parse data in documents folder
             FileIO file = new FileIO();
             trackedCoinList = file.ParseSavedData();
-            priceMonitorCoinsList = file.ParseSavedCoinTracking();
+            priceMonitorCoinsList = file.ParseSavedCoinMonitoring();
 
             progress.Report(30);
 
@@ -132,7 +132,7 @@ namespace CryptoTracker
             //Parse data in documents folder
             FileIO file = new FileIO();
             trackedCoinList = file.ParseSavedData();
-            priceMonitorCoinsList = file.ParseSavedCoinTracking();
+            priceMonitorCoinsList = file.ParseSavedCoinMonitoring();
 
             //Update prices based on parsed data
             UpdateMarketData();
@@ -199,38 +199,42 @@ namespace CryptoTracker
             //https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH,DASH&tsyms=USD
 
             string input = "";
-            for (int j = 0; j < trackedCoinList.Count; j++)
-            {
-                if (trackedCoinList[j].Symbol == "MIOTA")
-                {
-                    input += "IOTA" + ",";
-                }
-                else
-                {
-                    input += trackedCoinList[j].Symbol + ",";
-                }
-                
-            }
-            input = input.TrimEnd(',');
-            input = string.Format("https://min-api.cryptocompare.com/data/pricemulti?fsyms={0}&tsyms=USD", input);
 
-            try
+            if (trackedCoinList.Count != 0)
             {
-                //Connect to API
-                var cli = new System.Net.WebClient();
-                string prices = cli.DownloadString(input);
-                var results = JsonConvert.DeserializeObject<Dictionary<string, Item>>(prices);
-
-                int k = 0;
-                foreach (var item in results)
+                for (int j = 0; j < trackedCoinList.Count; j++)
                 {
-                    trackedCoinList[k].Price = item.Value.USD;
-                    k++;
+                    if (trackedCoinList[j].Symbol == "MIOTA")
+                    {
+                        input += "IOTA" + ",";
+                    }
+                    else
+                    {
+                        input += trackedCoinList[j].Symbol + ",";
+                    }
+
                 }
-            }
-            catch (System.Net.WebException e)
-            {
-                Console.WriteLine(e.Message);
+                input = input.TrimEnd(',');
+                input = string.Format("https://min-api.cryptocompare.com/data/pricemulti?fsyms={0}&tsyms=USD", input);
+
+                try
+                {
+                    //Connect to API
+                    var cli = new System.Net.WebClient();
+                    string prices = cli.DownloadString(input);
+                    var results = JsonConvert.DeserializeObject<Dictionary<string, Item>>(prices);
+
+                    int k = 0;
+                    foreach (var item in results)
+                    {
+                        trackedCoinList[k].Price = item.Value.USD;
+                        k++;
+                    }
+                }
+                catch (System.Net.WebException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
 

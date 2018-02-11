@@ -51,6 +51,16 @@
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.totalProfitLabel = new MetroFramework.Controls.MetroLabel();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
+            this.priceMonitorTab = new MetroFramework.Controls.MetroTabPage();
+            this.priceMonitorListView = new System.Windows.Forms.ListView();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.metroButton3 = new MetroFramework.Controls.MetroButton();
+            this.trackCoinButton = new MetroFramework.Controls.MetroButton();
+            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.exportButton = new MetroFramework.Controls.MetroButton();
             this.undoTradesButton = new MetroFramework.Controls.MetroButton();
@@ -76,27 +86,17 @@
             this.pieChart1 = new LiveCharts.WinForms.PieChart();
             this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.priceMonitorTab = new MetroFramework.Controls.MetroTabPage();
-            this.priceMonitorListView = new System.Windows.Forms.ListView();
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.metroButton3 = new MetroFramework.Controls.MetroButton();
-            this.metroButton2 = new MetroFramework.Controls.MetroButton();
-            this.trackCoinButton = new MetroFramework.Controls.MetroButton();
-            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
+            this.removeSelectedMonitorButton = new MetroFramework.Controls.MetroButton();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
+            this.priceMonitorTab.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.metroTabPage2.SuspendLayout();
             this.metroTabPage4.SuspendLayout();
-            this.priceMonitorTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -203,13 +203,13 @@
             // metroTabControl1
             // 
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
+            this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Controls.Add(this.priceMonitorTab);
             this.metroTabControl1.Controls.Add(this.metroTabPage3);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
-            this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 4;
+            this.metroTabControl1.SelectedIndex = 1;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -310,6 +310,90 @@
             this.metroLabel6.Size = new System.Drawing.Size(37, 15);
             this.metroLabel6.TabIndex = 11;
             this.metroLabel6.Text = "Profit:";
+            // 
+            // priceMonitorTab
+            // 
+            this.priceMonitorTab.Controls.Add(this.removeSelectedMonitorButton);
+            this.priceMonitorTab.Controls.Add(this.priceMonitorListView);
+            this.priceMonitorTab.Controls.Add(this.metroButton3);
+            this.priceMonitorTab.Controls.Add(this.trackCoinButton);
+            this.priceMonitorTab.Controls.Add(this.cartesianChart1);
+            this.priceMonitorTab.HorizontalScrollbarBarColor = true;
+            this.priceMonitorTab.Location = new System.Drawing.Point(4, 35);
+            this.priceMonitorTab.Name = "priceMonitorTab";
+            this.priceMonitorTab.Size = new System.Drawing.Size(796, 421);
+            this.priceMonitorTab.TabIndex = 4;
+            this.priceMonitorTab.Text = "Price Monitor";
+            this.priceMonitorTab.VerticalScrollbarBarColor = true;
+            // 
+            // priceMonitorListView
+            // 
+            this.priceMonitorListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader5,
+            this.columnHeader6,
+            this.columnHeader7,
+            this.columnHeader8,
+            this.columnHeader9});
+            this.priceMonitorListView.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.priceMonitorListView.Location = new System.Drawing.Point(3, 15);
+            this.priceMonitorListView.MultiSelect = false;
+            this.priceMonitorListView.Name = "priceMonitorListView";
+            this.priceMonitorListView.Size = new System.Drawing.Size(302, 374);
+            this.priceMonitorListView.TabIndex = 7;
+            this.priceMonitorListView.UseCompatibleStateImageBehavior = false;
+            this.priceMonitorListView.View = System.Windows.Forms.View.Details;
+            this.priceMonitorListView.SelectedIndexChanged += new System.EventHandler(this.priceMonitorListView_SelectedIndexChanged);
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Coin Name";
+            this.columnHeader5.Width = 80;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Price";
+            this.columnHeader6.Width = 55;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "1h";
+            this.columnHeader7.Width = 54;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "24h";
+            this.columnHeader8.Width = 54;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "7d";
+            this.columnHeader9.Width = 54;
+            // 
+            // metroButton3
+            // 
+            this.metroButton3.Location = new System.Drawing.Point(217, 395);
+            this.metroButton3.Name = "metroButton3";
+            this.metroButton3.Size = new System.Drawing.Size(75, 23);
+            this.metroButton3.TabIndex = 6;
+            this.metroButton3.Text = "Alerts";
+            // 
+            // trackCoinButton
+            // 
+            this.trackCoinButton.Location = new System.Drawing.Point(3, 395);
+            this.trackCoinButton.Name = "trackCoinButton";
+            this.trackCoinButton.Size = new System.Drawing.Size(101, 23);
+            this.trackCoinButton.TabIndex = 4;
+            this.trackCoinButton.Text = "Track New Coin";
+            this.trackCoinButton.Click += new System.EventHandler(this.trackCoinButton_Click);
+            // 
+            // cartesianChart1
+            // 
+            this.cartesianChart1.BackColor = System.Drawing.Color.White;
+            this.cartesianChart1.Location = new System.Drawing.Point(311, 15);
+            this.cartesianChart1.Name = "cartesianChart1";
+            this.cartesianChart1.Size = new System.Drawing.Size(466, 374);
+            this.cartesianChart1.TabIndex = 3;
+            this.cartesianChart1.Text = "cartesianChart1";
             // 
             // metroTabPage3
             // 
@@ -553,102 +637,19 @@
             this.infoFlowPanel.Size = new System.Drawing.Size(777, 415);
             this.infoFlowPanel.TabIndex = 2;
             // 
-            // priceMonitorTab
-            // 
-            this.priceMonitorTab.Controls.Add(this.priceMonitorListView);
-            this.priceMonitorTab.Controls.Add(this.metroButton3);
-            this.priceMonitorTab.Controls.Add(this.metroButton2);
-            this.priceMonitorTab.Controls.Add(this.trackCoinButton);
-            this.priceMonitorTab.Controls.Add(this.cartesianChart1);
-            this.priceMonitorTab.HorizontalScrollbarBarColor = true;
-            this.priceMonitorTab.Location = new System.Drawing.Point(4, 35);
-            this.priceMonitorTab.Name = "priceMonitorTab";
-            this.priceMonitorTab.Size = new System.Drawing.Size(796, 421);
-            this.priceMonitorTab.TabIndex = 4;
-            this.priceMonitorTab.Text = "Price Monitor";
-            this.priceMonitorTab.VerticalScrollbarBarColor = true;
-            // 
-            // priceMonitorListView
-            // 
-            this.priceMonitorListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader6,
-            this.columnHeader7,
-            this.columnHeader8,
-            this.columnHeader9});
-            this.priceMonitorListView.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.priceMonitorListView.Location = new System.Drawing.Point(3, 15);
-            this.priceMonitorListView.MultiSelect = false;
-            this.priceMonitorListView.Name = "priceMonitorListView";
-            this.priceMonitorListView.Size = new System.Drawing.Size(289, 374);
-            this.priceMonitorListView.TabIndex = 7;
-            this.priceMonitorListView.UseCompatibleStateImageBehavior = false;
-            this.priceMonitorListView.View = System.Windows.Forms.View.Details;
-            this.priceMonitorListView.SelectedIndexChanged += new System.EventHandler(this.priceMonitorListView_SelectedIndexChanged);
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Coin Name";
-            this.columnHeader5.Width = 95;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Price";
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "1h";
-            this.columnHeader7.Width = 42;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "24h";
-            this.columnHeader8.Width = 42;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "7d";
-            this.columnHeader9.Width = 45;
-            // 
-            // metroButton3
-            // 
-            this.metroButton3.Location = new System.Drawing.Point(110, 395);
-            this.metroButton3.Name = "metroButton3";
-            this.metroButton3.Size = new System.Drawing.Size(75, 23);
-            this.metroButton3.TabIndex = 6;
-            this.metroButton3.Text = "Alerts";
-            // 
-            // metroButton2
-            // 
-            this.metroButton2.Location = new System.Drawing.Point(217, 395);
-            this.metroButton2.Name = "metroButton2";
-            this.metroButton2.Size = new System.Drawing.Size(75, 23);
-            this.metroButton2.TabIndex = 5;
-            this.metroButton2.Text = "test";
-            this.metroButton2.Click += new System.EventHandler(this.metroButton2_Click);
-            // 
-            // trackCoinButton
-            // 
-            this.trackCoinButton.Location = new System.Drawing.Point(3, 395);
-            this.trackCoinButton.Name = "trackCoinButton";
-            this.trackCoinButton.Size = new System.Drawing.Size(101, 23);
-            this.trackCoinButton.TabIndex = 4;
-            this.trackCoinButton.Text = "Track New Coin";
-            this.trackCoinButton.Click += new System.EventHandler(this.trackCoinButton_Click);
-            // 
-            // cartesianChart1
-            // 
-            this.cartesianChart1.BackColor = System.Drawing.Color.White;
-            this.cartesianChart1.Location = new System.Drawing.Point(298, 15);
-            this.cartesianChart1.Name = "cartesianChart1";
-            this.cartesianChart1.Size = new System.Drawing.Size(479, 374);
-            this.cartesianChart1.TabIndex = 3;
-            this.cartesianChart1.Text = "cartesianChart1";
-            // 
             // metroStyleManager1
             // 
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
+            // 
+            // removeSelectedMonitorButton
+            // 
+            this.removeSelectedMonitorButton.Location = new System.Drawing.Point(110, 395);
+            this.removeSelectedMonitorButton.Name = "removeSelectedMonitorButton";
+            this.removeSelectedMonitorButton.Size = new System.Drawing.Size(101, 23);
+            this.removeSelectedMonitorButton.TabIndex = 8;
+            this.removeSelectedMonitorButton.Text = "Remove Selected";
+            this.removeSelectedMonitorButton.Click += new System.EventHandler(this.removeSelectedMonitorButton_Click);
             // 
             // MainAppForm
             // 
@@ -671,13 +672,13 @@
             this.metroTabControl1.ResumeLayout(false);
             this.metroTabPage1.ResumeLayout(false);
             this.metroTabPage1.PerformLayout();
+            this.priceMonitorTab.ResumeLayout(false);
             this.metroTabPage3.ResumeLayout(false);
             this.metroTabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage2.PerformLayout();
             this.metroTabPage4.ResumeLayout(false);
-            this.priceMonitorTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -736,7 +737,6 @@
         private MetroFramework.Controls.MetroTabPage priceMonitorTab;
         private LiveCharts.WinForms.CartesianChart cartesianChart1;
         private MetroFramework.Controls.MetroButton trackCoinButton;
-        private MetroFramework.Controls.MetroButton metroButton2;
         private MetroFramework.Controls.MetroButton metroButton3;
         private MetroFramework.Controls.MetroButton exportButton;
         private System.Windows.Forms.ListView priceMonitorListView;
@@ -745,6 +745,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
+        private MetroFramework.Controls.MetroButton removeSelectedMonitorButton;
     }
 }
 
