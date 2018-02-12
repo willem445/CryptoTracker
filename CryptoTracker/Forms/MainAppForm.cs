@@ -714,7 +714,7 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private void metroTabControl1_Selected(object sender, TabControlEventArgs e)
         {
-            if (e.TabPage == metroTabPage2)
+            if (e.TabPage == portfolioTab)
             {
                 PortfolioSelected();
             }
@@ -1269,10 +1269,17 @@ namespace CryptoTracker
         private void InitThread(IProgress<int> progress)
         {
             startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Text = "Updating prices..."));
-            priceManager = new PriceManager(progress);
+            priceManager = new PriceManager(progress); //Initialize price manager
             ApplicationFormInitialize(progress);
             progress.Report(100);
 
+            //Initialize the graph to show data
+            if (priceMonitorListView.Items.Count != 0)
+            {
+                priceMonitorListView.Invoke(new Action(() => priceMonitorListView.Items[0].Selected = true));
+            }
+            
+            //Hide load progress controls
             startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Visible = false));
             startUpStatusLabel.Invoke(new Action(() => startUpStatusLabel.Enabled = false));
             loadBar.Invoke(new Action(() => loadBar.Enabled = false));

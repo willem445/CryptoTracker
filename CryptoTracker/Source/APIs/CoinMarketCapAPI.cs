@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CryptoTracker
 {
-    class CoinMarketCapAPI
+    public class CoinMarketCapAPI
     {
         //TODO - JSON object does not have fields for other currencies
 
@@ -105,10 +102,20 @@ namespace CryptoTracker
         /// </summary>
         /// <param name="currency">return price, 24h volume, and market cap in terms of another currency</param>
         /// <param name="cmc_id">ID of currency on CMC (ie. bitcoin, ethereum)</param>
+        /// <param name="useURL">Set to true if cmc_id is the url to CMC, not just the id</param>
         /// <returns>Returns null if not found</returns>
-        public CoinMarketCapCoinResponse GetCoinData(CMCValidCurrency currency, string cmc_id)
+        public CoinMarketCapCoinResponse GetCoinData(CMCValidCurrency currency, string cmc_id, bool useURL = false)
         {
-            string input = string.Format("https://api.coinmarketcap.com/v1/ticker/{0}/?convert={1}", cmc_id, currency);
+            string input = "";
+
+            if (useURL == true)
+            {
+                input = cmc_id;
+            }
+            else
+            {
+                input = string.Format("https://api.coinmarketcap.com/v1/ticker/{0}/?convert={1}", cmc_id, currency);
+            }
 
             return CMC_CoinRequest(input)[0];
         }
@@ -125,6 +132,7 @@ namespace CryptoTracker
             return CMC_GlobalRequest(input);
         }
 
+        //Private Methods******************************************************
         /// <summary>
         /// Connects to CMC API and parse JSON reponse
         /// </summary>

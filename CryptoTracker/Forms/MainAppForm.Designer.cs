@@ -42,7 +42,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
-            this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.priceTrackingTab = new MetroFramework.Controls.MetroTabPage();
             this.startUpStatusLabel = new MetroFramework.Controls.MetroLabel();
             this.loadBar = new MetroFramework.Controls.MetroProgressBar();
             this.totalValueLabel = new MetroFramework.Controls.MetroLabel();
@@ -60,7 +60,7 @@
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.trackCoinButton = new MetroFramework.Controls.MetroButton();
             this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
-            this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.tradesTab = new MetroFramework.Controls.MetroTabPage();
             this.exportButton = new MetroFramework.Controls.MetroButton();
             this.undoTradesButton = new MetroFramework.Controls.MetroButton();
             this.pBar = new MetroFramework.Controls.MetroProgressBar();
@@ -71,7 +71,7 @@
             this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
             this.importButton = new MetroFramework.Controls.MetroButton();
             this.selectCoin_CB = new MetroFramework.Controls.MetroComboBox();
-            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.portfolioTab = new MetroFramework.Controls.MetroTabPage();
             this.filterPercentLabel = new MetroFramework.Controls.MetroLabel();
             this.metroScrollBar1 = new MetroFramework.Controls.MetroScrollBar();
             this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
@@ -83,7 +83,7 @@
             this.filter_CB = new MetroFramework.Controls.MetroComboBox();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.pieChart1 = new LiveCharts.WinForms.PieChart();
-            this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
+            this.coinInfoTab = new MetroFramework.Controls.MetroTabPage();
             this.infoFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
@@ -91,12 +91,12 @@
             this.chartTitleLabel = new MetroFramework.Controls.MetroLabel();
             this.menuStrip1.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
-            this.metroTabPage1.SuspendLayout();
+            this.priceTrackingTab.SuspendLayout();
             this.priceMonitorTab.SuspendLayout();
-            this.metroTabPage3.SuspendLayout();
+            this.tradesTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            this.metroTabPage2.SuspendLayout();
-            this.metroTabPage4.SuspendLayout();
+            this.portfolioTab.SuspendLayout();
+            this.coinInfoTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -202,11 +202,11 @@
             // 
             // metroTabControl1
             // 
-            this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage4);
+            this.metroTabControl1.Controls.Add(this.priceTrackingTab);
             this.metroTabControl1.Controls.Add(this.priceMonitorTab);
-            this.metroTabControl1.Controls.Add(this.metroTabPage3);
-            this.metroTabControl1.Controls.Add(this.metroTabPage2);
+            this.metroTabControl1.Controls.Add(this.tradesTab);
+            this.metroTabControl1.Controls.Add(this.portfolioTab);
+            this.metroTabControl1.Controls.Add(this.coinInfoTab);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
             this.metroTabControl1.SelectedIndex = 1;
@@ -216,24 +216,24 @@
             this.metroTabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.metroTabControl1_Selecting);
             this.metroTabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.metroTabControl1_Selected);
             // 
-            // metroTabPage1
+            // priceTrackingTab
             // 
-            this.metroTabPage1.Controls.Add(this.startUpStatusLabel);
-            this.metroTabPage1.Controls.Add(this.loadBar);
-            this.metroTabPage1.Controls.Add(this.totalValueLabel);
-            this.metroTabPage1.Controls.Add(this.metroLabel2);
-            this.metroTabPage1.Controls.Add(this.totalInvestedLabel);
-            this.metroTabPage1.Controls.Add(this.metroLabel4);
-            this.metroTabPage1.Controls.Add(this.totalProfitLabel);
-            this.metroTabPage1.Controls.Add(this.metroLabel6);
-            this.metroTabPage1.Controls.Add(this.flowLayoutPanel1);
-            this.metroTabPage1.HorizontalScrollbarBarColor = true;
-            this.metroTabPage1.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage1.Name = "metroTabPage1";
-            this.metroTabPage1.Size = new System.Drawing.Size(796, 421);
-            this.metroTabPage1.TabIndex = 0;
-            this.metroTabPage1.Text = "Price Tracking";
-            this.metroTabPage1.VerticalScrollbarBarColor = true;
+            this.priceTrackingTab.Controls.Add(this.startUpStatusLabel);
+            this.priceTrackingTab.Controls.Add(this.loadBar);
+            this.priceTrackingTab.Controls.Add(this.totalValueLabel);
+            this.priceTrackingTab.Controls.Add(this.metroLabel2);
+            this.priceTrackingTab.Controls.Add(this.totalInvestedLabel);
+            this.priceTrackingTab.Controls.Add(this.metroLabel4);
+            this.priceTrackingTab.Controls.Add(this.totalProfitLabel);
+            this.priceTrackingTab.Controls.Add(this.metroLabel6);
+            this.priceTrackingTab.Controls.Add(this.flowLayoutPanel1);
+            this.priceTrackingTab.HorizontalScrollbarBarColor = true;
+            this.priceTrackingTab.Location = new System.Drawing.Point(4, 35);
+            this.priceTrackingTab.Name = "priceTrackingTab";
+            this.priceTrackingTab.Size = new System.Drawing.Size(796, 421);
+            this.priceTrackingTab.TabIndex = 0;
+            this.priceTrackingTab.Text = "Price Tracking";
+            this.priceTrackingTab.VerticalScrollbarBarColor = true;
             // 
             // startUpStatusLabel
             // 
@@ -388,25 +388,25 @@
             this.cartesianChart1.TabIndex = 3;
             this.cartesianChart1.Text = "cartesianChart1";
             // 
-            // metroTabPage3
+            // tradesTab
             // 
-            this.metroTabPage3.Controls.Add(this.exportButton);
-            this.metroTabPage3.Controls.Add(this.undoTradesButton);
-            this.metroTabPage3.Controls.Add(this.pBar);
-            this.metroTabPage3.Controls.Add(this.dataGridView2);
-            this.metroTabPage3.Controls.Add(this.importSelect_CB);
-            this.metroTabPage3.Controls.Add(this.saveImportButton);
-            this.metroTabPage3.Controls.Add(this.addButton);
-            this.metroTabPage3.Controls.Add(this.metroLabel5);
-            this.metroTabPage3.Controls.Add(this.importButton);
-            this.metroTabPage3.Controls.Add(this.selectCoin_CB);
-            this.metroTabPage3.HorizontalScrollbarBarColor = true;
-            this.metroTabPage3.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage3.Name = "metroTabPage3";
-            this.metroTabPage3.Size = new System.Drawing.Size(796, 421);
-            this.metroTabPage3.TabIndex = 2;
-            this.metroTabPage3.Text = "Trades";
-            this.metroTabPage3.VerticalScrollbarBarColor = true;
+            this.tradesTab.Controls.Add(this.exportButton);
+            this.tradesTab.Controls.Add(this.undoTradesButton);
+            this.tradesTab.Controls.Add(this.pBar);
+            this.tradesTab.Controls.Add(this.dataGridView2);
+            this.tradesTab.Controls.Add(this.importSelect_CB);
+            this.tradesTab.Controls.Add(this.saveImportButton);
+            this.tradesTab.Controls.Add(this.addButton);
+            this.tradesTab.Controls.Add(this.metroLabel5);
+            this.tradesTab.Controls.Add(this.importButton);
+            this.tradesTab.Controls.Add(this.selectCoin_CB);
+            this.tradesTab.HorizontalScrollbarBarColor = true;
+            this.tradesTab.Location = new System.Drawing.Point(4, 35);
+            this.tradesTab.Name = "tradesTab";
+            this.tradesTab.Size = new System.Drawing.Size(796, 421);
+            this.tradesTab.TabIndex = 2;
+            this.tradesTab.Text = "Trades";
+            this.tradesTab.VerticalScrollbarBarColor = true;
             // 
             // exportButton
             // 
@@ -502,22 +502,22 @@
             this.selectCoin_CB.Size = new System.Drawing.Size(121, 25);
             this.selectCoin_CB.TabIndex = 3;
             // 
-            // metroTabPage2
+            // portfolioTab
             // 
-            this.metroTabPage2.Controls.Add(this.filterPercentLabel);
-            this.metroTabPage2.Controls.Add(this.metroScrollBar1);
-            this.metroTabPage2.Controls.Add(this.metroLabel3);
-            this.metroTabPage2.Controls.Add(this.listView1);
-            this.metroTabPage2.Controls.Add(this.filter_CB);
-            this.metroTabPage2.Controls.Add(this.metroLabel1);
-            this.metroTabPage2.Controls.Add(this.pieChart1);
-            this.metroTabPage2.HorizontalScrollbarBarColor = true;
-            this.metroTabPage2.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(796, 421);
-            this.metroTabPage2.TabIndex = 1;
-            this.metroTabPage2.Text = "Portfolio";
-            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            this.portfolioTab.Controls.Add(this.filterPercentLabel);
+            this.portfolioTab.Controls.Add(this.metroScrollBar1);
+            this.portfolioTab.Controls.Add(this.metroLabel3);
+            this.portfolioTab.Controls.Add(this.listView1);
+            this.portfolioTab.Controls.Add(this.filter_CB);
+            this.portfolioTab.Controls.Add(this.metroLabel1);
+            this.portfolioTab.Controls.Add(this.pieChart1);
+            this.portfolioTab.HorizontalScrollbarBarColor = true;
+            this.portfolioTab.Location = new System.Drawing.Point(4, 35);
+            this.portfolioTab.Name = "portfolioTab";
+            this.portfolioTab.Size = new System.Drawing.Size(796, 421);
+            this.portfolioTab.TabIndex = 1;
+            this.portfolioTab.Text = "Portfolio";
+            this.portfolioTab.VerticalScrollbarBarColor = true;
             // 
             // filterPercentLabel
             // 
@@ -610,16 +610,16 @@
             this.pieChart1.Text = "pieChart1";
             this.pieChart1.DataHover += new LiveCharts.Events.DataHoverHandler(this.pieChart1_DataHover);
             // 
-            // metroTabPage4
+            // coinInfoTab
             // 
-            this.metroTabPage4.Controls.Add(this.infoFlowPanel);
-            this.metroTabPage4.HorizontalScrollbarBarColor = true;
-            this.metroTabPage4.Location = new System.Drawing.Point(4, 35);
-            this.metroTabPage4.Name = "metroTabPage4";
-            this.metroTabPage4.Size = new System.Drawing.Size(796, 421);
-            this.metroTabPage4.TabIndex = 3;
-            this.metroTabPage4.Text = "Coin Info";
-            this.metroTabPage4.VerticalScrollbarBarColor = true;
+            this.coinInfoTab.Controls.Add(this.infoFlowPanel);
+            this.coinInfoTab.HorizontalScrollbarBarColor = true;
+            this.coinInfoTab.Location = new System.Drawing.Point(4, 35);
+            this.coinInfoTab.Name = "coinInfoTab";
+            this.coinInfoTab.Size = new System.Drawing.Size(796, 421);
+            this.coinInfoTab.TabIndex = 3;
+            this.coinInfoTab.Text = "Coin Info";
+            this.coinInfoTab.VerticalScrollbarBarColor = true;
             // 
             // infoFlowPanel
             // 
@@ -672,16 +672,16 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.metroTabControl1.ResumeLayout(false);
-            this.metroTabPage1.ResumeLayout(false);
-            this.metroTabPage1.PerformLayout();
+            this.priceTrackingTab.ResumeLayout(false);
+            this.priceTrackingTab.PerformLayout();
             this.priceMonitorTab.ResumeLayout(false);
             this.priceMonitorTab.PerformLayout();
-            this.metroTabPage3.ResumeLayout(false);
-            this.metroTabPage3.PerformLayout();
+            this.tradesTab.ResumeLayout(false);
+            this.tradesTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            this.metroTabPage2.ResumeLayout(false);
-            this.metroTabPage2.PerformLayout();
-            this.metroTabPage4.ResumeLayout(false);
+            this.portfolioTab.ResumeLayout(false);
+            this.portfolioTab.PerformLayout();
+            this.coinInfoTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -697,9 +697,9 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private MetroFramework.Controls.MetroTabControl metroTabControl1;
-        private MetroFramework.Controls.MetroTabPage metroTabPage1;
-        private MetroFramework.Controls.MetroTabPage metroTabPage2;
-        private MetroFramework.Controls.MetroTabPage metroTabPage3;
+        private MetroFramework.Controls.MetroTabPage priceTrackingTab;
+        private MetroFramework.Controls.MetroTabPage portfolioTab;
+        private MetroFramework.Controls.MetroTabPage tradesTab;
         private MetroFramework.Components.MetroStyleExtender metroStyleExtender1;
         private MetroFramework.Components.MetroStyleManager metroStyleManager1;
         private MetroFramework.Controls.MetroLabel metroLabel6;
@@ -711,7 +711,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private MetroFramework.Controls.MetroComboBox selectCoin_CB;
-        private MetroFramework.Controls.MetroTabPage metroTabPage4;
+        private MetroFramework.Controls.MetroTabPage coinInfoTab;
         private System.Windows.Forms.FlowLayoutPanel infoFlowPanel;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
