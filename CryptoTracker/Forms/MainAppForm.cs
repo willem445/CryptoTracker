@@ -1242,15 +1242,28 @@ namespace CryptoTracker
                 }
 
                 //TODO - If a coin is not in the list (ie IOTA in binance report, MIOTA in CMC) we get index out of bounds error
-                addCoin.Quantity = 0;
-                addCoin.NetCost = 0;
-                addCoin.Name = priceManager.AllCoinNames[index].Name;
-                addCoin.APILink = "https://api.coinmarketcap.com/v1/ticker/" + priceManager.AllCoinNames[index].Id;
+                if (index != priceManager.AllCoinNames.Count)
+                {
+                    addCoin.Quantity = 0;
+                    addCoin.NetCost = 0;
+                    addCoin.Name = priceManager.AllCoinNames[index].Name;
+                    addCoin.APILink = "https://api.coinmarketcap.com/v1/ticker/" + priceManager.AllCoinNames[index].Id;
 
-                //Add new value array to price manager
-                priceManager.AddNewCoin(addCoin);
+                    //Add new value array to price manager
+                    priceManager.AddNewCoin(addCoin);
 
-                AddNewCoinToFlowControl(addCoin);
+                    AddNewCoinToFlowControl(addCoin);
+                }
+                else
+                {
+                    MessageBoxForm message = new MessageBoxForm("Error finding coin " + coin + ".");
+                    message.ShowDialog();
+
+#if DEBUG
+                    Console.WriteLine("Error finding coin: " + coin);
+#endif 
+                }
+
 
                 progress.Report((int)(((float)i / coinsToTrack.Count) * 100.0F));
                 i++;
