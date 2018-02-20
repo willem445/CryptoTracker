@@ -274,6 +274,10 @@ namespace CryptoTracker
                     {
                         input += "IOTA" + ",";
                     }
+                    else if (trackedCoinList[j].Symbol == "NANO")
+                    {
+                        input += "XRB" + ",";
+                    }
                     else
                     {
                         input += trackedCoinList[j].Symbol + ",";
@@ -282,6 +286,9 @@ namespace CryptoTracker
                 }
                 input = input.TrimEnd(',');
                 input = string.Format("https://min-api.cryptocompare.com/data/pricemulti?fsyms={0}&tsyms=USD", input);
+
+                //TODOHP - If CMC returns null when it updates market data, the symbol is never updated in coin model resulting in the symbol being omitted from input string
+                //Causes returned data to be off when displayed
 
                 try
                 {
@@ -378,9 +385,9 @@ namespace CryptoTracker
                 }
                 else
                 {
-                    trackedCoinList[i].Value = null;
-                    trackedCoinList[i].Profit = null;
-                    trackedCoinList[i].ProfitPercent = null;
+                    trackedCoinList[i].Value = 0;
+                    trackedCoinList[i].Profit = 0;
+                    trackedCoinList[i].ProfitPercent = 0;
                 }
             }
         }

@@ -665,6 +665,25 @@ namespace CryptoTracker
         }
 
         /// <summary>
+        /// Open up the github wiki in the default browser for help
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Open the url in web browser for the user
+                ProcessStartInfo sInfo = new ProcessStartInfo("https://github.com/willem445/CryptoTracker/wiki");
+                Process.Start(sInfo);
+            }
+            catch
+            {
+                MessageBoxForm errorMessage = new MessageBoxForm("Error connecting to github wiki.");
+            }
+        }
+
+        /// <summary>
         /// Open the donate form
         /// </summary>
         /// <param name="sender"></param>
@@ -1285,5 +1304,7 @@ namespace CryptoTracker
             loadBar.Invoke(new Action(() => loadBar.Enabled = false));
             loadBar.Invoke(new Action(() => loadBar.Visible = false));
         }
+
+
     }
 }

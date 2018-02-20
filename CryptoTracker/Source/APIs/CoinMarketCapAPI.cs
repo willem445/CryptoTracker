@@ -117,7 +117,13 @@ namespace CryptoTracker
                 input = string.Format("https://api.coinmarketcap.com/v1/ticker/{0}/?convert={1}", cmc_id, currency);
             }
 
-            return CMC_CoinRequest(input)[0];
+            var data = CMC_CoinRequest(input);
+            if (data != null)
+            {
+                return CMC_CoinRequest(input)[0];
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -156,6 +162,10 @@ namespace CryptoTracker
                 Console.WriteLine("CMC Error: " + e.Message);
             }
 
+#if DEBUG
+            Console.WriteLine("Input string: " + input);
+#endif 
+
             return null;
         }
 
@@ -184,6 +194,10 @@ namespace CryptoTracker
             catch (Exception e)
             {
                 Console.WriteLine("CMC Error: " + e.Message);
+
+#if DEBUG
+                Console.WriteLine("Input string: " + input);
+#endif 
             }
 
             return null;
