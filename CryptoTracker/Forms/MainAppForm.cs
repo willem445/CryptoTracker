@@ -1230,11 +1230,16 @@ namespace CryptoTracker
             foreach (string coin in coinsToTrack)
             {
                 CoinModel addCoin = new CoinModel();
+                string coinSymbol = coin;
+                if (coin == "XRB")
+                {
+                    coinSymbol = "NANO";
+                }
 
                 int index = 0;
                 foreach (var item in priceManager.AllCoinNames)
                 {
-                    if (coin == item.Symbol)
+                    if (coinSymbol == item.Symbol)
                     {
                         break;
                     }
