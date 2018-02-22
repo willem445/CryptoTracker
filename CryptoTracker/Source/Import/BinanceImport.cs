@@ -96,11 +96,6 @@ namespace CryptoTracker
                                 tradePair.trade = "MIOTA";
                             }
 
-                            if (tradePair.trade == "NANO")
-                            {
-                                tradePair.trade = "XRB";
-                            }
-
                             table.Rows.Add(
                                 dateValue,
                                 "Binance",
