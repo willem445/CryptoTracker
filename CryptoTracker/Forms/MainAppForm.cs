@@ -67,6 +67,7 @@ namespace CryptoTracker
         List<Label> priceLabelList = new List<Label>(); //List of labels to iterate through when updating prices
         List<MetroFramework.Controls.MetroTextBox[]> textBoxArrayList = new List<MetroFramework.Controls.MetroTextBox[]>(); //Array of textboxes for each coin, stored in a list
         DataTable tableBindToDataGridView = new DataTable(); //Contains both unsaved and saved data which is bound to data grid view for viewing
+        DataTable tableBindToDataGridViewPrev = new DataTable(); //Contains copy of datagridview trades before importing new trades
         DataTable unsavedTradesDataTable = new DataTable(); //Contains unsaved data that has not yet been written to file, used to avoid adding duplicate trades to price tracking totals
 
         //MainApp fields
@@ -213,6 +214,9 @@ namespace CryptoTracker
 
                 saveImportButton.Enabled = false;
                 saveImportButton.Visible = false;
+
+                undoTradesButton.Enabled = false;
+                undoTradesButton.Visible = false;
 
                 importSelect_CB.Items.Add("Binance");
                 importSelect_CB.Items.Add("Coinbase");
@@ -942,6 +946,9 @@ namespace CryptoTracker
         /// <param name="e"></param>
         private async void importButton_Click(object sender, EventArgs e)
         {
+            tableBindToDataGridViewPrev.Clear();
+            tableBindToDataGridViewPrev = tableBindToDataGridView.Copy(); //Copy existing trades to datatable prev in case user decides to undo import 
+
             if (importSelect_CB.SelectedIndex >= 0)
             {
                 OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -987,6 +994,8 @@ namespace CryptoTracker
                             //Enable save button if an import was successfull
                             saveImportButton.Enabled = true;
                             saveImportButton.Visible = true;
+                            undoTradesButton.Enabled = true;
+                            undoTradesButton.Visible = true;
                             dataGridView2.Refresh();
                         }
                         else
@@ -1106,6 +1115,34 @@ namespace CryptoTracker
             if (export.ShowDialog() == DialogResult.OK)
             {
                 export.ExportData(tableBindToDataGridView);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the imported trades if not already saved, enable after import
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void undoTradesButton_Click(object sender, EventArgs e)
+        {
+            tableBindToDataGridView.Clear(); //Clear current table
+            tableBindToDataGridView = tableBindToDataGridViewPrev.Copy(); //Copy contents of the prev copy back to original table
+            dataGridView2.DataSource = tableBindToDataGridView; //Rebind, somehow binding is lost after clearing?
+            dataGridView2.Refresh(); //Refresh datagrid to reflect new changes
+
+            //Hide save and import buttons since there is no new data anymore
+            saveImportButton.Enabled = false;
+            saveImportButton.Visible = false;
+            undoTradesButton.Enabled = false;
+            undoTradesButton.Visible = false;
+        }
+
+        private void dataGridView2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                //Delete the currenly selected index from both datatable and datagridview
+                Console.WriteLine("Delete trade");
             }
         }
 
@@ -1322,7 +1359,5 @@ namespace CryptoTracker
             loadBar.Invoke(new Action(() => loadBar.Enabled = false));
             loadBar.Invoke(new Action(() => loadBar.Visible = false));
         }
-
-
     }
 }

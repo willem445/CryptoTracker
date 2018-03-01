@@ -194,7 +194,7 @@
             this.metroTabControl1.Controls.Add(this.coinInfoTab);
             this.metroTabControl1.Location = new System.Drawing.Point(23, 87);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 1;
+            this.metroTabControl1.SelectedIndex = 2;
             this.metroTabControl1.Size = new System.Drawing.Size(804, 460);
             this.metroTabControl1.TabIndex = 5;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -411,6 +411,7 @@
             this.undoTradesButton.TabIndex = 16;
             this.undoTradesButton.Text = "Undo";
             this.undoTradesButton.Visible = false;
+            this.undoTradesButton.Click += new System.EventHandler(this.undoTradesButton_Click);
             // 
             // pBar
             // 
@@ -430,6 +431,7 @@
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.Size = new System.Drawing.Size(774, 338);
             this.dataGridView2.TabIndex = 2;
+            this.dataGridView2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView2_KeyDown);
             // 
             // importSelect_CB
             // 
