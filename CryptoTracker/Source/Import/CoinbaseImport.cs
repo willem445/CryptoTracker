@@ -38,38 +38,44 @@ namespace CryptoTracker
             float percentComplete = 0.0F;
 #endif
 
-            var excelData = ExcelToDataSet(filePath).Tables[0];
+            var data = ExcelToDataSet(filePath);
 
-            if (ValidateDataFormat(coinBaseColumnValidation, excelData, COINBASE_ROW_START))
+            if (data.Tables.Count != 0)
             {
-                for (int i = 0; i < excelData.Rows.Count; i++)
+                var excelData = data.Tables[0];
+
+                if (ValidateDataFormat(coinBaseColumnValidation, excelData, COINBASE_ROW_START))
                 {
-                    DateTime dateValue;
-
-                    if (DateTime.TryParse(excelData.Rows[i][(int)CoinbaseColumns.DATE].ToString(), out dateValue) && excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString() != "")
+                    for (int i = 0; i < excelData.Rows.Count; i++)
                     {
-                        table.Rows.Add(
-                                        dateValue,
-                                        "Coinbase",
-                                        excelData.Rows[i][(int)CoinbaseColumns.TRADE_CURRENCY].ToString() + "/" + excelData.Rows[i][(int)CoinbaseColumns.BASE_CURRENCY].ToString(),
-                                        excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString().Split(' ')[0] == "Bought" ? "BUY" : "SELL",
-                                        Math.Abs((float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT])),
-                                        (float)((Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL]) - Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_FEE])) / Math.Abs(Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT]))),
-                                        (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL]),
-                                        (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL])
-                                      );
-                    }
+                        DateTime dateValue;
 
-                    progress.Report((int)(((float)i / (float)excelData.Rows.Count) * 100.0F));
+                        if (DateTime.TryParse(excelData.Rows[i][(int)CoinbaseColumns.DATE].ToString(), out dateValue) && excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString() != "")
+                        {
+                            table.Rows.Add(
+                                            dateValue,
+                                            "Coinbase",
+                                            excelData.Rows[i][(int)CoinbaseColumns.TRADE_CURRENCY].ToString() + "/" + excelData.Rows[i][(int)CoinbaseColumns.BASE_CURRENCY].ToString(),
+                                            excelData.Rows[i][(int)CoinbaseColumns.TYPE].ToString().Split(' ')[0] == "Bought" ? "BUY" : "SELL",
+                                            Math.Abs((float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT])),
+                                            (float)((Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL]) - Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_FEE])) / Math.Abs(Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.AMOUNT]))),
+                                            (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL]),
+                                            (float)Convert.ToDouble(excelData.Rows[i][(int)CoinbaseColumns.TRANSFER_TOTAL])
+                                          );
+                        }
+
+                        progress.Report((int)(((float)i / (float)excelData.Rows.Count) * 100.0F));
 
 #if DEBUG
-                    percentComplete = ((float)i / (float)excelData.Rows.Count) * 100.0F;
-                    Console.WriteLine(percentComplete.FloatToPercent());
+                        percentComplete = ((float)i / (float)excelData.Rows.Count) * 100.0F;
+                        Console.WriteLine(percentComplete.FloatToPercent());
 #endif
+                    }
+                    progress.Report(100);
+                    return table;
                 }
-                progress.Report(100);
-                return table;
             }
+
             return null;
         }
 

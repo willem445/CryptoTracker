@@ -175,15 +175,32 @@ namespace CryptoTracker
         /// <returns></returns>
         protected DataSet ExcelToDataSet(string _filePath)
         {
-            DataSet result;
+            DataSet result = new DataSet();
 
-            using (var stream = File.Open(_filePath, FileMode.Open, FileAccess.Read))
+            try
             {
-                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                using (var stream = File.Open(_filePath, FileMode.Open, FileAccess.Read))
                 {
-                    result = reader.AsDataSet();
+                    using (var reader = ExcelReaderFactory.CreateReader(stream))
+                    {
+                        result = reader.AsDataSet();
+                    }
                 }
+
+                return result;
             }
+            catch(System.IO.IOException e)
+            {
+                MessageBoxForm message = new MessageBoxForm("Please close document before importing.");
+                message.ShowDialog();
+            }
+            catch(Exception e)
+            {
+#if DEBUG
+                Console.WriteLine(e.Message);
+#endif 
+            }
+
             return result;
         }
     }

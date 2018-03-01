@@ -1290,13 +1290,13 @@ namespace CryptoTracker
         {
 
                 GeneralImport import = new GeneralImport();
-                DataTable test = import.ImportFromExchange(exchange, fileName, progress);
+                DataTable data = import.ImportFromExchange(exchange, fileName, progress);
 
 #if DEBUG
             Console.WriteLine("Import Done");
 #endif
 
-            return test;
+            return data;
 
         }
 
